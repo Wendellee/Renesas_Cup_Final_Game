@@ -98,7 +98,7 @@
 #define BSP_TZ_CFG_PSARB (\
             (((RA_NOT_DEFINED > 0) ? 0U : 1U) << 4) /* I3C */ | \
             (((RA_NOT_DEFINED > 0) ? 0U : 1U) << 7) /* IIC2 */ | \
-            (((RA_NOT_DEFINED > 0) ? 0U : 1U) << 8) /* IIC1 */ | \
+            (((1 > 0) ? 0U : 1U) << 8) /* IIC1 */ | \
             (((RA_NOT_DEFINED > 0) ? 0U : 1U) << 9) /* IIC0 */ | \
             (((RA_NOT_DEFINED > 0) ? 0U : 1U) << 11) /* USBFS */ | \
             (((RA_NOT_DEFINED > 0) ? 0U : 1U) << 12) /* USBHS */ | \
@@ -126,8 +126,8 @@
             (((RA_NOT_DEFINED > 0) ? 0U : 1U) << 11) /* SDHI1 */ | \
             (((RA_NOT_DEFINED > 0) ? 0U : 1U) << 12) /* SDHI0 */ | \
             (((RA_NOT_DEFINED > 0) ? 0U : 1U) << 13) /* DOC */ | \
-            (((RA_NOT_DEFINED > 0) ? 0U : 1U) << 15) /* GLCDC/MIPI-DSI/DRW */ | \
-            (((RA_NOT_DEFINED > 0) ? 0U : 1U) << 15) /* MIPI_CSI */ | \
+            (((1 > 0) ? 0U : 1U) << 15) /* GLCDC/MIPI-DSI/DRW */ | \
+            (((1 > 0) ? 0U : 1U) << 15) /* MIPI_CSI */ | \
             (((RA_NOT_DEFINED > 0) ? 0U : 1U) << 16) /* CEU */ | \
             (((RA_NOT_DEFINED > 0) ? 0U : 1U) << 24) /* PDM */ | \
             (((RA_NOT_DEFINED > 0) ? 0U : 1U) << 26) /* CANFD1 */ | \
@@ -333,10 +333,10 @@
 #endif
 
 /* Set DTCSTSAR if the Secure program uses the DTC. */
-#if RA_NOT_DEFINED == RA_NOT_DEFINED
-#define BSP_TZ_CFG_DTC_USED (0U)
+#if 2 == RA_NOT_DEFINED
+ #define BSP_TZ_CFG_DTC_USED (0U)
 #else
- #define BSP_TZ_CFG_DTC_USED (1U)
+#define BSP_TZ_CFG_DTC_USED (1U)
 #endif
 
 /* Security attribution for IPC */

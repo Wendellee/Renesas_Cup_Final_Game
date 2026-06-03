@@ -30,8 +30,19 @@ void hal_entry(void)
     g_led_b.p_api->open(g_led_b.p_ctrl, g_led_b.p_cfg);
     g_led_b.p_api->start(g_led_b.p_ctrl);
 
+    g_ioport.p_api->open(g_ioport.p_ctrl,g_ioport.p_cfg);
+    g_ioport.p_api->pinWrite(g_ioport.p_ctrl, BSP_IO_PORT_01_PIN_10, BSP_IO_LEVEL_HIGH);
+
     while(1)
     {
+        R_BSP_SoftwareDelay(250,BSP_DELAY_UNITS_MILLISECONDS);
+        g_ioport.p_api->open(g_ioport.p_ctrl,g_ioport.p_cfg);
+        g_ioport.p_api->pinWrite(g_ioport.p_ctrl, BSP_IO_PORT_01_PIN_10, BSP_IO_LEVEL_HIGH);
+
+        R_BSP_SoftwareDelay(250,BSP_DELAY_UNITS_MILLISECONDS);
+        g_ioport.p_api->open(g_ioport.p_ctrl,g_ioport.p_cfg);
+        g_ioport.p_api->pinWrite(g_ioport.p_ctrl, BSP_IO_PORT_01_PIN_10, BSP_IO_LEVEL_LOW);
+
 
     }
     /* Wake up 2nd core if this is first core and we are inside a multicore project. */

@@ -6,6 +6,8 @@
 /* Common macro for FSP header files. There is also a corresponding FSP_FOOTER macro at the end of this file. */
 FSP_HEADER
 
+#define user_led (BSP_IO_PORT_01_PIN_10)
+
 extern const ioport_cfg_t g_bsp_pin_cfg; /* R7KA8P1KFLCAC.pincfg */
 
 void BSP_PinConfigSecurityInit();
