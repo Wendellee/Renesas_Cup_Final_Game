@@ -6,6 +6,7 @@
 
 
 fsp_err_t gpt_init(timer_instance_t g_gpt_instance);
+fsp_err_t gpt_deinit(timer_instance_t g_gpt_instance);
 fsp_err_t gpt_set_duty_cycle(timer_instance_t g_gpt_instance, uint32_t duty_cycle_percent, uint32_t pin);
 
 
