@@ -1,4 +1,5 @@
 #include "hal_data.h"
+#include "GPT.h"
 
 #if (1 == BSP_MULTICORE_PROJECT) && BSP_TZ_SECURE_BUILD
 bsp_ipc_semaphore_handle_t g_core_start_semaphore =
@@ -15,20 +16,11 @@ void hal_entry(void)
 {
     /* TODO: add your own code here */
 
-    g_left_wheel.p_api->open(g_left_wheel.p_ctrl, g_left_wheel.p_cfg);
-    g_left_wheel.p_api->start(g_left_wheel.p_ctrl);
-
-    g_fan.p_api->open(g_fan.p_ctrl, g_fan.p_cfg);
-    g_fan.p_api->start(g_fan.p_ctrl);
-
-    g_right_wheel.p_api->open(g_right_wheel.p_ctrl, g_right_wheel.p_cfg);
-    g_right_wheel.p_api->start(g_right_wheel.p_ctrl);
-
-    g_led_a.p_api->open(g_led_a.p_ctrl, g_led_a.p_cfg);
-    g_led_a.p_api->start(g_led_a.p_ctrl);
-
-    g_led_b.p_api->open(g_led_b.p_ctrl, g_led_b.p_cfg);
-    g_led_b.p_api->start(g_led_b.p_ctrl);
+    gpt_init(g_left_wheel);
+    gpt_init(g_fan);
+    gpt_init(g_right_wheel);
+    gpt_init(g_led_a);
+    gpt_init(g_led_b);
 
     g_ioport.p_api->open(g_ioport.p_ctrl,g_ioport.p_cfg);
     g_ioport.p_api->pinWrite(g_ioport.p_ctrl, BSP_IO_PORT_01_PIN_10, BSP_IO_LEVEL_HIGH);
