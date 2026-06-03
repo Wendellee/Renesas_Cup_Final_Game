@@ -20,9 +20,7 @@ fsp_err_t gpt_deinit(timer_instance_t g_gpt_instance)
     }
     return err;
 }
-    }
-    return err;
-}
+
 
 
 
