@@ -832,7 +832,7 @@
       <property id="module.driver.i2c_master.ipl" value="board.icu.common.irq.priority0"/>
     </module>
     <module id="module.driver.transfer_on_dtc.725530470">
-      <property id="module.driver.transfer.name" value="g_transfer0"/>
+        <property id="module.driver.transfer.name" value="g_transfer0"/>
       <property id="module.driver.transfer.mode" value="module.driver.transfer.mode.mode_normal"/>
       <property id="module.driver.transfer.size" value="module.driver.transfer.size.size_2_byte"/>
       <property id="module.driver.transfer.dest_addr_mode" value="module.driver.transfer.dest_addr_mode.addr_mode_fixed"/>
@@ -896,14 +896,14 @@
       <property id="module.driver.vin.conversion_data.rcrmul2" value="1.596"/>
       <property id="module.driver.vin.conversion_data.gcbmul2" value="0.392"/>
       <property id="module.driver.vin.conversion_data.bcbmul2" value="2.017"/>
-      <property id="module.driver.vin.conversion_data.ne_bcb" value="enum.mcu.vin.common_types.conversion_data.interpolation_method.bilinear"/>
-      <property id="module.driver.vin.conversion_data.ne_gy" value="enum.mcu.vin.common_types.conversion_data.interpolation_method.bilinear"/>
-      <property id="module.driver.vin.conversion_data.ne_rcr" value="enum.mcu.vin.common_types.conversion_data.interpolation_method.bilinear"/>
+      <property id="module.driver.vin.conversion_data.ne_bcb" value="enum.mcu.vin.common_types.conversion_data.interpolation_method.nearest_neighbor"/>
+      <property id="module.driver.vin.conversion_data.ne_gy" value="enum.mcu.vin.common_types.conversion_data.interpolation_method.nearest_neighbor"/>
+      <property id="module.driver.vin.conversion_data.ne_rcr" value="enum.mcu.vin.common_types.conversion_data.interpolation_method.nearest_neighbor"/>
       <property id="module.driver.vin.conversion_data.pixel_interpolation" value="module.driver.vin.conversion_data.pixel_interpolation.bilinear_or_nearest"/>
       <property id="module.driver.vin.conversion_data.bilinear_advanced" value="enum.mcu.common_types.enabled_boolean.disabled"/>
       <property id="module.driver.vin.conversion_data.scale_up_pixel_count" value="module.driver.vin.conversion_data.scale_up_pixel_count.full_size"/>
-      <property id="module.driver.vin.conversion_data.cl_vsize" value="480"/>
-      <property id="module.driver.vin.conversion_data.cl_hsize" value="800"/>
+      <property id="module.driver.vin.conversion_data.cl_vsize" value="600"/>
+      <property id="module.driver.vin.conversion_data.cl_hsize" value="1024"/>
       <property id="module.driver.vin.conversion_data.setting_1_bits_y.lrp" value="263"/>
       <property id="module.driver.vin.conversion_data.setting_2_bits_y.lgp" value="516"/>
       <property id="module.driver.vin.conversion_data.setting_2_bits_y.lbp" value="100"/>
@@ -967,7 +967,7 @@
       <property id="module.driver.mipi_csi.p_context" value="NULL"/>
     </module>
     <module id="module.driver.mipi_phy.1131179120">
-      <property id="module.driver.mipi_phy.name" value="g_mipi_phy0"/>
+       <property id="module.driver.mipi_phy.name" value="g_mipi_phy0"/>
       <property id="module.driver.mipi_phy.pll_mhz" value="1000.00"/>
       <property id="module.driver.mipi_phy.lp_divisor" value="5"/>
       <property id="module.driver.mipi_phy.t_init" value="600000"/>
@@ -1032,14 +1032,14 @@
       <property id="module.driver.display.input1.lines_repeat_times" value="0"/>
       <property id="module.driver.display.layer1.fade_control" value="module.driver.display.layer1.fade_control.fade_control_none"/>
       <property id="module.driver.display.layer1.fade_speed" value="255"/>
-      <property id="module.driver.display.output.htiming.total_cyc" value="1334"/>
-      <property id="module.driver.display.output.htiming.display_cyc" value="1024"/>
-      <property id="module.driver.display.output.htiming.back_porch" value="140"/>
+      <property id="module.driver.display.output.htiming.total_cyc" value="816"/>
+      <property id="module.driver.display.output.htiming.display_cyc" value="800"/>
+      <property id="module.driver.display.output.htiming.back_porch" value="8"/>
       <property id="module.driver.display.output.htiming.sync_width" value="1"/>
       <property id="module.driver.display.output.htiming.sync_polarity" value="module.driver.display.output.htiming.sync_polarity.signal_polarity_loactive"/>
-      <property id="module.driver.display.output.vtiming.total_cyc" value="635"/>
-      <property id="module.driver.display.output.vtiming.display_cyc" value="600"/>
-      <property id="module.driver.display.output.vtiming.back_porch" value="20"/>
+      <property id="module.driver.display.output.vtiming.total_cyc" value="496"/>
+      <property id="module.driver.display.output.vtiming.display_cyc" value="480"/>
+      <property id="module.driver.display.output.vtiming.back_porch" value="8"/>
       <property id="module.driver.display.output.vtiming.sync_width" value="1"/>
       <property id="module.driver.display.output.vtiming.sync_polarity" value="module.driver.display.output.vtiming.sync_polarity.signal_polarity_loactive"/>
       <property id="module.driver.display.output.data_enable_polarity" value="module.driver.display.output.data_enable_polarity.signal_polarity_hiactive"/>
@@ -1057,7 +1057,7 @@
       <property id="module.driver.display.tcon_vsync" value="module.driver.display.tcon_vsync.tcon_pin_0"/>
       <property id="module.driver.display.tcon_de" value="module.driver.display.tcon_de.tcon_pin_2"/>
       <property id="module.driver.display.clksrc" value="module.driver.display.clksrc.clk_src_internal"/>
-      <property id="module.driver.display.clock_div_ratio" value="module.driver.display.clock_div_ratio.panel_clk_divisor_4"/>
+      <property id="module.driver.display.clock_div_ratio" value="module.driver.display.clock_div_ratio.panel_clk_divisor_9"/>
       <property id="module.driver.display.correction_proc_order" value="module.driver.display.correction_proc_order.correction_proc_order_brightness_contrast2gamma"/>
       <property id="module.driver.display.output.brightness.enable" value="module.driver.display.output.brightness.false"/>
       <property id="module.driver.display.output.brightness.r" value="512"/>
@@ -1170,7 +1170,6 @@
       <property id="module.driver.display.dithering_pattern_B" value="module.driver.display.dithering_pattern_B.dithering_pattern_11"/>
       <property id="module.driver.display.dithering_pattern_C" value="module.driver.display.dithering_pattern_C.dithering_pattern_11"/>
       <property id="module.driver.display.dithering_pattern_D" value="module.driver.display.dithering_pattern_D.dithering_pattern_11"/>
-    </module>
     <context id="_hal.0">
       <stack module="module.driver.ioport_on_ioport.0"/>
       <stack module="module.driver.timer_on_gpt.331594938"/>
