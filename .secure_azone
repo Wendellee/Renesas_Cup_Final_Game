@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<azone>
+    <rzone name="R7KA8P1KFLCAC.rzone"/>
+    <partition>
+        <peripheral name="PORT2.CPU0" group="PORT">
+            <slot name="P208.CPU0" secure="true"/>
+            <slot name="P209.CPU0" secure="true"/>
+            <slot name="P210.CPU0" secure="true"/>
+            <slot name="P211.CPU0" secure="true"/>
+        </peripheral>
+        <peripheral name="PORT3.CPU0" group="PORT">
+            <slot name="P303.CPU0" secure="true"/>
+            <slot name="P304.CPU0" secure="true"/>
+        </peripheral>
+        <peripheral name="PORT4.CPU0" group="PORT">
+            <slot name="P400.CPU0" secure="true"/>
+            <slot name="P401.CPU0" secure="true"/>
+        </peripheral>
+        <peripheral name="PORT5.CPU0" group="PORT">
+            <slot name="P501.CPU0" secure="true"/>
+            <slot name="P502.CPU0" secure="true"/>
+        </peripheral>
+        <peripheral name="PORT6.CPU0" group="PORT">
+            <slot name="P604.CPU0" secure="true"/>
+            <slot name="P605.CPU0" secure="true"/>
+        </peripheral>
+        <peripheral name="PORT8.CPU0" group="PORT">
+            <slot name="P810.CPU0" secure="true"/>
+            <slot name="P811.CPU0" secure="true"/>
+        </peripheral>
+        <peripheral name="GPT6.CPU0" group="GPT" security="s"/>
+        <peripheral name="GPT7.CPU0" group="GPT" security="s"/>
+        <peripheral name="GPT8.CPU0" group="GPT" security="s"/>
+        <peripheral name="GPT10.CPU0" group="GPT" security="s"/>
+        <peripheral name="GPT12.CPU0" group="GPT" security="s"/>
+    </partition>
+</azone>
