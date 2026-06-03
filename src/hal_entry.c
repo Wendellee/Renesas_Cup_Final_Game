@@ -15,7 +15,7 @@ bsp_ipc_semaphore_handle_t g_core_start_semaphore =
 void hal_entry(void)
 {
     /* TODO: add your own code here */
-
+    APP_PRINT("Hello World!\r\n");
     gpt_init(g_left_wheel);
     gpt_init(g_fan);
     gpt_init(g_right_wheel);
