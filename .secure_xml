@@ -205,7 +205,6 @@
       <configSetting altId="ospi0.om_0_sio3.p101" configurationId="ospi0.om_0_sio3" peripheral="OSPI0"/>
       <configSetting altId="p100.gpio_mode.gpio_mode_peripheral" configurationId="p100.gpio_mode"/>
       <configSetting altId="p101.gpio_mode.gpio_mode_peripheral" configurationId="p101.gpio_mode"/>
-      <configSetting altId="p102.gpio_mode.gpio_mode_peripheral" configurationId="p102.gpio_mode"/>
       <configSetting altId="p103.gpio_mode.gpio_mode_peripheral" configurationId="p103.gpio_mode"/>
       <configSetting altId="p104.gpio_mode.gpio_mode_peripheral" configurationId="p104.gpio_mode"/>
       <configSetting altId="p105.gpio_mode.gpio_mode_peripheral" configurationId="p105.gpio_mode"/>
@@ -240,6 +239,7 @@
       <configSetting altId="p410.gpio_mode.gpio_mode_peripheral" configurationId="p410.gpio_mode"/>
       <configSetting altId="p414.gpio_speed.gpio_speed_m" configurationId="p414.gpio_drivecapacity"/>
       <configSetting altId="p414.gpio_mode.gpio_mode_peripheral" configurationId="p414.gpio_mode"/>
+      <configSetting altId="p415.gpio_mode.gpio_mode_peripheral" configurationId="p415.gpio_mode"/>
       <configSetting altId="p501.gpio_mode.gpio_mode_peripheral" configurationId="p501.gpio_mode"/>
       <configSetting altId="p502.gpio_mode.gpio_mode_peripheral" configurationId="p502.gpio_mode"/>
       <configSetting altId="p503.gpio_mode.gpio_mode_peripheral" configurationId="p503.gpio_mode"/>
@@ -436,7 +436,7 @@
       <configSetting altId="spi0.ssla3.p406" configurationId="spi0.ssla3" peripheral="SPI0"/>
       <configSetting altId="spi1.miso1.p709" configurationId="spi1.miso1" peripheral="SPI1"/>
       <configSetting altId="spi1.mosi1.p708" configurationId="spi1.mosi1" peripheral="SPI1"/>
-      <configSetting altId="spi1.rspck1.p102" configurationId="spi1.rspck1" peripheral="SPI1"/>
+      <configSetting altId="spi1.rspck1.p415" configurationId="spi1.rspck1" peripheral="SPI1"/>
       <configSetting altId="spi1.sslb0.p414" configurationId="spi1.sslb0" peripheral="SPI1"/>
       <configSetting altId="spi1.sslb1.p104" configurationId="spi1.sslb1" peripheral="SPI1"/>
       <configSetting altId="spi1.sslb2.p105" configurationId="spi1.sslb2" peripheral="SPI1"/>

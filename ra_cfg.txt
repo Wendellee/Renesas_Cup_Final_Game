@@ -356,7 +356,7 @@ FSP Configuration
       P015 U8 - - - - Disabled - - "ACMPHS: IVCMP0; ADC1: AN015; DAC121: DA1; IRQ: IRQ13" - None - - 
       P100 U6 OSPI0_OM_0_SIO0 - L None "Peripheral mode" - - "AGT0: AGTIO0; ESWM_GMII/MII: GPTP1_MATCH; ESWM_RGMII1: GPTP1_MATCH; ESWM_RMII1: GPTP1_MATCH; GPT8: GTIOC8B; GPT_POEGA: GTETRGA; IRQ: IRQ2; OSPI0: OM_0_SIO0; SCI9: DE9; SCI9: SCK9; SPI1: MISO1" - IO - - 
       P101 R5 OSPI0_OM_0_SIO3 - L None "Peripheral mode" - - "AGT0: AGTEE0; ESWM_GMII/MII: GPTP1_CAPTURE; ESWM_RGMII1: GPTP1_CAPTURE; ESWM_RMII1: GPTP1_CAPTURE; GPT8: GTIOC8A; GPT_POEGB: GTETRGB; IRQ: IRQ1; OSPI0: OM_0_SIO3; SCI9: RXD9; SPI1: MOSI1" - IO - - 
-      P102 P5 SPI1_RSPCK1 - L None "Peripheral mode" - - "ADC0(Digital): ADTRG0; AGT0: AGTO0; CANFD0: CRX0; GPT2: GTIOC2B; GPT_OPS: GTOWLO; IRQ: IRQ17; OSPI0: OM_0_SIO4; SCI9: TXD9; SPI1: RSPCK1" - IO - - 
+      P102 P5 - - - - Disabled - - "ADC0(Digital): ADTRG0; AGT0: AGTO0; CANFD0: CRX0; GPT2: GTIOC2B; GPT_OPS: GTOWLO; IRQ: IRQ17; OSPI0: OM_0_SIO4; SCI9: TXD9; SPI1: RSPCK1" - None - - 
       P103 R4 OSPI0_OM_0_SIO2 - L None "Peripheral mode" - - "ADC1(Digital): AD1FLAG1; CANFD0: CTX0; ESWM_GMII/MII: GPTP0_PPS; ESWM_RGMII0: GPTP0_PPS; ESWM_RMII0: GPTP0_PPS; GPT2: GTIOC2A; GPT_OPS: GTOWUP; IRQ: IRQ16; OSPI0: OM_0_SIO2; SCI9: CTS_RTS9; SCI9: DE9; SPI1: SSLB0" - IO - - 
       P104 M6 SPI1_SSLB1 - L None "Peripheral mode" - - "ADC0(Digital): AD0FLAG1; ESWM_GMII/MII: GPTP0_MATCH; ESWM_RGMII0: GPTP0_MATCH; ESWM_RMII0: GPTP0_MATCH; GPT1: GTIOC1B; GPT_POEGB: GTETRGB; IRQ: IRQ1; OSPI0: OM_0_CS1; SCI9: CTS9; SPI1: SSLB1" - O - - 
       P105 N7 SPI1_SSLB2 - L None "Peripheral mode" - - "ADC(Digital): ADSYNC; ESWM_GMII/MII: GPTP0_CAPTURE; ESWM_RGMII0: GPTP0_CAPTURE; ESWM_RMII0: GPTP0_CAPTURE; GPT1: GTIOC1A; IRQ: IRQ0; OSPI0: OM_0_ECSINT1; SCI8: CTS_RTS8; SCI8: DE8; SPI1: SSLB2; ULPT1: ULPTO1-DS" - O - - 
@@ -410,7 +410,7 @@ FSP Configuration
       P412 M12 - - - - Disabled - - "AGT1: AGTEE1; BUS: A21; ESWM_GMII/MII: GPTP_PTPOUT0; ESWM_RGMII: GPTP_PTPOUT0; ESWM_RMII: GPTP_PTPOUT0; GPT8: GTCPPO8; GPT_OPS: GTOULO; IRQ: IRQ20-DS; SCI3: CTS3; USB FS: USB_EXICEN; USB HS: USBHS_EXICEN" - None - - 
       P413 P14 - - - - Disabled - - "BUS: A22; ESWM_GMII/MII: ET_TAS_STA3; ESWM_RGMII: ET_TAS_STA3; ESWM_RMII: ET_TAS_STA3; GPT7: GTCPPO7; GPT_OPS: GTOUUP; IRQ: IRQ18; ULPT1: ULPTEE1" - None - - 
       P414 L13 SPI1_SSLB0 - M None "Peripheral mode" - - "BUS: A23; CANFD1: CRX1; CEU: VIO_CLK; ESWM_GMII/MII: ET1_MDIO; ESWM_RGMII1: ET1_MDIO; ESWM_RMII1: ET1_MDIO; GPT0: GTIOC0B; IRQ: IRQ9; SCI4: RXD4; SPI1: SSLB0" - IO - - 
-      P415 R15 - - - - Disabled - - "BUS: WAIT; CANFD1: CTX1; CEU: VIO_HD; ESWM_GMII/MII: ET1_MDC; ESWM_RGMII1: ET1_MDC; ESWM_RMII1: ET1_MDC; GPT0: GTIOC0A; IRQ: IRQ8; SCI4: TXD4; SPI1: RSPCK1" - None - - 
+      P415 R15 SPI1_RSPCK1 - L None "Peripheral mode" - - "BUS: WAIT; CANFD1: CTX1; CEU: VIO_HD; ESWM_GMII/MII: ET1_MDC; ESWM_RGMII1: ET1_MDC; ESWM_RMII1: ET1_MDC; GPT0: GTIOC0A; IRQ: IRQ8; SCI4: TXD4; SPI1: RSPCK1" - IO - - 
       P500 U7 - - - - Disabled - - "ADC0: AN021; ADC1: AN021; CAC: CACREF; GPT11: GTIOC11B; IRQ: IRQ24; PDM0: PDMDAT0; SCI8: RXD8; SDHI1: SD1DAT5; USB FS: USB_VBUSEN" - None - - 
       P501 R8 GPT12_GTIOC12A - L None "Peripheral mode" - - "ADC0: AN020; ADC1: AN020; GPT12: GTIOC12A; IRQ: IRQ25; PDM1: PDMDAT1; SCI8: TXD8; SDHI1: SD1DAT6; USB FS: USB_OVRCURA" - IO - - 
       P502 T7 GPT12_GTIOC12B - L None "Peripheral mode" - - "ADC0: AN019; ADC1: AN019; GPT12: GTIOC12B; IRQ: IRQ26; PDM2: PDMDAT2; SCI8: DE8; SCI8: SCK8; SDHI1: SD1DAT7; USB FS: USB_OVRCURB" - IO - - 
@@ -1074,14 +1074,14 @@ FSP Configuration
       Output: Conversion: YUV to RGB: Coefficients: Cr to R Coefficient: 1.596
       Output: Conversion: YUV to RGB: Coefficients: Cb to G Coefficient: 0.392
       Output: Conversion: YUV to RGB: Coefficients: Cb to B Coefficient: 2.017
-      Output: Conversion: YUV to RGB: Scaling: Interpolation: B/Cb Component: Bilinear Method
-      Output: Conversion: YUV to RGB: Scaling: Interpolation: G/Y Component: Bilinear Method
-      Output: Conversion: YUV to RGB: Scaling: Interpolation: R/Cr Component: Bilinear Method
+      Output: Conversion: YUV to RGB: Scaling: Interpolation: B/Cb Component: Nearest Neighbor
+      Output: Conversion: YUV to RGB: Scaling: Interpolation: G/Y Component: Nearest Neighbor
+      Output: Conversion: YUV to RGB: Scaling: Interpolation: R/Cr Component: Nearest Neighbor
       Output: Conversion: YUV to RGB: Scaling: Interpolation: Scale Up/Down Override: Use Component Configuration
       Output: Scaling: Interpolation: Bilinear Advanced: Disabled
       Output: Scaling: Scale Up Pixel Count: Pixel count after scale-up: (n × scale-up factor)
-      Output: Image: Size: Vertical: 480
-      Output: Image: Size: Horizontal: 800
+      Output: Image: Size: Vertical: 600
+      Output: Image: Size: Horizontal: 1024
       Output: Conversion: RGB to YUV: R to Y Coefficient: 263
       Output: Conversion: RGB to YUV: G to Y Coefficient: 516
       Output: Conversion: RGB to YUV: B to Y Coefficient: 100
@@ -1210,14 +1210,14 @@ FSP Configuration
       Input: Graphics Layer 2: Line Repeat: Repeat count: 0
       Input: Graphics Layer 2: Fading: Mode: None
       Input: Graphics Layer 2: Fading: Speed: 255
-      Output: Timing: Horizontal total cycles: 1334
-      Output: Timing: Horizontal active video cycles: 1024
-      Output: Timing: Horizontal back porch cycles: 140
+      Output: Timing: Horizontal total cycles: 816
+      Output: Timing: Horizontal active video cycles: 800
+      Output: Timing: Horizontal back porch cycles: 8
       Output: Timing: Horizontal sync signal cycles: 1
       Output: Timing: Horizontal sync signal polarity: Low active
-      Output: Timing: Vertical total lines: 635
-      Output: Timing: Vertical active video lines: 600
-      Output: Timing: Vertical back porch lines: 20
+      Output: Timing: Vertical total lines: 496
+      Output: Timing: Vertical active video lines: 480
+      Output: Timing: Vertical back porch lines: 8
       Output: Timing: Vertical sync signal lines: 1
       Output: Timing: Vertical sync signal polarity: Low active
       Output: Timing: Data Enable Signal Polarity: High active
@@ -1235,7 +1235,7 @@ FSP Configuration
       TCON: Vsync pin select: LCD_TCON0
       TCON: Data enable (DE) pin select: LCD_TCON2
       TCON: Panel clock source: Internal clock (GLCDCLK)
-      TCON: Panel clock division ratio: 1/4
+      TCON: Panel clock division ratio: 1/9
       Color Correction: Process order: Brightness/contrast first
       Color Correction: Brightness: Enabled: No
       Color Correction: Brightness: Red channel: 512

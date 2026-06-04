@@ -100,7 +100,7 @@ const glcdc_extended_cfg_t g_display_extend_cfg =
   .tcon_de = GLCDC_TCON_PIN_2,
   .correction_proc_order = GLCDC_CORRECTION_PROC_ORDER_BRIGHTNESS_CONTRAST2GAMMA,
   .clksrc = GLCDC_CLK_SRC_INTERNAL,
-  .clock_div_ratio = GLCDC_PANEL_CLK_DIVISOR_4,
+  .clock_div_ratio = GLCDC_PANEL_CLK_DIVISOR_9,
   .dithering_mode = GLCDC_DITHERING_MODE_TRUNCATE,
   .dithering_pattern_A = GLCDC_DITHERING_PATTERN_11,
   .dithering_pattern_B = GLCDC_DITHERING_PATTERN_11,
@@ -161,10 +161,10 @@ const display_cfg_t g_display_cfg =
           /** Output configuration */
           .output =
                   { .htiming =
-                  { .total_cyc = 1334, .display_cyc = 1024, .back_porch = 140, .sync_width = 1, .sync_polarity =
+                  { .total_cyc = 816, .display_cyc = 800, .back_porch = 8, .sync_width = 1, .sync_polarity =
                             DISPLAY_SIGNAL_POLARITY_LOACTIVE },
                     .vtiming =
-                    { .total_cyc = 635, .display_cyc = 600, .back_porch = 20, .sync_width = 1, .sync_polarity =
+                    { .total_cyc = 496, .display_cyc = 480, .back_porch = 8, .sync_width = 1, .sync_polarity =
                               DISPLAY_SIGNAL_POLARITY_LOACTIVE },
                     .format = DISPLAY_OUT_FORMAT_24BITS_RGB888, .endian = DISPLAY_ENDIAN_LITTLE, .color_order =
                             DISPLAY_COLOR_ORDER_RGB,
@@ -472,7 +472,7 @@ const vin_extended_cfg_t g_vin_cfg_extend =
   .input_ctrl.cfg_bits.lut_enable = 0,
   .input_ctrl.cfg_bits.dithering_direction = false,
   .input_ctrl.cfg_bits.yuv444_conversion = VIN_YUV444_CONVERSION_MODE_DATA_EXTEND,
-  .input_ctrl.cfg_bits.scaling_enable = true,
+  .input_ctrl.cfg_bits.scaling_enable = false,
   .input_ctrl.cfg_bits.pixel_data_clipping = VIN_PIXEL_DATA_CLIPPING_DEFAULT,
 
   .input_ctrl.preclip.line_start = 0,
@@ -512,21 +512,21 @@ const vin_extended_cfg_t g_vin_cfg_extend =
   .conversion_data.yc_rgb_conversion_setting_4_bits.gcbmul2 = 1605,
   .conversion_data.yc_rgb_conversion_setting_4_bits.bcbmul2 = 8261,
 
-  .conversion_data.uds_ctrl_bits.ne_bcb = 0,
-  .conversion_data.uds_ctrl_bits.ne_gy = 0,
-  .conversion_data.uds_ctrl_bits.ne_rcr = 0,
+  .conversion_data.uds_ctrl_bits.ne_bcb = 1,
+  .conversion_data.uds_ctrl_bits.ne_gy = 1,
+  .conversion_data.uds_ctrl_bits.ne_rcr = 1,
   .conversion_data.uds_ctrl_bits.pixel_interpolation = 0,
   .conversion_data.uds_ctrl_bits.bilinear_advanced = 0,
   .conversion_data.uds_ctrl_bits.scale_up_pixel_count = 1,
 
-  .conversion_data.uds_scale_bits.vertical_mask = 5120,
-  .conversion_data.uds_scale_bits.horizontal_mask = 5242,
+  .conversion_data.uds_scale_bits.vertical_mask = 4096,
+  .conversion_data.uds_scale_bits.horizontal_mask = 4096,
 
-  .conversion_data.uds_bwidth_bits.bwidth_v = 51,
-  .conversion_data.uds_bwidth_bits.bwidth_h = 50,
+  .conversion_data.uds_bwidth_bits.bwidth_v = 64,
+  .conversion_data.uds_bwidth_bits.bwidth_h = 64,
 
-  .conversion_data.uds_clipping_bits.cl_vsize = 480,
-  .conversion_data.uds_clipping_bits.cl_hsize = 800,
+  .conversion_data.uds_clipping_bits.cl_vsize = 600,
+  .conversion_data.uds_clipping_bits.cl_hsize = 1024,
 
   .conversion_data.rgb_to_yuv_conversion_settings[0].setting_1_bits.lrp = 263,
   .conversion_data.rgb_to_yuv_conversion_settings[0].setting_2_bits.lgp = 516,

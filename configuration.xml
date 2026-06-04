@@ -832,7 +832,7 @@
       <property id="module.driver.i2c_master.ipl" value="board.icu.common.irq.priority0"/>
     </module>
     <module id="module.driver.transfer_on_dtc.725530470">
-        <property id="module.driver.transfer.name" value="g_transfer0"/>
+      <property id="module.driver.transfer.name" value="g_transfer0"/>
       <property id="module.driver.transfer.mode" value="module.driver.transfer.mode.mode_normal"/>
       <property id="module.driver.transfer.size" value="module.driver.transfer.size.size_2_byte"/>
       <property id="module.driver.transfer.dest_addr_mode" value="module.driver.transfer.dest_addr_mode.addr_mode_fixed"/>
@@ -967,7 +967,7 @@
       <property id="module.driver.mipi_csi.p_context" value="NULL"/>
     </module>
     <module id="module.driver.mipi_phy.1131179120">
-       <property id="module.driver.mipi_phy.name" value="g_mipi_phy0"/>
+      <property id="module.driver.mipi_phy.name" value="g_mipi_phy0"/>
       <property id="module.driver.mipi_phy.pll_mhz" value="1000.00"/>
       <property id="module.driver.mipi_phy.lp_divisor" value="5"/>
       <property id="module.driver.mipi_phy.t_init" value="600000"/>
@@ -1170,6 +1170,7 @@
       <property id="module.driver.display.dithering_pattern_B" value="module.driver.display.dithering_pattern_B.dithering_pattern_11"/>
       <property id="module.driver.display.dithering_pattern_C" value="module.driver.display.dithering_pattern_C.dithering_pattern_11"/>
       <property id="module.driver.display.dithering_pattern_D" value="module.driver.display.dithering_pattern_D.dithering_pattern_11"/>
+    </module>
     <context id="_hal.0">
       <stack module="module.driver.ioport_on_ioport.0"/>
       <stack module="module.driver.timer_on_gpt.331594938"/>
@@ -1287,8 +1288,6 @@
       <configSetting altId="p100.gpio_mode.gpio_mode_peripheral" configurationId="p100.gpio_mode"/>
       <configSetting altId="p101.ospi0.om_0_sio3" configurationId="p101"/>
       <configSetting altId="p101.gpio_mode.gpio_mode_peripheral" configurationId="p101.gpio_mode"/>
-      <configSetting altId="p102.spi1.rspck1" configurationId="p102"/>
-      <configSetting altId="p102.gpio_mode.gpio_mode_peripheral" configurationId="p102.gpio_mode"/>
       <configSetting altId="p103.ospi0.om_0_sio2" configurationId="p103"/>
       <configSetting altId="p103.gpio_mode.gpio_mode_peripheral" configurationId="p103.gpio_mode"/>
       <configSetting altId="p104.spi1.sslb1" configurationId="p104"/>
@@ -1351,6 +1350,8 @@
       <configSetting altId="p414.spi1.sslb0" configurationId="p414"/>
       <configSetting altId="p414.gpio_speed.gpio_speed_m" configurationId="p414.gpio_drivecapacity"/>
       <configSetting altId="p414.gpio_mode.gpio_mode_peripheral" configurationId="p414.gpio_mode"/>
+      <configSetting altId="p415.spi1.rspck1" configurationId="p415"/>
+      <configSetting altId="p415.gpio_mode.gpio_mode_peripheral" configurationId="p415.gpio_mode"/>
       <configSetting altId="p501.gpt12.gtioc12a" configurationId="p501"/>
       <configSetting altId="p501.gpio_mode.gpio_mode_peripheral" configurationId="p501.gpio_mode"/>
       <configSetting altId="p502.gpt12.gtioc12b" configurationId="p502"/>
@@ -1664,7 +1665,7 @@
       <configSetting altId="spi1.miso1.p709" configurationId="spi1.miso1"/>
       <configSetting altId="spi1.mode.custom.free" configurationId="spi1.mode"/>
       <configSetting altId="spi1.mosi1.p708" configurationId="spi1.mosi1"/>
-      <configSetting altId="spi1.rspck1.p102" configurationId="spi1.rspck1"/>
+      <configSetting altId="spi1.rspck1.p415" configurationId="spi1.rspck1"/>
       <configSetting altId="spi1.sslb0.p414" configurationId="spi1.sslb0"/>
       <configSetting altId="spi1.sslb1.p104" configurationId="spi1.sslb1"/>
       <configSetting altId="spi1.sslb2.p105" configurationId="spi1.sslb2"/>

@@ -110,11 +110,11 @@ void vin_callback(capture_callback_args_t *p_args);
 #endif
 
 #ifndef VIN_CFG_IMAGE_STRIDE
-#define VIN_CFG_IMAGE_STRIDE (832)
+#define VIN_CFG_IMAGE_STRIDE (1024)
 #endif
 
 #ifndef VIN_CFG_BYTES_PER_LINE
-#define VIN_CFG_BYTES_PER_LINE (1664)
+#define VIN_CFG_BYTES_PER_LINE (2048)
 #endif
 
 #define VIN_BYTES_PER_FRAME (VIN_CFG_BYTES_PER_LINE * 600)
