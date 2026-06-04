@@ -350,7 +350,7 @@ FSP Configuration
       P009 P11 - - - - Disabled - - "ACMPHS: IVREF1; ADC1: AN009; IRQ: IRQ13-DS" - None - - 
       P010 P10 - - - - Disabled - - "ADC1: AN010; IRQ: IRQ14" - None - - 
       P011 N10 - - - - Disabled - - "ADC1: AN011; IRQ: IRQ16" - None - - 
-      P012 P9 - - - - Disabled - - "ADC0: AN012; IRQ: IRQ15" - None - - 
+      P012 P9 GPIO CAMERA_RESET L - "Output mode (Initial High)" - - "ADC0: AN012; IRQ: IRQ15" - IO - - 
       P013 N9 - - - - Disabled - - "ADC1: AN013; IRQ: IRQ14" - None - - 
       P014 T8 - - - - Disabled - - "ACMPHS: IVCMP0; ADC0: AN014; DAC120: DA0; IRQ: IRQ27" - None - - 
       P015 U8 - - - - Disabled - - "ACMPHS: IVCMP0; ADC1: AN015; DAC121: DA1; IRQ: IRQ13" - None - - 

@@ -2,6 +2,9 @@
 <azone>
     <rzone name="R7KA8P1KFLCAC.rzone"/>
     <partition>
+        <peripheral name="PORT0.CPU0" group="PORT">
+            <slot name="P012.CPU0" secure="true"/>
+        </peripheral>
         <peripheral name="PORT1.CPU0" group="PORT">
             <slot name="P100.CPU0" secure="true"/>
             <slot name="P101.CPU0" secure="true"/>
