@@ -11,6 +11,8 @@ fsp_err_t gpt_init(timer_instance_t g_gpt_instance)
     }
     return err;
 }
+
+
 fsp_err_t gpt_deinit(timer_instance_t g_gpt_instance)
 {
     fsp_err_t err = g_gpt_instance.p_api->stop(g_gpt_instance.p_ctrl);
