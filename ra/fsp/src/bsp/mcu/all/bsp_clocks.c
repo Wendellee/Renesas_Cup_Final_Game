@@ -2201,6 +2201,13 @@ void bsp_prv_cmc_init (void)
 
         R_SYSTEM->OSMC = BSP_PRV_OSMC;
     }
+
+ #else
+  #ifdef BSP_PRV_PACKAGE_FSXP_SOURCE_INIT
+
+    /* For products where SOSC is not available, the Subsystem Clock source setting must be updated accordingly. */
+    R_SYSTEM->OSMC = (BSP_PRV_PACKAGE_FSXP_SOURCE_INIT << R_SYSTEM_OSMC_WUTMMCK0_Pos);
+  #endif
  #endif
 }
 

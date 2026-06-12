@@ -203,9 +203,12 @@
 #define BSP_FEATURE_CRC_SNOOP_ADDRESS_TYPE_TDR                          (0x04UL)        // Used to indicate the type of register being snooped on; derived from the least-significant nybble of the address of SCI TDR registers.
 
 #define BSP_FEATURE_CTSU_IS_AVAILABLE                                   (0UL)
+#define BSP_FEATURE_CTSU_CORRECTION_TYPE                                (0UL)           // Feature not available on this device.
 #define BSP_FEATURE_CTSU_CTSUCHAC_REGISTER_COUNT                        (0UL)           // Feature not available on this device.
 #define BSP_FEATURE_CTSU_CTSUCHTRC_REGISTER_COUNT                       (0UL)           // Feature not available on this device.
 #define BSP_FEATURE_CTSU_HAS_TXVSEL                                     (0UL)           // Feature not available on this device.
+#define BSP_FEATURE_CTSU_SUCLK_LV_MAX_MHZ                               (0UL)           // Feature not available on this device.
+#define BSP_FEATURE_CTSU_SUCLK_MAX_MHZ                                  (0UL)           // Feature not available on this device.
 #define BSP_FEATURE_CTSU_VERSION                                        (0UL)           // Feature not available on this device.
 
 #define BSP_FEATURE_DAC_IS_AVAILABLE                                    (1UL)

@@ -50,6 +50,12 @@ typedef struct st_dtc_extended_cfg
 {
     /** Select which IRQ will trigger the transfer. */
     IRQn_Type activation_source;
+
+#if BSP_CFG_DCACHE_ENABLED
+
+    /** Store transfer info. */
+    const transfer_info_t * p_user_config_info;
+#endif
 } dtc_extended_cfg_t;
 
 /** Control block used by driver. DO NOT INITIALIZE - this structure will be initialized in @ref transfer_api_t::open. */

@@ -76,12 +76,21 @@ static void      r_dtc_set_info(dtc_instance_ctrl_t * p_ctrl, transfer_info_t * 
 static fsp_err_t r_dtc_length_assert(transfer_info_t * p_info);
 
  #endif
+ #if BSP_CFG_DCACHE_ENABLED
+static fsp_err_t r_dtc_info_assert(transfer_info_t * p_info);
+
+ #endif
 static fsp_err_t r_dtc_source_destination_parameter_check(transfer_info_t * p_info);
 
 #endif
 
 static void r_dtc_wait_for_transfer_complete(dtc_instance_ctrl_t * p_ctrl);
 static void r_dtc_disable_transfer(const IRQn_Type irq);
+
+#if BSP_CFG_DCACHE_ENABLED
+static void r_dtc_user_info_init(transfer_cfg_t const * const p_cfg);
+
+#endif
 
 /***********************************************************************************************************************
  * Private global variables
@@ -148,6 +157,12 @@ fsp_err_t R_DTC_Open (transfer_ctrl_t * const p_api_ctrl, transfer_cfg_t const *
     FSP_ERROR_RETURN(p_ctrl->open != DTC_OPEN, FSP_ERR_ALREADY_OPEN);
     FSP_ASSERT(NULL != p_cfg);
     FSP_ASSERT(NULL != p_cfg->p_extend);
+
+ #if BSP_CFG_DCACHE_ENABLED
+
+    /* Ensure that when using D-Cache, descriptor is placed into nocache regions */
+    FSP_ERROR_RETURN(FSP_SUCCESS == r_dtc_info_assert((transfer_info_t *) (p_cfg->p_info)), FSP_ERR_ASSERTION);
+ #endif
 #endif
 
     /* One time initialization for all DTC instances. */
@@ -163,6 +178,12 @@ fsp_err_t R_DTC_Open (transfer_ctrl_t * const p_api_ctrl, transfer_cfg_t const *
 
     /* irq is used to index the DTC vector table. */
     p_ctrl->irq = irq;
+
+#if BSP_CFG_DCACHE_ENABLED
+
+    /* Initialize p_info if required. */
+    r_dtc_user_info_init(p_cfg);
+#endif
 
     /* Copy p_info into the DTC vector table. */
     if (p_cfg->p_info)
@@ -192,6 +213,7 @@ fsp_err_t R_DTC_Open (transfer_ctrl_t * const p_api_ctrl, transfer_cfg_t const *
  * @retval FSP_ERR_UNSUPPORTED      Transfer 8 byte is not supported.
  *
  * @note p_info must persist until all transfers are completed.
+ * @note p_info must be placed into nocache regions if D-Cache is enabled.
  **********************************************************************************************************************/
 fsp_err_t R_DTC_Reconfigure (transfer_ctrl_t * const p_api_ctrl, transfer_info_t * p_info)
 {
@@ -202,6 +224,12 @@ fsp_err_t R_DTC_Reconfigure (transfer_ctrl_t * const p_api_ctrl, transfer_info_t
     FSP_ERROR_RETURN(p_ctrl->open == DTC_OPEN, FSP_ERR_NOT_OPEN);
     FSP_ASSERT(NULL != p_info);
     FSP_ASSERT(FSP_SUCCESS == r_dtc_length_assert(p_info));
+
+ #if BSP_CFG_DCACHE_ENABLED
+
+    /* Ensure that when using D-Cache, descriptor is placed into nocache region */
+    FSP_ERROR_RETURN(FSP_SUCCESS == r_dtc_info_assert(p_info), FSP_ERR_ASSERTION);
+ #endif
 
  #if !BSP_FEATURE_DTC_SUPPORT_TRANSFER_8_BYTE
     if (TRANSFER_SIZE_8_BYTE == p_info->transfer_settings_word_b.size)
@@ -482,8 +510,17 @@ fsp_err_t R_DTC_Close (transfer_ctrl_t * const p_api_ctrl)
     /* Clear DTC enable bit in ICU. */
     r_dtc_disable_transfer(irq);
 
+    /* Wait for current transfer to finish. */
+    r_dtc_wait_for_transfer_complete(p_ctrl);
+
     /* Clear pointer in vector table. */
     gp_dtc_vector_table[irq] = NULL;
+
+#if BSP_CFG_DCACHE_ENABLED && DTC_CFG_USE_DEFAULT_SECTION
+
+    /* Clean up the cache to ensure that gp_dtc_vector_table[irq] = NULL will reflect to main memory. */
+    SCB_CleanDCache_by_Addr(&(gp_dtc_vector_table[p_ctrl->irq]), sizeof(gp_dtc_vector_table[0]));
+#endif
 
     /* Mark instance as closed. */
     p_ctrl->open = 0U;
@@ -508,6 +545,9 @@ static fsp_err_t r_dtc_prv_enable (dtc_instance_ctrl_t * p_ctrl)
     fsp_err_t err = r_dtc_source_destination_parameter_check(gp_dtc_vector_table[p_ctrl->irq]);
     FSP_ERROR_RETURN(FSP_SUCCESS == err, err);
 #endif
+
+    /* All previous loads and stores must be ordered and complete before activation source enable. */
+    FSP_DSB();
 
     /* Enable transfers on this activation source. */
 #if BSP_FEATURE_ICU_HAS_IELSR
@@ -544,6 +584,12 @@ static void r_dtc_state_initialize (void)
         /* The DTC vector table must be cleared during initialization because it is located in
          * its own section outside of the .BSS section which is cleared during startup. */
         memset(&gp_dtc_vector_table, 0U, DTC_VECTOR_TABLE_ENTRIES * sizeof(transfer_info_t *));
+
+#if BSP_CFG_DCACHE_ENABLED && DTC_CFG_USE_DEFAULT_SECTION
+
+        /* Clean D-cache after zero-initializing to reflect the value to main memory. */
+        SCB_CleanDCache_by_Addr(&gp_dtc_vector_table, sizeof(gp_dtc_vector_table));
+#endif
 
         /* Set DTC vector table. */
 #if !BSP_TZ_NONSECURE_BUILD && BSP_FEATURE_TZ_HAS_TRUSTZONE
@@ -585,6 +631,13 @@ static void r_dtc_set_info (dtc_instance_ctrl_t * p_ctrl, transfer_info_t * p_in
 
     /* Update the entry in the DTC Vector table. */
     gp_dtc_vector_table[p_ctrl->irq] = p_info;
+
+#if BSP_CFG_DCACHE_ENABLED && DTC_CFG_USE_DEFAULT_SECTION
+
+    /* After p_info is assigned to dtc_vector_table, need to call SCB_CleanDCache_by_Addr() to reflect the address of
+     * p_info from cache to CPU's main memory. */
+    SCB_CleanDCache_by_Addr(&(gp_dtc_vector_table[p_ctrl->irq]), sizeof(gp_dtc_vector_table[0]));
+#endif
 
     /* Enable read skip after all settings are written. */
 #if !BSP_TZ_NONSECURE_BUILD && BSP_FEATURE_TZ_HAS_TRUSTZONE
@@ -673,6 +726,36 @@ static fsp_err_t r_dtc_source_destination_parameter_check (transfer_info_t * p_i
     return FSP_SUCCESS;
 }
 
+ #if BSP_CFG_DCACHE_ENABLED
+
+/*******************************************************************************************************************//**
+ * Check that descriptors is placed in non-cacheable region when using D-Cache .
+ *
+ * @retval FSP_SUCCESS              Descriptor is allocated in non-cacheable region.
+ * @retval FSP_ERR_ASSERTION        Descriptor is not allocated in non-cacheable region.
+ *
+ **********************************************************************************************************************/
+static fsp_err_t r_dtc_info_assert (transfer_info_t * p_info)
+{
+    bool info_is_valid = false;
+
+    /* Go through the list of non-cacheable regions. If the descriptor does not belong to any region, throw an error. */
+    for (uint8_t i = 0U; i < g_init_info.nocache_count; i++)
+    {
+        if (((uint32_t *) p_info >= g_init_info.p_nocache_list[i].p_base) &&
+            ((uint32_t *) p_info < g_init_info.p_nocache_list[i].p_limit))
+        {
+            info_is_valid = true;
+            break;
+        }
+    }
+
+    FSP_ASSERT(info_is_valid);
+
+    return FSP_SUCCESS;
+}
+
+ #endif
 #endif
 
 /*******************************************************************************************************************//**
@@ -684,6 +767,9 @@ static void r_dtc_wait_for_transfer_complete (dtc_instance_ctrl_t * p_ctrl)
 
     /* Wait for the DTCSTS.ACT flag to be clear if the current vector is the activation source.*/
     FSP_HARDWARE_REGISTER_WAIT((FSP_STYPE3_REG16_READ(R_DTC->DTCSTS, !DTC_PRV_DTCSAR_DTCSTSA) == in_progress), 0);
+
+    /* Prevent the compiler from ordering any following loads or stores before the wait loop. */
+    __COMPILER_BARRIER();
 }
 
 /*******************************************************************************************************************//**
@@ -692,8 +778,35 @@ static void r_dtc_wait_for_transfer_complete (dtc_instance_ctrl_t * p_ctrl)
 static void r_dtc_disable_transfer (const IRQn_Type irq)
 {
 #if BSP_FEATURE_ICU_HAS_IELSR
-    R_ICU->IELSR_b[((uint32_t) irq)].DTCE = 0U;
+    R_ICU->IELSR[(uint32_t) irq] &= ~(R_ICU_IELSR_IR_Msk | R_ICU_IELSR_DTCE_Msk);
+
+    /* Read back the IELSR register to ensure that the DTCE and IR bits are cleared. */
+    FSP_REGISTER_READ(R_ICU->IELSR[irq]);
 #else
     R_ICU->DTCENCLR[(((uint32_t) irq) >> 5UL)] = 1UL << (((uint32_t) irq) & (uint32_t) 0x1FUL);
+
+    /* Read back the DTCENST register to ensure that the ST and INTFLAG.IF bits are cleared. */
+    FSP_REGISTER_READ(R_ICU->DTCENST[(((uint32_t) irq) >> 5UL)]);
 #endif
+
+    /* Prevent the compiler from ordering any following loads or stores before the activation source disable. */
+    __COMPILER_BARRIER();
 }
+
+#if BSP_CFG_DCACHE_ENABLED
+
+/*******************************************************************************************************************//**
+ * Initialize the descriptor.
+ **********************************************************************************************************************/
+static void r_dtc_user_info_init (transfer_cfg_t const * const p_cfg)
+{
+    transfer_info_t       * p_info             = p_cfg->p_info;
+    const transfer_info_t * p_user_config_info = ((dtc_extended_cfg_t *) p_cfg->p_extend)->p_user_config_info;
+
+    if ((NULL != p_info) && (NULL != p_user_config_info))
+    {
+        *p_info = *p_user_config_info;
+    }
+}
+
+#endif

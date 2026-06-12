@@ -3,6 +3,30 @@
 
 dtc_instance_ctrl_t g_transfer1_ctrl;
 
+#if (BSP_CFG_DCACHE_ENABLED) && (1 == 1)
+const transfer_info_t g_transfer1_user_config_info =
+{
+    .transfer_settings_word_b.dest_addr_mode = TRANSFER_ADDR_MODE_INCREMENTED,
+    .transfer_settings_word_b.repeat_area    = TRANSFER_REPEAT_AREA_DESTINATION,
+    .transfer_settings_word_b.irq            = TRANSFER_IRQ_END,
+    .transfer_settings_word_b.chain_mode     = TRANSFER_CHAIN_MODE_DISABLED,
+    .transfer_settings_word_b.src_addr_mode  = TRANSFER_ADDR_MODE_FIXED,
+    .transfer_settings_word_b.size           = TRANSFER_SIZE_1_BYTE,
+    .transfer_settings_word_b.mode           = TRANSFER_MODE_NORMAL,
+    .p_dest                                  = (void *) NULL,
+    .p_src                                   = (void const *) NULL,
+    .num_blocks                              = (uint16_t) 0,
+    .length                                  = (uint16_t) 0,
+};
+#endif
+
+#if BSP_CFG_DCACHE_ENABLED
+    #if (1 > 0)
+    transfer_info_t g_transfer1_info_fsp_nocache[1] DTC_TRANSFER_INFO_ALIGNMENT;
+    #else
+    /* User must call api::reconfigure before enable DTC transfer. */
+    #endif
+#else
 #if (1 == 1)
 transfer_info_t g_transfer1_info DTC_TRANSFER_INFO_ALIGNMENT =
 { .transfer_settings_word_b.dest_addr_mode = TRANSFER_ADDR_MODE_INCREMENTED,
@@ -16,25 +40,44 @@ transfer_info_t g_transfer1_info DTC_TRANSFER_INFO_ALIGNMENT =
   .p_src = (void const*) NULL,
   .num_blocks = (uint16_t) 0,
   .length = (uint16_t) 0, };
-
 #elif (1 > 1)
-/* User is responsible to initialize the array. */
-transfer_info_t g_transfer1_info[1] DTC_TRANSFER_INFO_ALIGNMENT;
-#else
-/* User must call api::reconfigure before enable DTC transfer. */
+    /* User is responsible to initialize the array. */
+    transfer_info_t g_transfer1_info[1] DTC_TRANSFER_INFO_ALIGNMENT;
+    #else
+    /* User must call api::reconfigure before enable DTC transfer. */
+    #endif
 #endif
 
 const dtc_extended_cfg_t g_transfer1_cfg_extend =
-{ .activation_source = VECTOR_NUMBER_IIC1_RXI, };
+{ .activation_source = VECTOR_NUMBER_IIC1_RXI,
+
+#if BSP_CFG_DCACHE_ENABLED
+    #if (1 == 1)
+        .p_user_config_info =  &g_transfer1_user_config_info,
+    #else
+        .p_user_config_info = NULL,
+    #endif
+#else
+        /* p_user_config_info not present. */
+#endif
+        };
 
 const transfer_cfg_t g_transfer1_cfg =
 {
+#if BSP_CFG_DCACHE_ENABLED
+    #if (1 > 0)
+        .p_info              = g_transfer1_info_fsp_nocache,
+    #else
+        .p_info = NULL,
+    #endif
+#else
 #if (1 == 1)
   .p_info = &g_transfer1_info,
 #elif (1 > 1)
-    .p_info              = g_transfer1_info,
-#else
-    .p_info = NULL,
+        .p_info              = g_transfer1_info,
+    #else
+        .p_info = NULL,
+    #endif
 #endif
   .p_extend = &g_transfer1_cfg_extend, };
 
@@ -43,6 +86,30 @@ const transfer_instance_t g_transfer1 =
 { .p_ctrl = &g_transfer1_ctrl, .p_cfg = &g_transfer1_cfg, .p_api = &g_transfer_on_dtc };
 dtc_instance_ctrl_t g_transfer0_ctrl;
 
+#if (BSP_CFG_DCACHE_ENABLED) && (1 == 1)
+const transfer_info_t g_transfer0_user_config_info =
+{
+    .transfer_settings_word_b.dest_addr_mode = TRANSFER_ADDR_MODE_FIXED,
+    .transfer_settings_word_b.repeat_area    = TRANSFER_REPEAT_AREA_SOURCE,
+    .transfer_settings_word_b.irq            = TRANSFER_IRQ_END,
+    .transfer_settings_word_b.chain_mode     = TRANSFER_CHAIN_MODE_DISABLED,
+    .transfer_settings_word_b.src_addr_mode  = TRANSFER_ADDR_MODE_INCREMENTED,
+    .transfer_settings_word_b.size           = TRANSFER_SIZE_1_BYTE,
+    .transfer_settings_word_b.mode           = TRANSFER_MODE_NORMAL,
+    .p_dest                                  = (void *) NULL,
+    .p_src                                   = (void const *) NULL,
+    .num_blocks                              = (uint16_t) 0,
+    .length                                  = (uint16_t) 0,
+};
+#endif
+
+#if BSP_CFG_DCACHE_ENABLED
+    #if (1 > 0)
+    transfer_info_t g_transfer0_info_fsp_nocache[1] DTC_TRANSFER_INFO_ALIGNMENT;
+    #else
+    /* User must call api::reconfigure before enable DTC transfer. */
+    #endif
+#else
 #if (1 == 1)
 transfer_info_t g_transfer0_info DTC_TRANSFER_INFO_ALIGNMENT =
 { .transfer_settings_word_b.dest_addr_mode = TRANSFER_ADDR_MODE_FIXED,
@@ -56,25 +123,44 @@ transfer_info_t g_transfer0_info DTC_TRANSFER_INFO_ALIGNMENT =
   .p_src = (void const*) NULL,
   .num_blocks = (uint16_t) 0,
   .length = (uint16_t) 0, };
-
 #elif (1 > 1)
-/* User is responsible to initialize the array. */
-transfer_info_t g_transfer0_info[1] DTC_TRANSFER_INFO_ALIGNMENT;
-#else
-/* User must call api::reconfigure before enable DTC transfer. */
+    /* User is responsible to initialize the array. */
+    transfer_info_t g_transfer0_info[1] DTC_TRANSFER_INFO_ALIGNMENT;
+    #else
+    /* User must call api::reconfigure before enable DTC transfer. */
+    #endif
 #endif
 
 const dtc_extended_cfg_t g_transfer0_cfg_extend =
-{ .activation_source = VECTOR_NUMBER_IIC1_TXI, };
+{ .activation_source = VECTOR_NUMBER_IIC1_TXI,
+
+#if BSP_CFG_DCACHE_ENABLED
+    #if (1 == 1)
+        .p_user_config_info =  &g_transfer0_user_config_info,
+    #else
+        .p_user_config_info = NULL,
+    #endif
+#else
+        /* p_user_config_info not present. */
+#endif
+        };
 
 const transfer_cfg_t g_transfer0_cfg =
 {
+#if BSP_CFG_DCACHE_ENABLED
+    #if (1 > 0)
+        .p_info              = g_transfer0_info_fsp_nocache,
+    #else
+        .p_info = NULL,
+    #endif
+#else
 #if (1 == 1)
   .p_info = &g_transfer0_info,
 #elif (1 > 1)
-    .p_info              = g_transfer0_info,
-#else
-    .p_info = NULL,
+        .p_info              = g_transfer0_info,
+    #else
+        .p_info = NULL,
+    #endif
 #endif
   .p_extend = &g_transfer0_cfg_extend, };
 

@@ -92,7 +92,6 @@
 #endif
 
 /* Type 1 Peripheral Security Attribution */
-
 /* Peripheral Security Attribution Register (PSAR) Settings */
 #ifndef BSP_TZ_CFG_PSARB
 #define BSP_TZ_CFG_PSARB (\
@@ -156,8 +155,8 @@
 #endif
 #ifndef BSP_TZ_CFG_PSARE
 #define BSP_TZ_CFG_PSARE (\
-            (((RA_NOT_DEFINED > 0) ? 0U : 1U) << 0) /* WDT1 */ | \
-            (((RA_NOT_DEFINED > 0) ? 0U : 1U) << 1) /* WDT0 */ | \
+            (((RA_NOT_DEFINED > 0) ? ((BSP_CFG_CPU_CORE == 1) ? 0U : 1U) : 1U) << 0) /* WDT1 */ | \
+            (((RA_NOT_DEFINED > 0) ? ((BSP_CFG_CPU_CORE == 0) ? 0U : 1U) : 1U) << 1) /* WDT0 */ | \
             (((RA_NOT_DEFINED > 0) ? 0U : 1U) << 2) /* IWDT */ | \
             (((RA_NOT_DEFINED > 0) ? 0U : 1U) << 3) /* RTC */ | \
             (((RA_NOT_DEFINED > 0) ? 0U : 1U) << 8) /* ULPT1 */ | \
