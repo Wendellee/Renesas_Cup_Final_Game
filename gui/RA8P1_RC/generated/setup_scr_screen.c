@@ -143,12 +143,12 @@ void setup_scr_screen(lv_ui *ui)
 
     //Write codes screen_video_container
     ui->screen_video_container = gg_video_create(ui->screen_cont_1, 480, 272);
-    lv_obj_set_pos(ui->screen_video_container, -1, 105);
+    lv_obj_set_pos(ui->screen_video_container, 0, 104);
     lv_obj_set_size(ui->screen_video_container, 480, 272);
 #if LV_USE_GUIDER_SIMULATOR
-    gg_video_set_src(ui->screen_video_container,"C:\\NXP\\GUI-Guider-Projects\\RA8P1_RC");
+    gg_video_set_src(ui->screen_video_container,"E:\\Renesas_Cup_Final_Game\\Renesas_Cup_Final_Game\\gui\\RA8P1_RC\\import\\video\\z.h264");
 #else
-    gg_video_set_src(ui->screen_video_container,"S:/");
+    gg_video_set_src(ui->screen_video_container,"S:/z.h264");
 #endif
 
     //Write codes screen_label_2

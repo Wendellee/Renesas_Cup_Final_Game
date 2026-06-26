@@ -1,44 +1,44 @@
 build/object/lv_os_none.o: \
- c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\osal\lv_os_none.c \
- c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\lv_conf_internal.h \
- c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\lv_conf_kconfig.h \
- C:/NXP/GUI-Guider-Projects/RA8P1_RC/lvgl-simulator/lv_conf.h \
- c:\nxp\gui-guider-projects\ra8p1_rc\custom\lv_conf_ext.h \
- c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\osal\lv_os.h \
- c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\misc\lv_types.h \
- c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\lv_conf_internal.h \
- c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\osal\lv_os_none.h \
- c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\misc\lv_timer.h \
- c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\tick\lv_tick.h \
- c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\lv_conf_internal.h \
- c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\misc\lv_types.h \
- c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\misc\lv_types.h \
- c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\misc\lv_ll.h
+ e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\osal\lv_os_none.c \
+ e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\lv_conf_internal.h \
+ e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\lv_conf_kconfig.h \
+ E:/Renesas_Cup_Final_Game/Renesas_Cup_Final_Game/gui/RA8P1_RC/lvgl-simulator/lv_conf.h \
+ e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\custom\lv_conf_ext.h \
+ e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\osal\lv_os.h \
+ e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\misc\lv_types.h \
+ e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\lv_conf_internal.h \
+ e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\osal\lv_os_none.h \
+ e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\misc\lv_timer.h \
+ e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\tick\lv_tick.h \
+ e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\lv_conf_internal.h \
+ e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\misc\lv_types.h \
+ e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\misc\lv_types.h \
+ e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\misc\lv_ll.h
 
-c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\lv_conf_internal.h:
+e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\lv_conf_internal.h:
 
-c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\lv_conf_kconfig.h:
+e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\lv_conf_kconfig.h:
 
-C:/NXP/GUI-Guider-Projects/RA8P1_RC/lvgl-simulator/lv_conf.h:
+E:/Renesas_Cup_Final_Game/Renesas_Cup_Final_Game/gui/RA8P1_RC/lvgl-simulator/lv_conf.h:
 
-c:\nxp\gui-guider-projects\ra8p1_rc\custom\lv_conf_ext.h:
+e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\custom\lv_conf_ext.h:
 
-c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\osal\lv_os.h:
+e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\osal\lv_os.h:
 
-c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\misc\lv_types.h:
+e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\misc\lv_types.h:
 
-c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\lv_conf_internal.h:
+e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\lv_conf_internal.h:
 
-c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\osal\lv_os_none.h:
+e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\osal\lv_os_none.h:
 
-c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\misc\lv_timer.h:
+e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\misc\lv_timer.h:
 
-c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\tick\lv_tick.h:
+e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\tick\lv_tick.h:
 
-c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\lv_conf_internal.h:
+e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\lv_conf_internal.h:
 
-c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\misc\lv_types.h:
+e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\misc\lv_types.h:
 
-c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\misc\lv_types.h:
+e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\misc\lv_types.h:
 
-c:\nxp\gui-guider-projects\ra8p1_rc\lvgl\src\misc\lv_ll.h:
+e:\renesas_cup_final_game\renesas_cup_final_game\gui\ra8p1_rc\lvgl\src\misc\lv_ll.h:

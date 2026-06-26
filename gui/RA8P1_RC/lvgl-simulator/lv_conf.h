@@ -818,7 +818,7 @@
 #define LV_USE_FS_STDIO 1
 #if LV_USE_FS_STDIO
 /* Set an upper-case letter on which the drive will accessible (e.g. 'A'). */
-#define LV_FS_STDIO_LETTER 'C'
+#define LV_FS_STDIO_LETTER 'E'
 /* Set the working directory. File/directory paths will be appended to it. */
 #define LV_FS_STDIO_PATH ""
 /* >0 to cache this number of bytes in lv_fs_read(). */

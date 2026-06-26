@@ -30,9 +30,54 @@ static void screen_btn_go_event_handler (lv_event_t *e)
     }
 }
 
+static void screen_btn_back_event_handler (lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    switch (code) {
+    case LV_EVENT_PRESSED:
+    {
+        lv_label_set_text(guider_ui.screen_label_2, "back");
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+static void screen_btn_left_event_handler (lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    switch (code) {
+    case LV_EVENT_PRESSED:
+    {
+        lv_label_set_text(guider_ui.screen_label_2, "left");
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+static void screen_btn_right_event_handler (lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    switch (code) {
+    case LV_EVENT_PRESSED:
+    {
+        lv_label_set_text(guider_ui.screen_label_2, "right");
+        break;
+    }
+    default:
+        break;
+    }
+}
+
 void events_init_screen (lv_ui *ui)
 {
     lv_obj_add_event_cb(ui->screen_btn_go, screen_btn_go_event_handler, LV_EVENT_ALL, ui);
+    lv_obj_add_event_cb(ui->screen_btn_back, screen_btn_back_event_handler, LV_EVENT_ALL, ui);
+    lv_obj_add_event_cb(ui->screen_btn_left, screen_btn_left_event_handler, LV_EVENT_ALL, ui);
+    lv_obj_add_event_cb(ui->screen_btn_right, screen_btn_right_event_handler, LV_EVENT_ALL, ui);
 }
 
 

@@ -366,9 +366,29 @@ def screen_btn_go_event_handler(e):
     code = e.get_code()
     if (code == lv.EVENT.PRESSED):
         pass
-        
-
+        screen_label_2.set_text("go")
 screen_btn_go.add_event_cb(lambda e: screen_btn_go_event_handler(e), lv.EVENT.ALL, None)
+
+def screen_btn_back_event_handler(e):
+    code = e.get_code()
+    if (code == lv.EVENT.PRESSED):
+        pass
+        screen_label_2.set_text("back")
+screen_btn_back.add_event_cb(lambda e: screen_btn_back_event_handler(e), lv.EVENT.ALL, None)
+
+def screen_btn_left_event_handler(e):
+    code = e.get_code()
+    if (code == lv.EVENT.PRESSED):
+        pass
+        screen_label_2.set_text("left")
+screen_btn_left.add_event_cb(lambda e: screen_btn_left_event_handler(e), lv.EVENT.ALL, None)
+
+def screen_btn_right_event_handler(e):
+    code = e.get_code()
+    if (code == lv.EVENT.PRESSED):
+        pass
+        screen_label_2.set_text("right")
+screen_btn_right.add_event_cb(lambda e: screen_btn_right_event_handler(e), lv.EVENT.ALL, None)
 
 # content from custom.py
 
