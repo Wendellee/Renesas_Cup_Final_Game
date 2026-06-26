@@ -283,6 +283,22 @@ __STATIC_INLINE uint32_t R_BSP_S_STYPE3_RegU32Read (uint32_t volatile const * p_
  #define FSP_STYPE3_REG32_READ(X, S)    (X)
 #endif
 
+/* Macro to insert either a CMSIS __DSB() or __COMPILER_BARRIER() macro depending on microarchitecture.
+ * Used where a memory barrier is required, but where the hardware instruction might be optional. */
+#if defined(__CORTEX_M)
+
+/* Cortex-M3/M4 has an internal write buffer shared between the DCode and System interfaces.
+ * There may be a case where a buffered store to the DCode or System interface must be ordered against a load to the other interface.
+ * This case is likely seldom to occur, and thus Cortex-M3/M4 is omitted here. */
+ #if ((__CORTEX_M == 7U) || (__CORTEX_M == 52U) || (__CORTEX_M == 55U) || (__CORTEX_M == 85U))
+  #define FSP_DSB()    __DSB()
+ #else
+  #define FSP_DSB()    __COMPILER_BARRIER()
+ #endif
+#else
+ #error "Unknown microarchitecture."
+#endif
+
 /***********************************************************************************************************************
  * Typedef definitions
  **********************************************************************************************************************/

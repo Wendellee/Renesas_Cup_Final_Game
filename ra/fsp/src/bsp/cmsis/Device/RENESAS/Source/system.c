@@ -431,12 +431,6 @@ void SystemInit (void)
  #endif
 #endif
 
-#if BSP_CFG_DCACHE_ENABLED
-    bsp_init_mpu();
-
-    SCB_EnableDCache();
-#endif
-
 #if BSP_FEATURE_BSP_HAS_GRAPHICS_DOMAIN && !BSP_CFG_SKIP_INIT
     if ((((0 == R_SYSTEM->PGCSAR_b.NONSEC1) && FSP_PRIV_TZ_USE_SECURE_REGS) ||
          ((1 == R_SYSTEM->PGCSAR_b.NONSEC1) && BSP_TZ_NONSECURE_BUILD)) && (0 != R_SYSTEM->PDCTRGD))
@@ -466,9 +460,6 @@ void SystemInit (void)
         R_BSP_RegisterProtectEnable(BSP_REG_PROTECT_OM_LPC_BATT);
     }
 #endif
-
-    /* Call Post C runtime initialization hook. */
-    R_BSP_WarmStart(BSP_WARM_START_POST_C);
 
 #if BSP_CFG_C_RUNTIME_INIT
 
@@ -521,11 +512,20 @@ void SystemInit (void)
     __call_ctors(pibase, ilimit);
 #endif
 
+    /* Call Post C runtime initialization hook. */
+    R_BSP_WarmStart(BSP_WARM_START_POST_C);
+
     /* Initialize ELC events that will be used to trigger NVIC interrupts. */
     bsp_irq_cfg();
 
     /* Call any BSP specific code. No arguments are needed so NULL is sent. */
     bsp_init(NULL);
+
+#if BSP_CFG_DCACHE_ENABLED
+    bsp_init_mpu();
+
+    SCB_EnableDCache();
+#endif
 }
 
 /*******************************************************************************************************************//**
@@ -683,24 +683,46 @@ static void bsp_init_mpu (void)
     };
 
     /* Initialize MPU_MAIR0 and MPU_MAIR1 from attributes table. */
-    uint8_t num_attr = (sizeof(bsp_mpu_mair_attributes) / sizeof(bsp_mpu_mair_attributes[0]));
+    const uint8_t num_attr = (sizeof(bsp_mpu_mair_attributes) / sizeof(bsp_mpu_mair_attributes[0]));
     for (uint8_t i = 0; i < num_attr; i++)
     {
         ARM_MPU_SetMemAttr(i, bsp_mpu_mair_attributes[i]);
     }
 
     /* Initialize MPU from configuration table. */
-    for (uint8_t i = 0; i < g_init_info.nocache_count; i++)
+    uint8_t       mpu_region_number = 0;
+    const uint8_t max_mpu_regions   = ((MPU->TYPE & MPU_TYPE_DREGION_Msk) >> MPU_TYPE_DREGION_Pos);
+    for (uint8_t i = 0; (i < g_init_info.nocache_count) && (mpu_region_number < max_mpu_regions); i++)
     {
-        uint32_t rbar = ARM_MPU_RBAR((uint32_t) (g_init_info.p_nocache_list[i].p_base), ARM_MPU_SH_NON, 0U, 0U, 1U);
-        uint32_t rlar = ARM_MPU_RLAR((((uint32_t) g_init_info.p_nocache_list[i].p_limit) - ARMV8_MPU_REGION_MIN_SIZE),
-                                     0U);
+        const uint32_t p_base  = (uint32_t) (g_init_info.p_nocache_list[i].p_base);
+        const uint32_t p_limit = (uint32_t) (g_init_info.p_nocache_list[i].p_limit);
 
-        /* Only configure regions of non-zero size. */
-        if ((((rlar & MPU_RLAR_LIMIT_Msk) >> MPU_RLAR_LIMIT_Pos) + ARMV8_MPU_REGION_MIN_SIZE) >
-            ((rbar & MPU_RBAR_BASE_Msk) >> MPU_RBAR_BASE_Pos))
+        /*
+         * Only configure regions where the linker limit address does not wrap upon subtraction.
+         * The linker limit address is exclusive, and must be subtracted before being masked by ARM_MPU_RLAR().
+         */
+        if ((p_limit - ARMV8_MPU_REGION_MIN_SIZE) < p_limit)
         {
-            ARM_MPU_SetRegion(i, rbar, rlar);
+            const uint32_t rbar = ARM_MPU_RBAR(p_base, ARM_MPU_SH_NON, 0U, 0U, 1U);
+            const uint32_t rlar = ARM_MPU_RLAR((p_limit - ARMV8_MPU_REGION_MIN_SIZE), 0U);
+
+            /*
+             * Only configure regions of non-zero size.
+             * The RLAR limit address is inclusive and is always considered by the MPU with bits [0, 4] fixed to one.
+             */
+            if ((rlar & MPU_RLAR_LIMIT_Msk) >= (rbar & MPU_RBAR_BASE_Msk))
+            {
+                ARM_MPU_SetRegion(mpu_region_number, rbar, rlar);
+                mpu_region_number++;
+            }
+            else
+            {
+                /* Do nothing. */
+            }
+        }
+        else
+        {
+            /* Do nothing. */
         }
     }
 

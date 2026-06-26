@@ -642,6 +642,7 @@ SECTIONS
     {
         __ram_zero_nocache$$Base = .;
         /* section.ram.zero_nocache */
+        *(.bss.*_fsp_nocache)
         *(.ram_nocache)
         . = ALIGN(32);
         __ram_zero_nocache$$Limit = .;
