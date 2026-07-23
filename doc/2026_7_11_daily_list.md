@@ -22,3 +22,13 @@
 # 2026.7.12 Renesas Cup Finals Daily List
 1. 添加GT911 驱动          
 2. 测试lvgl 触摸与交互
+
+# 2026.7.23 Renesas Cup Finals Daily List
+1. 系统总体完善 
+   > - 1024*600 屏幕驱动板网络修改后打板测试成功
+   > - GT911驱动测试成功 与Lvgl交互成功
+   > - 摄像头方向旋转OK
+2. 等待完善部分
+   > - NRF24L01+ 图传功能完善
+   > - IPC(Rtos )系统
+   > - 系统整合测试
