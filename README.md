@@ -19,11 +19,68 @@ Cortex-M33 负责履带运动、姿态控制和安全保护。操作员可通过
 
 ## 项目展示
 
-当前已完成摄像头画面显示、LVGL 基础界面和部分屏幕适配测试。
+<p align="center">
+  <img src="doc/image/18.边框3D支架%28完整车体%29.jpg" alt="负压吸附巡检车完整车体" width="900">
+</p>
+<p align="center"><b>负压吸附巡检车阶段性整机</b></p>
 
-| 摄像头画面与 LVGL 界面 | “关于我们”界面 |
+当前原型已经完成 RA8P1 核心板、负压吸附底盘、左右履带、OV5640 摄像头、
+RGB 屏幕、电源及多组 3D 打印结构件的装机验证；软件侧已完成图像采集显示、
+LCD 彩条、LVGL 界面、GT911 触摸及部分运动控制测试。
+
+### 整机与结构
+
+| 装机与图像显示测试 | 摄像头 3D 支架 |
 | --- | --- |
-| <img src="doc/image/2026_6_28_LVGL_UI界面.jpg" alt="摄像头画面与 LVGL 界面" width="500"> | <img src="doc/image/2026_6_28_添加二维码.jpg" alt="控制器关于界面" width="260"> |
+| <img src="doc/image/16.装机测试.jpg" alt="巡检车装机测试" width="460"> | <img src="doc/image/17.摄像头3D支架%28已安装%29.jpg" alt="摄像头 3D 支架安装效果" width="460"> |
+
+| 屏幕支架安装效果 | 原始负压吸附底盘 |
+| --- | --- |
+| <img src="doc/image/13.屏幕3D支架%28安装屏幕%29.jpg" alt="屏幕 3D 支架安装效果" width="460"> | <img src="doc/image/9.吸附底盘%28原装%29.jpg" alt="原始负压吸附履带底盘" width="460"> |
+
+### 图像采集与显示链路
+
+| OV5640 → RA8P1 → RGB LCD 数据流 | 摄像头采集与显示结果 |
+| --- | --- |
+| <img src="doc/image/5.采集图像与显示数据流测试.jpg" alt="图像采集与显示数据流测试" width="460"> | <img src="doc/image/6.数据流测试%28自拍%29.jpg" alt="摄像头数据流显示测试" width="460"> |
+
+以上测试验证了 OV5640、MIPI-CSI、帧缓冲和 GLCDC 显示链路。画面中的矩形框
+用于验证图像叠加流程，不代表当前光伏板缺陷模型已经完成。
+
+### 显示与交互
+
+| LCD 彩条与帧缓冲测试 | LVGL 基础界面 |
+| --- | --- |
+| <img src="doc/image/8.彩条带测试%28GUI显示%29.jpg" alt="LCD 彩条带与帧缓冲测试" width="460"> | <img src="doc/image/2026_6_28_LVGL_UI界面.jpg" alt="LVGL 基础交互界面" width="460"> |
+
+| 1024×600 屏幕实测 | About us 页面设计稿 |
+| --- | --- |
+| <img src="doc/image/15.测试1024_600屏幕.jpg" alt="1024×600 屏幕测试" width="460"> | <img src="doc/image/About%20us.png" alt="About us 页面设计稿" width="460"> |
+
+<details>
+<summary><b>展开查看硬件与开发过程照片</b></summary>
+
+| 参赛 RA8P1 核心板 | 第一版 OV5640 MIPI-CSI 转接板 |
+| --- | --- |
+| <img src="doc/image/1.参赛核心板.jpg" alt="参赛 RA8P1 核心板" width="440"> | <img src="doc/image/2.第一版OV5640驱动板%28mipi_csi%29.jpg" alt="第一版 OV5640 MIPI-CSI 转接板" width="440"> |
+
+| 第一版 RGB LCD 驱动板 | 核心板扩展板焊接测试 |
+| --- | --- |
+| <img src="doc/image/3.第一版RGBLCD驱动板%28瑞萨背光%29.jpg" alt="第一版 RGB LCD 驱动板" width="440"> | <img src="doc/image/4.第一版核心板扩展版焊接测试.jpg" alt="核心板扩展板焊接测试" width="440"> |
+
+| 第一版图像数据流平台 | 顶部散热风扇支撑板 PCB 设计 |
+| --- | --- |
+| <img src="doc/image/11.第一版图像数据流平台.jpg" alt="第一版图像数据流平台" width="440"> | <img src="doc/image/7.顶部散热风扇支撑板.jpg" alt="顶部散热风扇支撑板 PCB 设计" width="440"> |
+
+| 屏幕支架安装前 | 负压电机调试记录 |
+| --- | --- |
+| <img src="doc/image/12.屏幕3D支架%28未安装屏幕%29.jpg" alt="屏幕支架安装前" width="440"> | <img src="doc/image/10.调试负压电机%28人像%29.jpg" alt="负压电机调试记录" width="440"> |
+
+| LVGL 输出测试现场 | About us 页面早期实测 |
+| --- | --- |
+| <img src="doc/image/14.测试lvgl输出.jpg" alt="LVGL 输出测试现场" width="440"> | <img src="doc/image/2026_6_28_添加二维码.jpg" alt="About us 页面早期实测" width="440"> |
+
+</details>
 
 ## 项目目标
 
@@ -60,7 +117,7 @@ flowchart LR
 
     subgraph CONTROLLER["手持触控控制器"]
         TOUCH["GT911<br/>电容触摸屏"]
-        UI["Cortex-M85 + LVGL 9.3.0<br/>交互与图像显示"]
+        UI["Cortex-M85 + LVGL 9.5.0<br/>交互与图像显示"]
         PAD_LCD["GLCDC<br/>1024×600 显示屏"]
         PAD_RADIO["无线通信"]
     end
@@ -115,12 +172,28 @@ OV5640
 控制器是操作员与巡检车之间的人机交互终端，目标功能包括：
 
 - 使用 GT911 电容触摸屏接收操作；
-- 使用 LVGL 9.3.0 构建 1024×600 图形界面；
+- 使用 LVGL 9.5.0 构建 1024×600 图形界面；
 - 控制小车前进、后退、左转、右转和停止；
 - 控制负压风机及巡检模式；
 - 显示巡检画面、缺陷信息和置信度；
 - 显示电池、负压、姿态、通信和故障状态；
 - 提供紧急停止和通信失联提示。
+
+### 3. 自研硬件与机械结构
+
+除了固件开发，本项目还包含板卡和机械结构设计：
+
+- RA8P1 核心板扩展底板；
+- OV5640 MIPI-CSI 转接板；
+- RGB LCD、背光与触摸转接板；
+- 顶部散热风扇支撑板；
+- 车载屏幕 3D 打印支架；
+- 可调节摄像头 3D 打印支架；
+- 车体外围防护与搬运边框；
+- 履带、负压风机、电池和控制板的整机布局。
+
+当前结构件以快速迭代和装机验证为目标，后续仍需继续优化重心、线缆固定、
+摄像头视角、屏幕防护和负压风道。
 
 ## RA8P1 双核职责
 
@@ -210,7 +283,7 @@ OV5640 转接板和扩展板等硬件工程文件。
 | 配置框架 | Flexible Software Package（FSP）6.5.0 |
 | 目标芯片 | RA8P1 / CPU0（当前工程） |
 | 编程语言 | C |
-| 图形库 | LVGL 9.3.0 |
+| 图形库 | LVGL 9.5.0（`gui` / `color` 分支实际配置） |
 | 调试输出 | SEGGER RTT |
 | RTOS | FreeRTOS（规划集成，当前工程配置为无 RTOS） |
 | AI 运行时 | Ethos-U55 相关推理组件（待集成） |
@@ -226,7 +299,9 @@ OV5640 转接板和扩展板等硬件工程文件。
 │  ├─ SEGGER_RTT/      # RTT 调试输出
 │  └─ hal_entry.c      # 当前 CPU0 程序入口
 ├─ hardware/           # 自研板卡和转接板工程
-├─ doc/                # 设计文档、器件资料和开发记录
+├─ doc/
+│  ├─ image/           # 实物、调试和界面照片
+│  └─ ...              # 设计文档、器件资料和开发记录
 ├─ ra/                 # FSP 驱动代码
 ├─ ra_cfg/             # FSP 配置头文件
 ├─ ra_gen/             # FSP 自动生成代码
@@ -250,6 +325,22 @@ firmware/
    └─ common/          # CRC、日志和公共数据结构
 ```
 
+## 功能分支
+
+当前各功能仍分布在不同 Git 分支中，尚未全部合入 `main`：
+
+| 分支 | 主要内容 | 当前定位 |
+| --- | --- | --- |
+| [`main`](https://github.com/Wendellee/Renesas_Cup_Final_Game/tree/main) | 摄像头、MIPI-CSI、GLCDC、GPT 基础工程 | 当前默认分支 |
+| [`car`](https://github.com/Wendellee/Renesas_Cup_Final_Game/tree/car) | MPU6050、航向闭环、履带和负压风机控制 | 巡检车固件基础 |
+| [`gui`](https://github.com/Wendellee/Renesas_Cup_Final_Game/tree/gui) | 1024×600、LVGL 9.5.0、GT911、GUI Guider 界面 | 控制器固件基础 |
+| [`color`](https://github.com/Wendellee/Renesas_Cup_Final_Game/tree/color) | 800×480 彩条、SDRAM 和帧缓冲诊断 | 显示硬件调试 |
+| [`FreeRTOS`](https://github.com/Wendellee/Renesas_Cup_Final_Game/tree/FreeRTOS) | FreeRTOS 11.1.0 单任务骨架 | RTOS 配置参考 |
+
+其中 `FreeRTOS` 是独立创建的实验工程，与 `main` 没有共同提交历史，不建议
+直接整体合并。后续计划以 `car` 和 `gui` 中经过验证的功能为基础重新整理目录，
+再统一接入 FreeRTOS、IPC 和无线通信。
+
 ## 当前进度
 
 图例：✅ 已完成阶段性验证　🚧 开发中　⬜ 待开发/待集成
@@ -257,17 +348,19 @@ firmware/
 | 功能 | 状态 | 说明 |
 | --- | :---: | --- |
 | RA8P1 自定义板基础工程 | ✅ | CPU0 工程已建立，FSP 外设配置可用 |
+| 自研转接板与机械装机 | ✅ | 摄像头、LCD、扩展板和多组 3D 支架已完成阶段性装机 |
 | GPT PWM | ✅ | 已接入左右履带、风机和 LED 实例 |
 | OV5640 与 MIPI-CSI | ✅ | 已有驱动代码并完成阶段性摄像头测试 |
-| GLCDC 显示 | ✅ | 已有驱动，800×480/1024×600 屏幕完成阶段性测试 |
-| GT911 与 LVGL 交互 | ✅ | 开发记录显示触摸交互测试成功 |
-| 底盘运动控制 | 🚧 | PWM 基础已具备，IMU 闭环与运动状态机待整合 |
+| 图像采集与显示数据流 | ✅ | OV5640 → MIPI-CSI → 帧缓冲 → GLCDC 链路已完成实机验证 |
+| GLCDC 显示 | ✅ | 800×480 彩条及 1024×600 屏幕已完成阶段性测试 |
+| GT911 与 LVGL 交互 | ✅ | `gui` 分支已实现 LVGL 9.5.0、GT911 和基础页面 |
+| 底盘运动控制 | 🚧 | `car` 分支已实现 MPU6050 航向闭环，仍待整机标定与主线整合 |
 | AI 缺陷识别 | 🚧 | 模型、预处理、U55 推理及结果绘制待集成 |
 | NRF24L01+ 无线通信 | 🚧 | 控制协议与图像传输仍在完善 |
-| FreeRTOS 任务调度 | ⬜ | 当前 FSP 工程配置为无 RTOS |
+| FreeRTOS 任务调度 | 🚧 | 已有独立骨架分支，尚未与巡检车和控制器工程整合 |
 | M85/M33 IPC | ⬜ | 双核职责、共享内存和消息协议待实现 |
 | SD 卡与巡检记录 | ⬜ | 待开发 |
-| 整机联调 | ⬜ | 待各子系统完成后进行 |
+| 整机联调 | 🚧 | 已完成装机和局部功能验证，系统闭环联调尚未完成 |
 
 详细开发记录可参阅 [`doc/2026_7_11_daily_list.md`](doc/2026_7_11_daily_list.md)。
 
@@ -323,9 +416,9 @@ firmware/
 
 | 成员 | 负责方向 |
 | --- | --- |
-| 孔令杰 | AI 识别、DA16200 Wi-Fi、补光灯 |
-| 李文学 | RTOS 调度、NRF24L01+ 图传、底板设计 |
-| 韩汶君 | IPC 核间通信、运动控制与定位、SD 卡 |
+| Zimu(子木) | AI 识别、DA16200 Wi-Fi、补光灯 |
+| Wendell Lee(硕正) | RTOS 调度、NRF24L01+ 图传、底板设计 |
+| Xshghost | 运动控制与定位、SD 卡 |
 
 具体分工会随系统集成进度继续调整。
 
