@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>光伏板负压吸附智能巡检系统 — 基于 Renesas RA8P1</title>
+<style>
+  :root {
+    --bg: #0a0e14;
+    --surface: #131820;
+    --surface2: #1a212e;
+    --border: #252e3b;
+    --text: #c9d1d9;
+    --text2: #8b949e;
+    --accent: #58a6ff;
+    --accent2: #3fb950;
+    --accent3: #d2a8ff;
+    --warn: #d29922;
+    --danger: #f85149;
+    --radius: 12px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── Nav ──────────────────────── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 1000;
+    background: rgba(10,14,20,0.85); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px; height: 56px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  nav .logo { font-weight: 700; font-size: 1.05rem; color: #fff; letter-spacing: -.01em; }
+  nav .logo span { color: var(--accent); }
+  nav a { color: var(--text2); text-decoration: none; margin-left: 28px; font-size: .9rem; transition: color .2s; }
+  nav a:hover { color: #fff; }
+
+  /* ── Hero ──────────────────────── */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 120px 24px 80px;
+    background: radial-gradient(ellipse at 50% 0%, #112233 0%, var(--bg) 70%);
+    position: relative;
+  }
+  .hero::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+  }
+  .hero .badge {
+    display: inline-block; padding: 4px 14px; border-radius: 20px;
+    font-size: .8rem; font-weight: 500; margin: 0 4px 8px;
+    border: 1px solid;
+  }
+  .badge-mcu  { color: var(--accent);  border-color: var(--accent); }
+  .badge-fsp  { color: var(--accent3); border-color: var(--accent3); }
+  .badge-dev  { color: var(--warn);    border-color: var(--warn); }
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 800; color: #fff;
+    line-height: 1.25; margin: 20px 0 12px; letter-spacing: -.02em;
+  }
+  .hero h1 span { background: linear-gradient(135deg, var(--accent), var(--accent3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero .sub {
+    font-size: 1.15rem; color: var(--text2); max-width: 620px; margin: 0 auto 32px;
+  }
+  .hero .btn-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px;
+    border-radius: 8px; font-size: .92rem; font-weight: 600; text-decoration: none;
+    transition: all .25s; border: 1px solid transparent; cursor: pointer;
+  }
+  .btn-p { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn-p:hover { background: #4090e0; box-shadow: 0 0 20px rgba(88,166,255,.35); }
+  .btn-s { background: transparent; color: var(--text); border-color: var(--border); }
+  .btn-s:hover { background: var(--surface2); border-color: var(--text2); }
+
+  /* ── Sections ──────────────────── */
+  section { padding: 90px 24px; max-width: 1100px; margin: 0 auto; }
+  .sec-label { font-size: .8rem; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin-bottom: 6px; }
+  .sec-title { font-size: 2rem; font-weight: 700; color: #fff; margin-bottom: 14px; letter-spacing: -.01em; }
+  .sec-desc { color: var(--text2); font-size: 1.05rem; max-width: 700px; margin-bottom: 40px; }
+
+  /* ── Cards ──────────────────────── */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 20px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 28px; transition: border-color .25s, transform .25s;
+  }
+  .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .card .icon { font-size: 1.8rem; margin-bottom: 12px; }
+  .card h3 { color: #fff; font-size: 1.08rem; margin-bottom: 6px; }
+  .card p { color: var(--text2); font-size: .92rem; }
+
+  /* ── Architecture ──────────────── */
+  .arch {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 36px; overflow-x: auto;
+  }
+  .arch h3 { color: #fff; font-size: 1.1rem; margin-bottom: 18px; text-align: center; }
+  .arch-diagram {
+    display: flex; gap: 32px; justify-content: center; flex-wrap: wrap; min-width: 700px;
+  }
+  .arch-box {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 22px; flex: 1; min-width: 280px;
+  }
+  .arch-box h4 { color: var(--accent); font-size: .95rem; margin-bottom: 14px; text-align: center; }
+  .arch-flow { display: flex; flex-direction: column; gap: 8px; }
+  .arch-item {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+    padding: 8px 12px; font-size: .85rem; text-align: center; color: var(--text);
+  }
+  .arch-arrow { text-align: center; color: var(--text2); font-size: 1.2rem; padding: 4px 0; }
+  .arch-link {
+    text-align: center; color: var(--accent2); font-size: .82rem; font-weight: 600;
+    padding: 12px 0; border-top: 1px dashed var(--border); margin-top: 8px;
+  }
+
+  /* ── Table ──────────────────────── */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+  th, td { padding: 10px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+  th { color: var(--text2); font-weight: 600; font-size: .82rem; text-transform: uppercase; letter-spacing: .06em; }
+  td { color: var(--text); }
+
+  /* ── Progress ──────────────────── */
+  .progress-grid { display: flex; flex-direction: column; gap: 12px; }
+  .progress-row {
+    display: grid; grid-template-columns: 240px 1fr 280px; gap: 16px; align-items: center;
+    padding: 12px 0; border-bottom: 1px solid var(--border);
+  }
+  .progress-row .name { font-weight: 600; color: #fff; }
+  .progress-bar {
+    height: 8px; border-radius: 4px; background: var(--surface2); overflow: hidden;
+  }
+  .progress-bar div { height: 100%; border-radius: 4px; transition: width 1s ease; }
+  .bar-done { background: var(--accent2); }
+  .bar-wip  { background: var(--warn); }
+  .bar-todo { background: var(--border); }
+  .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+  .dot-done { background: var(--accent2); }
+  .dot-wip  { background: var(--warn); }
+  .dot-todo { background: var(--border); }
+
+  /* ── Gallery ────────────────────── */
+  .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+  .gallery-item {
+    position: relative; border-radius: var(--radius); overflow: hidden;
+    border: 1px solid var(--border); cursor: pointer; aspect-ratio: 4/3;
+    background: var(--surface2);
+  }
+  .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+  .gallery-item:hover img { transform: scale(1.06); }
+  .gallery-item .caption {
+    position: absolute; bottom: 0; left: 0; right: 0; padding: 10px 14px;
+    background: linear-gradient(transparent, rgba(0,0,0,.85)); color: #fff;
+    font-size: .82rem; font-weight: 500;
+  }
+
+  /* ── Lightbox ──────────────────── */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,.92);
+    display: none; align-items: center; justify-content: center; cursor: pointer;
+  }
+  .lightbox.active { display: flex; }
+  .lightbox img { max-width: 90vw; max-height: 90vh; border-radius: 8px; object-fit: contain; }
+  .lightbox .close {
+    position: absolute; top: 24px; right: 32px; font-size: 2rem; color: #fff;
+    cursor: pointer; width: 44px; height: 44px; display: flex; align-items: center;
+    justify-content: center; border-radius: 50%; background: rgba(255,255,255,.1);
+    transition: background .2s;
+  }
+  .lightbox .close:hover { background: rgba(255,255,255,.2); }
+
+  /* ── Team ───────────────────────── */
+  .team-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+  .team-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 28px; text-align: center; transition: border-color .25s;
+  }
+  .team-card:hover { border-color: var(--accent3); }
+  .team-card .avatar {
+    width: 64px; height: 64px; border-radius: 50%; background: var(--surface2);
+    border: 2px solid var(--border); margin: 0 auto 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem; font-weight: 700; color: var(--accent);
+  }
+  .team-card h3 { color: #fff; font-size: 1.05rem; }
+  .team-card .role { color: var(--accent); font-size: .85rem; margin: 4px 0 8px; font-weight: 500; }
+  .team-card .desc { color: var(--text2); font-size: .88rem; }
+
+  /* ── Repo structure ─────────────── */
+  .code-block {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 24px 28px; font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: .84rem; line-height: 1.7; color: var(--text); overflow-x: auto; white-space: pre;
+  }
+  .code-block .c1 { color: var(--text2); }
+  .code-block .c2 { color: var(--accent); }
+  .code-block .c3 { color: var(--accent2); }
+
+  /* ── Footer ─────────────────────── */
+  footer {
+    text-align: center; padding: 48px 24px; border-top: 1px solid var(--border);
+    color: var(--text2); font-size: .88rem;
+  }
+  footer span { color: var(--accent); }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  /* ── Responsive ────────────────── */
+  @media (max-width: 768px) {
+    nav a { display: none; }
+    section { padding: 60px 16px; }
+    .progress-row { grid-template-columns: 1fr; gap: 4px; }
+    .progress-row .status { text-align: left; }
+    .arch-diagram { flex-direction: column; min-width: unset; }
+    .hero h1 { font-size: 1.7rem; }
+  }
+
+  /* ── Animations ────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .anim { animation: fadeUp .7s ease both; }
+  .anim-d1 { animation-delay: .1s; }
+  .anim-d2 { animation-delay: .2s; }
+  .anim-d3 { animation-delay: .3s; }
+</style>
+</head>
+<body>
+
+<!-- ════════════ NAV ════════════ -->
+<nav>
+  <div class="logo">☀️ 光伏<span>巡检系统</span></div>
+  <div>
+    <a href="#overview">项目概述</a>
+    <a href="#arch">系统架构</a>
+    <a href="#features">功能特性</a>
+    <a href="#gallery">项目展示</a>
+    <a href="#progress">开发进度</a>
+    <a href="#team">团队</a>
+  </div>
+</nav>
+
+<!-- ════════════ HERO ════════════ -->
+<header class="hero">
+  <div>
+    <div class="anim">
+      <span class="badge badge-mcu">Renesas RA8P1</span>
+      <span class="badge badge-fsp">FSP 6.5.0</span>
+      <span class="badge badge-dev">Cortex-M85 + M33</span>
+    </div>
+    <h1 class="anim anim-d1">基于 RA8P1 的<br><span>光伏板负压吸附智能巡检系统</span></h1>
+    <p class="sub anim anim-d2">
+      面向光伏电站缺陷检测场景，融合负压吸附运动、边缘 AI 推理与无线远程控制的嵌入式智能巡检平台。
+    </p>
+    <div class="btn-row anim anim-d3">
+      <a href="#overview" class="btn btn-p">🔍 了解项目</a>
+      <a href="https://github.com/Wendellee/Renesas_Cup_Final_Game" class="btn btn-s" target="_blank">📦 GitHub 仓库</a>
+    </div>
+  </div>
+</header>
+
+<!-- ════════════ OVERVIEW ════════════ -->
+<section id="overview">
+  <div class="sec-label">01 — 项目概述</div>
+  <h2 class="sec-title">系统简介</h2>
+  <p class="sec-desc">
+    本项目是一套由<strong>负压吸附履带巡检车</strong>和<strong>手持触控控制器</strong>组成的智能光伏板巡检系统。
+    巡检车通过负压风机吸附在倾斜的光伏板表面，使用 OV5640 摄像头采集图像，
+    并利用 <strong>Renesas RA8P1</strong> 双核 MCU 与 <strong>Ethos-U55 NPU</strong> 完成边缘端缺陷识别。
+  </p>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="icon">🛻</div>
+      <h3>负压吸附巡检车</h3>
+      <p>
+        搭载 OV5640 摄像头、RGB 屏幕、履带驱动和负压风机，可以在倾斜光伏板表面稳定移动和吸附，
+        完成图像采集、AI 识别和结果显示。
+      </p>
+    </div>
+    <div class="card">
+      <div class="icon">🎮</div>
+      <h3>手持触控控制器</h3>
+      <p>
+        基于 LVGL 9.5.0 构建 1024×600 图形界面，通过无线链路发送运动指令、
+        接收巡检画面、设备状态和 AI 检测结果。
+      </p>
+    </div>
+    <div class="card">
+      <div class="icon">🧠</div>
+      <h3>边缘 AI 推理</h3>
+      <p>
+        利用 Cortex-M85 进行图像采集和预处理，Cortex-M33 负责实时运动控制，
+        Ethos-U55 NPU 执行光伏板缺陷检测模型，实现视觉计算与实时控制的分离。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ ARCHITECTURE ════════════ -->
+<section id="arch">
+  <div class="sec-label">02 — 系统架构</div>
+  <h2 class="sec-title">双系统协作架构</h2>
+  <p class="sec-desc">
+    高吞吐量的视觉任务与实时运动控制任务相互隔离，通过定义明确的 IPC 消息进行协作。
+  </p>
+
+  <div class="arch">
+    <h3>⚡ 系统总体架构</h3>
+    <div class="arch-diagram">
+      <!-- 巡检车 -->
+      <div class="arch-box">
+        <h4>🛻 负压吸附巡检车</h4>
+        <div class="arch-flow">
+          <div class="arch-item">📷 OV5640 摄像头 (MIPI-CSI)</div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-item">🧠 Cortex-M85 — 图像处理与系统管理</div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-item">💾 SDRAM 图像帧缓冲</div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-item">🤖 Ethos-U55 — 光伏板缺陷识别</div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-item">🖥️ GLCDC 800×480 车载屏幕</div>
+          <div style="border-top:1px dashed var(--border); margin-top:8px; padding-top:10px;">
+            <div class="arch-item">⚙️ Cortex-M33 — 运动与安全控制</div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-item">📐 MPU6050 · 🚗 履带电机 · 💨 负压风机</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 连接 -->
+      <div style="display:flex;align-items:center;">
+        <div style="text-align:center; padding:12px; background:var(--surface2); border-radius:8px; border:1px solid var(--border);">
+          <div style="font-size:.85rem;color:var(--accent2);">📡 2.4GHz 无线</div>
+          <div style="font-size:.78rem;color:var(--text2);">控制指令 / 状态 / 图像</div>
+          <div style="margin-top:8px;font-size:2rem;">⇄</div>
+        </div>
+      </div>
+
+      <!-- 控制器 -->
+      <div class="arch-box">
+        <h4>🎮 手持触控控制器</h4>
+        <div class="arch-flow">
+          <div class="arch-item">👆 GT911 电容触摸屏</div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-item">🧠 Cortex-M85 + LVGL 9.5.0</div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-item">🖥️ GLCDC 1024×600 显示屏</div>
+          <div style="border-top:1px dashed var(--border); margin-top:8px; padding-top:10px;">
+            <div class="arch-item">📡 NRF24L01+ / DA16200 无线通信</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ FEATURES ════════════ -->
+<section id="features">
+  <div class="sec-label">03 — 功能特性</div>
+  <h2 class="sec-title">核心能力</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="icon">📷</div>
+      <h3>图像采集与显示</h3>
+      <p>OV5640 通过 MIPI-CSI 接入，SDRAM 帧缓冲，GLCDC 驱动 RGB LCD，已完成实机验证。</p>
+    </div>
+    <div class="card">
+      <div class="icon">🤖</div>
+      <h3>AI 缺陷识别</h3>
+      <p>计划使用 Ethos-U55 NPU 执行光伏板缺陷检测模型，在边缘端完成推理与结果叠加。</p>
+    </div>
+    <div class="card">
+      <div class="icon">🕹️</div>
+      <h3>运动控制</h3>
+      <p>GPT PWM 驱动履带和负压风机，MPU6050 航向闭环改善直线行驶与定角转向精度。</p>
+    </div>
+    <div class="card">
+      <div class="icon">🛡️</div>
+      <h3>安全保护</h3>
+      <p>负压检测、电池电压、电机电流、通信心跳与失联保护，异常时进入安全状态。</p>
+    </div>
+    <div class="card">
+      <div class="icon">📡</div>
+      <h3>无线通信</h3>
+      <p>NRF24L01+ 传输运动指令与状态，DA16200 Wi-Fi 传输压缩图像与检测结果。</p>
+    </div>
+    <div class="card">
+      <div class="icon">🖥️</div>
+      <h3>图形界面</h3>
+      <p>LVGL 9.5.0 + GT911 触摸，1024×600 交互界面，支持远程操作与巡检画面显示。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ HARDWARE ════════════ -->
+<section id="hardware">
+  <div class="sec-label">04 — 硬件方案</div>
+  <h2 class="sec-title">主要硬件组成</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>模块</th><th>型号 / 接口</th><th>用途</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>主控 MCU</td><td>Renesas RA8P1 (R7KA8P1KFLCAC)</td><td>双核控制、图形和边缘 AI</td></tr>
+        <tr><td>AI 加速器</td><td>Ethos-U55</td><td>光伏板缺陷模型推理</td></tr>
+        <tr><td>摄像头</td><td>OV5640 / MIPI-CSI</td><td>巡检图像采集</td></tr>
+        <tr><td>图像存储</td><td>外部 SDRAM</td><td>摄像头和显示帧缓冲</td></tr>
+        <tr><td>车载显示</td><td>RGB 800×480</td><td>本地图像及识别结果显示</td></tr>
+        <tr><td>控制器显示</td><td>RGB 1024×600</td><td>LVGL 交互界面</td></tr>
+        <tr><td>触摸屏</td><td>GT911</td><td>电容触摸输入</td></tr>
+        <tr><td>IMU</td><td>MPU6050</td><td>航向角和姿态测量</td></tr>
+        <tr><td>无线模块</td><td>NRF24L01+ / DA16200</td><td>控制、遥测和图像传输</td></tr>
+        <tr><td>执行机构</td><td>履带电机、负压风机</td><td>车辆移动与吸附</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ════════════ SELF-DEVELOPED HARDWARE ════════════ -->
+<section id="pcb">
+  <h2 class="sec-title">自研板卡与机械结构</h2>
+  <p class="sec-desc">除固件开发外，本项目还包含多块自研 PCB 和 3D 打印结构件。</p>
+  <div class="card-grid">
+    <div class="card">
+      <div class="icon">🔌</div>
+      <h3>核心板扩展底板</h3>
+      <p>为 RA8P1 核心板提供外设接口扩展、电源管理和信号引出。</p>
+    </div>
+    <div class="card">
+      <div class="icon">📸</div>
+      <h3>OV5640 MIPI-CSI 转接板</h3>
+      <p>将 OV5640 摄像头模块通过 MIPI-CSI 接口接入 RA8P1 主控。</p>
+    </div>
+    <div class="card">
+      <div class="icon">🖥️</div>
+      <h3>RGB LCD、背光与触摸转接板</h3>
+      <p>适配 800×480 和 1024×600 两块 RGB 屏幕，集成背光驱动与触摸接口。</p>
+    </div>
+    <div class="card">
+      <div class="icon">🎨</div>
+      <h3>3D 打印结构件</h3>
+      <p>车载屏幕支架、可调节摄像头支架、车体外围防护边框等多组 3D 打印件。</p>
+    </div>
+    <div class="card">
+      <div class="icon">⚡</div>
+      <h3>电机驱动底板</h3>
+      <p>集成左右履带电机驱动和负压风机控制电路。</p>
+    </div>
+    <div class="card">
+      <div class="icon">🔋</div>
+      <h3>电源开关保护板</h3>
+      <p>提供电池输入保护、电压监测和系统供电管理。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ GALLERY ════════════ -->
+<section id="gallery">
+  <div class="sec-label">05 — 项目展示</div>
+  <h2 class="sec-title">实物与开发过程</h2>
+  <p class="sec-desc">点击图片可放大查看。涵盖整机装机、图像测试、PCB 设计和 3D 打印件。</p>
+
+  <h3 style="color:#fff;margin:28px 0 14px;">📸 整机与测试</h3>
+  <div class="gallery">
+    <div class="gallery-item" onclick="openLightbox('doc/image/0.完整车体.jpg')">
+      <img src="doc/image/0.完整车体.jpg" alt="完整车体"><div class="caption">完整车体</div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox('doc/image/18.边框3D支架(完整车体).jpg')">
+      <img src="doc/image/18.边框3D支架(完整车体).jpg" alt="完整车体带边框"><div class="caption">完整车体（带边框支架）</div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox('doc/image/16.装机测试.jpg')">
+      <img src="doc/image/16.装机测试.jpg" alt="装机测试"><div class="caption">装机测试</div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox('doc/image/9.吸附底盘(原装).jpg')">
+      <img src="doc/image/9.吸附底盘(原装).jpg" alt="吸附底盘"><div class="caption">负压吸附履带底盘</div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox('doc/image/1.参赛核心板.jpg')">
+      <img src="doc/image/1.参赛核心板.jpg" alt="RA8P1 核心板"><div class="caption">RA8P1 参赛核心板</div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox('doc/image/11.第一版图像数据流平台.jpg')">
+      <img src="doc/image/11.第一版图像数据流平台.jpg" alt="图像数据流平台"><div class="caption">第一版图像数据流平台</div>
+    </div>
+  </div>
+
+  <h3 style="color:#fff;margin:36px 0 14px;">🖥️ 显示与交互测试</h3>
+  <div class="gallery">
+    <div class="gallery-item" onclick="openLightbox('doc/image/5.采集图像与显示数据流测试.jpg')">
+      <img src="doc/image/5.采集图像与显示数据流测试.jpg" alt="图像数据流测试"><div class="caption">图像采集与显示数据流</div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox('doc/image/6.数据流测试(自拍).jpg')">
+      <img src="doc/image/6.数据流测试(自拍).jpg" alt="数据流显示"><div class="caption">摄像头数据流显示</div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox('doc/image/8.彩条带测试(GUI显示).jpg')">
+      <img src="doc/image/8.彩条带测试(GUI显示).jpg" alt="彩条测试"><div class="caption">LCD 彩条带与帧缓冲测试</div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox('doc/image/2026_6_28_LVGL_UI界面.jpg')">
+      <img src="doc/image/2026_6_28_LVGL_UI界面.jpg" alt="LVGL 界面"><div class="caption">LVGL 基础交互界面</div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox('doc/image/15.测试1024_600屏幕.jpg')">
+      <img src="doc/image/15.测试1024_600屏幕.jpg" alt="屏幕测试"><div class="caption">1024×600 屏幕实测</div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox('doc/image/About us.png')">
+      <img src="doc/image/About us.png" alt="About us"><div class="caption">About us 页面设计稿</div>
+    </div>
+  </div>
+
+  <h3 style="color:#fff;margin:36px 0 14px;">🔧 结构件与 PCB</h3>
+  <div class="gallery">
+    <div class="gallery-item" onclick="openLightbox('doc/image/17.摄像头3D支架(已安装).jpg')">
+      <img src="doc/image/17.摄像头3D支架(已安装).jpg" alt="摄像头支架"><div class="caption">摄像头 3D 支架（已安装）</div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox('doc/image/13.屏幕3D支架(安装屏幕).jpg')">
+      <img src="doc/image/13.屏幕3D支架(安装屏幕).jpg" alt="屏幕支架"><div class="caption">屏幕 3D 支架（安装屏幕）</div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox('doc/image/12.屏幕3D支架(未安装屏幕).jpg')">
+      <img src="doc/image/12.屏幕3D支架(未安装屏幕).jpg" alt="屏幕支架未安装"><div class="caption">屏幕 3D 支架（未安装）</div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox('doc/image/PCB设计图/1.核心板扩展底板.png')">
+      <img src="doc/image/PCB设计图/1.核心板扩展底板.png" alt="PCB扩展板"><div class="caption">核心板扩展底板 PCB</div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox('doc/image/PCB设计图/9.摄像头总成.png')">
+      <img src="doc/image/PCB设计图/9.摄像头总成.png" alt="摄像头总成PCB"><div class="caption">摄像头总成 PCB</div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox('doc/image/PCB设计图/10.OV5640驱动板.png')">
+      <img src="doc/image/PCB设计图/10.OV5640驱动板.png" alt="OV5640驱动板"><div class="caption">OV5640 驱动板 PCB</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ PROGRESS ════════════ -->
+<section id="progress">
+  <div class="sec-label">06 — 开发进度</div>
+  <h2 class="sec-title">当前状态</h2>
+  <p class="sec-desc">
+    项目目前处于功能集成阶段，多项基础外设已完成阶段性验证，AI 推理、无线通信和整机联调仍在完善。
+  </p>
+
+  <div class="progress-grid">
+    <div class="progress-row">
+      <span class="name">RA8P1 基础工程</span>
+      <div class="progress-bar"><div class="bar-done" style="width:100%"></div></div>
+      <span style="color:var(--accent2)"><span class="status-dot dot-done"></span>已完成阶段性验证</span>
+    </div>
+    <div class="progress-row">
+      <span class="name">自研转接板与机械装机</span>
+      <div class="progress-bar"><div class="bar-done" style="width:100%"></div></div>
+      <span style="color:var(--accent2)"><span class="status-dot dot-done"></span>已完成阶段性装机</span>
+    </div>
+    <div class="progress-row">
+      <span class="name">GPT PWM 驱动</span>
+      <div class="progress-bar"><div class="bar-done" style="width:100%"></div></div>
+      <span style="color:var(--accent2)"><span class="status-dot dot-done"></span>左右履带、风机、LED 已接入</span>
+    </div>
+    <div class="progress-row">
+      <span class="name">OV5640 + MIPI-CSI</span>
+      <div class="progress-bar"><div class="bar-done" style="width:100%"></div></div>
+      <span style="color:var(--accent2)"><span class="status-dot dot-done"></span>驱动代码完成，实机验证通过</span>
+    </div>
+    <div class="progress-row">
+      <span class="name">图像采集与显示数据流</span>
+      <div class="progress-bar"><div class="bar-done" style="width:100%"></div></div>
+      <span style="color:var(--accent2)"><span class="status-dot dot-done"></span>完整链路已实机验证</span>
+    </div>
+    <div class="progress-row">
+      <span class="name">GLCDC 显示</span>
+      <div class="progress-bar"><div class="bar-done" style="width:100%"></div></div>
+      <span style="color:var(--accent2)"><span class="status-dot dot-done"></span>800×480 + 1024×600 已测试</span>
+    </div>
+    <div class="progress-row">
+      <span class="name">GT911 + LVGL 交互</span>
+      <div class="progress-bar"><div class="bar-done" style="width:100%"></div></div>
+      <span style="color:var(--accent2)"><span class="status-dot dot-done"></span>gui 分支已实现基础页面</span>
+    </div>
+    <div class="progress-row">
+      <span class="name">底盘运动控制</span>
+      <div class="progress-bar"><div class="bar-wip" style="width:65%"></div></div>
+      <span style="color:var(--warn)"><span class="status-dot dot-wip"></span>航向闭环已实现，待整机标定</span>
+    </div>
+    <div class="progress-row">
+      <span class="name">AI 缺陷识别</span>
+      <div class="progress-bar"><div class="bar-wip" style="width:30%"></div></div>
+      <span style="color:var(--warn)"><span class="status-dot dot-wip"></span>模型、预处理与推理待集成</span>
+    </div>
+    <div class="progress-row">
+      <span class="name">NRF24L01+ 无线通信</span>
+      <div class="progress-bar"><div class="bar-wip" style="width:40%"></div></div>
+      <span style="color:var(--warn)"><span class="status-dot dot-wip"></span>协议与图像传输完善中</span>
+    </div>
+    <div class="progress-row">
+      <span class="name">FreeRTOS 任务调度</span>
+      <div class="progress-bar"><div class="bar-wip" style="width:30%"></div></div>
+      <span style="color:var(--warn)"><span class="status-dot dot-wip"></span>独立骨架分支，待整合</span>
+    </div>
+    <div class="progress-row">
+      <span class="name">M85/M33 IPC</span>
+      <div class="progress-bar"><div class="bar-todo" style="width:5%"></div></div>
+      <span style="color:var(--text2)"><span class="status-dot dot-todo"></span>待开发</span>
+    </div>
+    <div class="progress-row">
+      <span class="name">整机联调</span>
+      <div class="progress-bar"><div class="bar-wip" style="width:50%"></div></div>
+      <span style="color:var(--warn)"><span class="status-dot dot-wip"></span>局部功能已验证，系统闭环未完成</span>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ REPO ════════════ -->
+<section id="repo">
+  <div class="sec-label">07 — 代码仓库</div>
+  <h2 class="sec-title">仓库结构与功能分支</h2>
+  <p class="sec-desc">项目采用多分支协作开发，各功能分布在不同的 Git 分支中。</p>
+
+  <div class="card-grid" style="margin-bottom:28px;">
+    <div class="card">
+      <h3 style="color:var(--accent)">main</h3>
+      <p>摄像头、MIPI-CSI、GLCDC、GPT 基础工程 — 当前默认分支。</p>
+    </div>
+    <div class="card">
+      <h3 style="color:var(--accent)">car</h3>
+      <p>MPU6050、航向闭环、履带和负压风机控制 — 巡检车固件基础。</p>
+    </div>
+    <div class="card">
+      <h3 style="color:var(--accent)">gui</h3>
+      <p>1024×600、LVGL 9.5.0、GT911、GUI Guider 界面 — 控制器固件基础。</p>
+    </div>
+    <div class="card">
+      <h3 style="color:var(--accent)">color</h3>
+      <p>800×480 彩条、SDRAM 和帧缓冲诊断 — 显示硬件调试。</p>
+    </div>
+    <div class="card">
+      <h3 style="color:var(--accent)">FreeRTOS</h3>
+      <p>FreeRTOS 11.1.0 单任务骨架 — RTOS 配置参考。</p>
+    </div>
+  </div>
+
+  <div class="code-block"><span class="c1">.</span>
+<span class="c1">├─</span> <span class="c2">src/</span>
+<span class="c1">│  ├─</span> <span class="c3">CAMERA/</span>          <span class="c1"># OV5640、I2C 和 MIPI-CSI 驱动</span>
+<span class="c1">│  ├─</span> <span class="c3">GLCDC/</span>           <span class="c1"># 显示控制器驱动</span>
+<span class="c1">│  ├─</span> <span class="c3">GPT/</span>             <span class="c1"># 履带、风机和 LED 的 PWM 控制</span>
+<span class="c1">│  ├─</span> <span class="c3">SEGGER_RTT/</span>      <span class="c1"># RTT 调试输出</span>
+<span class="c1">│  └─</span> hal_entry.c      <span class="c1"># 当前 CPU0 程序入口</span>
+<span class="c1">├─</span> <span class="c2">hardware/</span>           <span class="c1"># 自研板卡和转接板工程</span>
+<span class="c1">├─</span> <span class="c2">doc/</span>
+<span class="c1">│  ├─</span> image/           <span class="c1"># 实物、调试和界面照片</span>
+<span class="c1">│  └─</span> ...              <span class="c1"># 设计文档、器件资料和开发记录</span>
+<span class="c1">├─</span> <span class="c2">ra/</span>                 <span class="c1"># FSP 驱动代码</span>
+<span class="c1">├─</span> <span class="c2">ra_cfg/</span>             <span class="c1"># FSP 配置头文件</span>
+<span class="c1">├─</span> <span class="c2">ra_gen/</span>             <span class="c1"># FSP 自动生成代码</span>
+<span class="c1">├─</span> configuration.xml   <span class="c1"># FSP 图形化配置</span>
+<span class="c1">└─</span> LICENSE             <span class="c1"># MIT License</span></div>
+</section>
+
+<!-- ════════════ TEAM ════════════ -->
+<section id="team">
+  <div class="sec-label">08 — 团队成员</div>
+  <h2 class="sec-title">核心贡献者</h2>
+  <div class="team-cards">
+    <div class="team-card">
+      <div class="avatar">🛻</div>
+      <h3>Zimu（子木）</h3>
+      <div class="role">AI 识别 · DA16200 Wi-Fi · 补光灯</div>
+      <p class="desc">负责光伏板缺陷检测模型、Wi-Fi 无线图传和补光系统。</p>
+    </div>
+    <div class="team-card">
+      <div class="avatar">⚙️</div>
+      <h3>Wendell Lee（硕正）</h3>
+      <div class="role">RTOS 调度 · NRF24L01+ 图传 · 底板设计</div>
+      <p class="desc">负责 FreeRTOS 任务调度、无线控制协议和核心板扩展底板硬件设计。</p>
+    </div>
+    <div class="team-card">
+      <div class="avatar">🎯</div>
+      <h3>Xshghost</h3>
+      <div class="role">运动控制与定位 · SD 卡</div>
+      <p class="desc">负责履带运动控制算法、航向定位优化和巡检数据本地存储。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ FOOTER ════════════ -->
+<footer>
+  <p>
+    <span>☀️ 光伏板负压吸附智能巡检系统</span> — 基于 Renesas RA8P1
+  </p>
+  <p style="margin-top:6px;">
+    <a href="https://github.com/Wendellee/Renesas_Cup_Final_Game" target="_blank">GitHub</a> ·
+    MIT License · Copyright © 2026 Wendell Lee
+  </p>
+</footer>
+
+<!-- ════════════ LIGHTBOX ════════════ -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <span class="close">&times;</span>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+  function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+  // Smooth scroll for nav links
+  document.querySelectorAll('nav a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const el = document.querySelector(a.getAttribute('href'));
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+
+</body>
+</html>
