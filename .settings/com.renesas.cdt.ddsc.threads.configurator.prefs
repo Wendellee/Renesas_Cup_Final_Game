@@ -1,0 +1,16 @@
+collapse/module.driver.display_on_glcdc.1563798874=false
+collapse/module.driver.display_on_glcdc.825232932=false
+collapse/module.driver.drw.1749976366=false
+collapse/module.driver.drw.2129041371=false
+collapse/module.driver.drw.680731766=false
+collapse/module.driver.i2c_on_iic_master.682023971=false
+collapse/module.driver.mipi_csi.2055704969=false
+collapse/module.driver.spi_on_spi_b.2056988360=false
+collapse/module.driver.spi_on_spi_b.427924988=false
+collapse/module.driver.vin.1965483037=false
+collapse/module.lvgl.lvgl.102144175=false
+collapse/module.lvgl.lvgl.1631806719=false
+collapse/module.middleware.rm_freertos_port.0=false
+collapse/module.middleware.rm_lvgl_port.1065061298=false
+collapse/module.middleware.rm_lvgl_port.348334882=false
+eclipse.preferences.version=1

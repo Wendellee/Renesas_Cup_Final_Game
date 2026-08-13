@@ -1,0 +1,1 @@
+GEN_CSRCS += main_anm_screenabc.c
