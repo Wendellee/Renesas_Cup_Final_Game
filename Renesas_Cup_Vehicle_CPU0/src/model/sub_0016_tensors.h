@@ -1,0 +1,19 @@
+#ifndef __SUB_0016_TENSORS_H__
+#define __SUB_0016_TENSORS_H__
+
+#include <stddef.h>
+#include <stdint.h>
+#include "ethosu_common.h"
+
+extern const TensorInfo sub_0016_tensors[];
+extern const size_t sub_0016_tensors_count;
+
+#define kArenaSize_sub_0016 24576
+
+// Addresses for each input and output buffer inside of the arena
+extern const uint32_t sub_0016_address_functional_1_pan1_csp_bn_1_concatenate_136_1_concat_70274;
+extern const uint32_t sub_0016_address_functional_1_pan1_csp_bn_1_pan1_csp_bn_conv_out_1_activation_219_1_Relu6_functional_1_pan1_csp_bn_1_pan1_csp_bn_conv_out_1_batch_normalization_227_1_batchnorm_add_1_functional_1_pan1_csp_bn_1_pan1_csp_bn_conv_out_1_conv2d_204_1_convolution_functional_1_pan1_csp_bn_1_pan1_csp_bn_conv_out_1_batch_normalization_227_1_batchnorm_sub_70275;
+extern const uint32_t sub_0016_address_functional_1_pan2_upsample_1_resize_ResizeBilinear_70276;
+
+
+#endif // __SUB_0016_TENSORS_H__

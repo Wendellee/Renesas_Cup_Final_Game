@@ -11,12 +11,13 @@ void R_BSP_WarmStart(bsp_warm_start_event_t event);
 
 FSP_CPP_FOOTER
 
-/*******************************************************************************************************************//**
- * This function is called at various points during the startup process.  This implementation uses the event that is
- * called right before main() to set up the pins.
- *
- * @param[in]  event    Where at in the start up process the code is currently at
- **********************************************************************************************************************/
+/*
+ *[@name] R_BSP_WarmStart
+ *[@type] BSP warm-start callback
+ *[@usage] 在FSP启动阶段完成数据Flash、引脚、SDRAM初始化，并在CPU0正常上电路径启动CPU1
+ *[@argument] event 当前BSP启动阶段
+ *[@return] none
+ */
 void R_BSP_WarmStart (bsp_warm_start_event_t event)
 {
     if (BSP_WARM_START_RESET == event)
@@ -50,6 +51,15 @@ void R_BSP_WarmStart (bsp_warm_start_event_t event)
 
         /* Setup SDRAM and initialize it. Must configure pins first. */
         R_BSP_SdramInit(true);
+#endif
+
+        /*
+         * Start CPU1 during the normal power-on path after clocks, the C runtime,
+         * pins, and shared SDRAM are ready.  CPU1 boot is deliberately independent
+         * of the IPC application protocol.
+         */
+#if (0 == _RA_CORE) && (1 == BSP_MULTICORE_PROJECT) && !BSP_TZ_NONSECURE_BUILD
+        R_BSP_SecondaryCoreStart();
 #endif
     }
 }
