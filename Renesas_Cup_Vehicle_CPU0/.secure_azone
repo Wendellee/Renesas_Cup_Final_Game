@@ -106,6 +106,9 @@
         <memory parent="CTCM" name="CTCM_CPU1_S" size="0x10000" offset="0x0" security="s" Pname="CPU1"/>
         <memory parent="STCM_NS" name="STCM_NS_CPU1_N" size="0x0" offset="0x10000" security="n" Pname="CPU1"/>
         <memory parent="STCM" name="STCM_CPU1_S" size="0x10000" offset="0x0" security="s" Pname="CPU1"/>
+        <peripheral name="PORT0.CPU0" group="PORT">
+            <slot name="P012.CPU0" secure="true"/>
+        </peripheral>
         <peripheral name="PORT1.CPU0" group="PORT">
             <slot name="P112.CPU0" secure="true"/>
             <slot name="P113.CPU0" secure="true"/>

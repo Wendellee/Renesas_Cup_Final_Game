@@ -180,6 +180,8 @@
       <configSetting altId="glcdc.lcd_tcon2.p807" configurationId="glcdc.lcd_tcon2" peripheral="GLCDC"/>
       <configSetting altId="iic1.scl1.p512" configurationId="iic1.scl1" isUsedByDriver="true" peripheral="IIC1"/>
       <configSetting altId="iic1.sda1.p511" configurationId="iic1.sda1" isUsedByDriver="true" peripheral="IIC1"/>
+      <configSetting altId="p012.output.high" configurationId="p012"/>
+      <configSetting altId="p012.gpio_mode.gpio_mode_out.high" configurationId="p012.gpio_mode"/>
       <configSetting altId="p112.gpio_mode.gpio_mode_peripheral" configurationId="p112.gpio_mode"/>
       <configSetting altId="p113.gpio_mode.gpio_mode_peripheral" configurationId="p113.gpio_mode"/>
       <configSetting altId="p114.gpio_mode.gpio_mode_peripheral" configurationId="p114.gpio_mode"/>

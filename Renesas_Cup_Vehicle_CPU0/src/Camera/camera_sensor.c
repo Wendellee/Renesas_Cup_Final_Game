@@ -222,7 +222,7 @@ fsp_err_t camera_open (void)
 /*
  *[@name] camera_hw_reset
  *[@type] static function
- *[@usage] 通过P709复位OV5640
+ *[@usage] 通过P012复位OV5640
  *[@argument] none
  *[@return] none
  */

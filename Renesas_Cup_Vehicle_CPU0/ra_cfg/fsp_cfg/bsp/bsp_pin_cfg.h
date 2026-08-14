@@ -6,6 +6,7 @@
 /* Common macro for FSP header files. There is also a corresponding FSP_FOOTER macro at the end of this file. */
 FSP_HEADER
 
+#define CAMERA_RESET (BSP_IO_PORT_00_PIN_12)
 #define DISP_BLEN (BSP_IO_PORT_05_PIN_13)
 
 extern const ioport_cfg_t g_bsp_pin_cfg; /* R7KA8P1KFLCAC.pincfg */
