@@ -1,0 +1,8 @@
+# ---- 编译产物 (不要提交编译/链接输出) ----
+
+# e2studio (RA8P1 MCU) 构建输出目录
+Debug/
+
+# GUI Guider LVGL 模拟器构建输出 (.o/.d/.dll/.exe/.a)
+gui/RA8P1_GUI_1024_600/lvgl-simulator/build*/
+gui/RA8P1_GUI_1024_600/lib/native/

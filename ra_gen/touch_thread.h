@@ -2,15 +2,15 @@
 #ifndef TOUCH_THREAD_H_
 #define TOUCH_THREAD_H_
 #include "bsp_api.h"
-                #include "FreeRTOS.h"
-                #include "task.h"
-                #include "semphr.h"
-                #include "hal_data.h"
-                #ifdef __cplusplus
+#include "FreeRTOS.h"
+#include "task.h"
+#include "semphr.h"
+#include "hal_data.h"
+#ifdef __cplusplus
                 extern "C" void touch_thread_entry(void * pvParameters);
                 #else
-                extern void touch_thread_entry(void * pvParameters);
-                #endif
+extern void touch_thread_entry(void *pvParameters);
+#endif
 FSP_HEADER
 FSP_FOOTER
 #endif /* TOUCH_THREAD_H_ */

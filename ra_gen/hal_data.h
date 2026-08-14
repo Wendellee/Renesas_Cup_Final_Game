@@ -30,7 +30,7 @@ extern iic_master_instance_ctrl_t g_i2c_master_for_peripheral_ctrl;
 extern const i2c_master_cfg_t g_i2c_master_for_peripheral_cfg;
 
 #ifndef g_i2c_master_for_peripheral_callback
-void g_i2c_master_for_peripheral_callback(i2c_master_callback_args_t * p_args);
+void g_i2c_master_for_peripheral_callback(i2c_master_callback_args_t *p_args);
 #endif
 /** SPI on SPI Instance. */
 extern const spi_instance_t g_spi1;
@@ -41,18 +41,17 @@ extern const spi_cfg_t g_spi1_cfg;
 
 /** Callback used by SPI Instance. */
 #ifndef spi1_callback
-void spi1_callback(spi_callback_args_t * p_args);
+void spi1_callback(spi_callback_args_t *p_args);
 #endif
-
 
 #define RA_NOT_DEFINED (1)
 #if (RA_NOT_DEFINED == RA_NOT_DEFINED)
-    #define g_spi1_P_TRANSFER_TX (NULL)
+#define g_spi1_P_TRANSFER_TX (NULL)
 #else
     #define g_spi1_P_TRANSFER_TX (&RA_NOT_DEFINED)
 #endif
 #if (RA_NOT_DEFINED == RA_NOT_DEFINED)
-    #define g_spi1_P_TRANSFER_RX (NULL)
+#define g_spi1_P_TRANSFER_RX (NULL)
 #else
     #define g_spi1_P_TRANSFER_RX (&RA_NOT_DEFINED)
 #endif
@@ -66,18 +65,17 @@ extern const spi_cfg_t g_spi0_cfg;
 
 /** Callback used by SPI Instance. */
 #ifndef spi0_callback
-void spi0_callback(spi_callback_args_t * p_args);
+void spi0_callback(spi_callback_args_t *p_args);
 #endif
-
 
 #define RA_NOT_DEFINED (1)
 #if (RA_NOT_DEFINED == RA_NOT_DEFINED)
-    #define g_spi0_P_TRANSFER_TX (NULL)
+#define g_spi0_P_TRANSFER_TX (NULL)
 #else
     #define g_spi0_P_TRANSFER_TX (&RA_NOT_DEFINED)
 #endif
 #if (RA_NOT_DEFINED == RA_NOT_DEFINED)
-    #define g_spi0_P_TRANSFER_RX (NULL)
+#define g_spi0_P_TRANSFER_RX (NULL)
 #else
     #define g_spi0_P_TRANSFER_RX (&RA_NOT_DEFINED)
 #endif

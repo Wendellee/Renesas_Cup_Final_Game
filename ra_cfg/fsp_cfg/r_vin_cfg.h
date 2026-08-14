@@ -5,9 +5,9 @@
             extern "C" {
             #endif
 
-            #define VIN_CFG_PARAM_CHECKING_ENABLE   ((BSP_CFG_PARAM_CHECKING_ENABLE))
+#define VIN_CFG_PARAM_CHECKING_ENABLE   ((BSP_CFG_PARAM_CHECKING_ENABLE))
 
-            #ifdef __cplusplus
+#ifdef __cplusplus
             }
             #endif
 #endif /* R_VIN_CFG_H_ */
