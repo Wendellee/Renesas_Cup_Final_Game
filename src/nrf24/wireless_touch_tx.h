@@ -8,7 +8,10 @@
 
 #define WIRELESS_TOUCH_MAGIC           (0xA5U)
 #define WIRELESS_TOUCH_VERSION         (1U)
-#define WIRELESS_TOUCH_CHANNEL         (76U)
+#define WIRELESS_COMMAND_TX_CHANNEL    (76U)
+#define WIRELESS_VIDEO_RX_CHANNEL      (100U)
+/* Compatibility name used by older diagnostics. */
+#define WIRELESS_TOUCH_CHANNEL         WIRELESS_COMMAND_TX_CHANNEL
 #define WIRELESS_TOUCH_PAYLOAD_LENGTH  (8U)
 #define WIRELESS_RADIO_MAX_PAYLOAD_LENGTH (32U)
 #define WIRELESS_RADIO_TX_RING_CAPACITY (8U)
@@ -22,7 +25,7 @@
  * 0: Long-range vehicle build; use the driver's normal 0 dBm power.
  */
 #ifndef WIRELESS_RADIO_NEAR_FIELD_LOOPBACK_TEST
-#define WIRELESS_RADIO_NEAR_FIELD_LOOPBACK_TEST (1U)
+#define WIRELESS_RADIO_NEAR_FIELD_LOOPBACK_TEST (0U)
 #endif
 
 typedef enum
@@ -66,6 +69,7 @@ typedef struct
 } wireless_touch_packet_t;
 
 nrf24_result_t WirelessTouchTx_Init(void);
+nrf24_result_t WirelessRemoteLinks_Init(void);
 bool WirelessTouchTx_IsReady(void);
 bool WirelessTouchRx_IsReady(void);
 nrf24_result_t WirelessTouchTx_GetInitResult(void);

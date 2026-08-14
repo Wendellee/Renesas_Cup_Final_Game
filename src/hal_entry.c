@@ -1,4 +1,5 @@
 #include "hal_data.h"
+#include "app_config.h"
 #include "common_utils.h"
 #include "generated/gui_guider.h"
 #include "generated/events_init.h"
@@ -9,7 +10,9 @@
 #include "touch_GT911.h"
 #include "bsp/nrf24_port.h"
 #include "nrf24/wireless_touch_tx.h"
+#if APP_CAMERA_CAPTURE_ENABLE
 #include "CAMERA/camera_capture.h"
+#endif
 #include "CAMERA/jpeg_codec.h"
 #include "freertos_app.h"
 #include "FreeRTOS.h"
@@ -36,7 +39,6 @@ void R_BSP_SdramInit(bool init_memory);
 
 #define LCD_FRAMEBUFFER_TEST_MODE    (0)
 #define TOUCH_RTT_TEST_MODE          (0)
-#define NRF24_IMAGE_TEST_ENABLE      (1)
 
 #define IMAGE_PACKET_MAGIC           (0x49U)
 #define IMAGE_PACKET_VERSION         (1U)
@@ -61,7 +63,8 @@ void R_BSP_SdramInit(bool init_memory);
 #define NRF24_RX_FIFO_DRAIN_INTERVAL    (3U)
 #define IMAGE_RX_STALL_TIMEOUT_MS       (250U)
 
-#if NRF24_IMAGE_TEST_ENABLE
+#if APP_VIDEO_RX_ENABLE
+#if APP_LOCAL_VIDEO_LOOPBACK_ENABLE
 typedef enum e_image_tx_stage
 {
     IMAGE_TX_STAGE_IDLE = 0,
@@ -87,10 +90,12 @@ typedef struct st_image_tx_state
     uint8_t          pattern_id;
     nrf24_result_t   last_error;
 } image_tx_state_t;
+#endif
 
 typedef struct st_image_rx_state
 {
     bool             active;
+    uint32_t         start_tick_ms;
     uint32_t         last_packet_tick_ms;
     uint32_t         data_size;
     uint32_t         expected_crc32;
@@ -108,8 +113,10 @@ typedef struct st_image_rx_state
     uint8_t          pattern_id;
 } image_rx_state_t;
 
+#if APP_LOCAL_VIDEO_LOOPBACK_ENABLE
 static uint8_t          g_image_tx_gray8[JPEG_CODEC_GRAY8_SIZE] BSP_ALIGN_VARIABLE(32);
 static uint8_t          g_image_tx_compressed[IMAGE_COMPRESSED_BUFFER_SIZE] BSP_ALIGN_VARIABLE(32);
+#endif
 static uint8_t          g_image_rx_compressed[IMAGE_COMPRESSED_BUFFER_SIZE] BSP_ALIGN_VARIABLE(32);
 /* JPEG decoding and GLCDC/LVGL rendering run in different RTOS tasks.  Keep
  * two decoder buffers, plus one stable LVGL presentation buffer.  The image
@@ -119,10 +126,12 @@ static uint8_t          g_image_rx_compressed[IMAGE_COMPRESSED_BUFFER_SIZE] BSP_
 static uint8_t          g_image_rx_buffer[2][IMAGE_DECOMPRESSED_BUFFER_SIZE] BSP_ALIGN_VARIABLE(32);
 static uint8_t          g_image_present_buffer[IMAGE_DECOMPRESSED_BUFFER_SIZE] BSP_ALIGN_VARIABLE(32);
 static lv_image_dsc_t   g_image_present_dsc;
+#if APP_LOCAL_VIDEO_LOOPBACK_ENABLE
 static image_tx_state_t g_image_tx_state;
-static image_rx_state_t g_image_rx_state;
 static uint32_t         g_camera_last_queued_sequence;
 static uint16_t         g_camera_next_frame_id = 1U;
+#endif
+static image_rx_state_t g_image_rx_state;
 static volatile bool    g_image_display_pending;
 static bool             g_image_present_source_installed;
 static lv_obj_t        * g_image_present_owner;
@@ -392,6 +401,7 @@ static void lcd_framebuffer_fail_pattern(sdram_test_result_t const * p_result)
 }
 #endif
 
+#if APP_VIDEO_RX_CONTROL_COMPAT_ENABLE
 static char const * wireless_touch_control_name(uint8_t control)
 {
     switch ((wireless_touch_control_t) control)
@@ -418,8 +428,10 @@ static char const * wireless_touch_action_name(uint8_t action)
         default:                             return "unknown";
     }
 }
+#endif /* APP_VIDEO_RX_CONTROL_COMPAT_ENABLE */
 
-#if NRF24_IMAGE_TEST_ENABLE
+#if APP_VIDEO_RX_ENABLE
+#if APP_LOCAL_VIDEO_LOOPBACK_ENABLE
 static void image_write_u16(uint8_t * p_data, uint16_t value)
 {
     p_data[0] = (uint8_t) value;
@@ -433,6 +445,7 @@ static void image_write_u32(uint8_t * p_data, uint32_t value)
     p_data[2] = (uint8_t) (value >> 16U);
     p_data[3] = (uint8_t) (value >> 24U);
 }
+#endif
 
 static uint16_t image_read_u16(uint8_t const * p_data)
 {
@@ -483,6 +496,7 @@ static uint32_t image_crc32(uint8_t const * p_data, uint32_t length)
     return ~crc;
 }
 
+#if APP_LOCAL_VIDEO_LOOPBACK_ENABLE
 static void image_packet_common_init(uint8_t * p_packet, uint8_t packet_type, uint16_t frame_id)
 {
     (void) memset(p_packet, 0, IMAGE_PACKET_SIZE);
@@ -490,6 +504,7 @@ static void image_packet_common_init(uint8_t * p_packet, uint8_t packet_type, ui
     p_packet[1] = packet_type;
     image_write_u16(&p_packet[2], frame_id);
 }
+#endif
 
 static void image_prepare_rgb888_descriptor(void)
 {
@@ -506,6 +521,7 @@ static void image_prepare_rgb888_descriptor(void)
     p_descriptor->data          = g_image_present_buffer;
 }
 
+#if APP_LOCAL_VIDEO_LOOPBACK_ENABLE
 static bool image_test_queue_frame(uint16_t frame_id,
                                    uint8_t pattern_id,
                                    uint32_t jpeg_size)
@@ -710,6 +726,7 @@ static void image_test_tx_service(void)
         g_image_tx_state.stage = IMAGE_TX_STAGE_IDLE;
     }
 }
+#endif /* APP_LOCAL_VIDEO_LOOPBACK_ENABLE */
 
 static void image_test_rx_start(uint8_t const * p_packet)
 {
@@ -736,6 +753,7 @@ static void image_test_rx_start(uint8_t const * p_packet)
     (void) memset(&g_image_rx_state, 0, sizeof(g_image_rx_state));
     (void) memset(g_image_rx_compressed, 0, data_size);
     g_image_rx_state.active         = true;
+    g_image_rx_state.start_tick_ms  = lv_tick_get();
     g_image_rx_state.last_packet_tick_ms = lv_tick_get();
     g_image_rx_state.frame_id       = image_read_u16(&p_packet[2]);
     g_image_rx_state.color_format   = p_packet[5];
@@ -844,15 +862,14 @@ static void image_test_rx_end(uint8_t const * p_packet)
         uint32_t decoder_result = 0U;
         uint16_t decoded_width = 0U;
         uint16_t decoded_height = 0U;
-        bool compressed_match;
         bool decode_ok;
         bool display_updated;
 
-        compressed_match = (0 == memcmp(g_image_tx_compressed,
-                                        g_image_rx_compressed,
-                                        g_image_rx_state.data_size));
-        decode_ok = compressed_match &&
-                    JpegCodec_DecodeRgb888(g_image_rx_compressed,
+        /* This is now a real remote receive path.  The former loopback-only
+         * comparison against this board's TX buffer intentionally does not
+         * participate in validation; length, chunk order and CRC32 are the
+         * transport integrity checks shared with the vehicle. */
+        decode_ok = JpegCodec_DecodeRgb888(g_image_rx_compressed,
                                            g_image_rx_state.data_size,
                                            p_decode_buffer,
                                            IMAGE_DECOMPRESSED_BUFFER_SIZE,
@@ -869,10 +886,9 @@ static void image_test_rx_end(uint8_t const * p_packet)
             __DMB();
             g_image_display_pending = true;
         }
-        APP_PRINT("[JPEG DEC] f=%u %s match=%s err=%lu jpg=%ux%u crc=%08lX gui=%s\r\n",
+        APP_PRINT("[JPEG DEC] f=%u %s source=vehicle err=%lu jpg=%ux%u crc=%08lX gui=%s\r\n",
                   (uint32_t) g_image_rx_state.frame_id,
                   decode_ok ? "PASS" : "FAIL",
-                  compressed_match ? "YES" : "NO",
                   decoder_result,
                   (uint32_t) decoded_width,
                   (uint32_t) decoded_height,
@@ -880,7 +896,7 @@ static void image_test_rx_end(uint8_t const * p_packet)
                   display_updated ? "queued-for-GUI-task" : "decode-failed");
         APP_PRINT("[FRAME] f=%u ms=%lu gui=%s\r\n",
                   (uint32_t) g_image_rx_state.frame_id,
-                  (uint32_t) (lv_tick_get() - g_image_tx_state.start_tick_ms),
+                  (uint32_t) (lv_tick_get() - g_image_rx_state.start_tick_ms),
                   display_updated ? "queued-for-GUI-task" : "skipped");
     }
     g_image_rx_state.active = false;
@@ -991,9 +1007,11 @@ void AppRadioTask_Entry(void)
     }
 #endif
 
-    /* IIC1 is shared only during initialization: configure the OV5640 first,
-     * then let GT911 select its own address for normal touch polling. */
+    /* IIC1 remains global because it is shared by board peripherals.  The
+     * production remote build disables its local OV5640 source and uses IIC1
+     * only for the GT911 touch controller. */
     error = i2c_control_init();
+#if APP_CAMERA_CAPTURE_ENABLE
     if (FSP_SUCCESS == error)
     {
         error = CameraCapture_Init();
@@ -1003,6 +1021,10 @@ void AppRadioTask_Entry(void)
               (uint32_t) CAMERA_CAPTURE_WIDTH,
               (uint32_t) CAMERA_CAPTURE_HEIGHT,
               (uint32_t) CAMERA_CAPTURE_STRIDE);
+#else
+    APP_PRINT("[CAM] local capture disabled; video source is vehicle channel %u\r\n",
+              (uint32_t) WIRELESS_VIDEO_RX_CHANNEL);
+#endif
 
     /* Initialize input device (touch); i2c_control_init is idempotent. */
     lv_port_indev_init();
@@ -1010,17 +1032,18 @@ void AppRadioTask_Entry(void)
     /* Start SPI only after the touch/IIC interrupt path is live.  Besides avoiding
      * an overly early first transfer, this gives the radio's power-on reset time
      * to complete before the first register read. */
-    nrf24_result_t radio_result = WirelessTouchTx_Init();
+    nrf24_result_t radio_result = WirelessRemoteLinks_Init();
 #if NRF24_PORT_SOFTWARE_SPI
-    APP_PRINT("[NRF] init=%u rx0=%u/%u/%u tx1=%u/%u/%u ch=%u soft done=%lu/%lu timeout=%lu fsp=%08lX\r\n",
+    APP_PRINT("[NRF] init=%u rx0=%u/%u/%u ch=%u tx1=%u/%u/%u ch=%u soft done=%lu/%lu timeout=%lu fsp=%08lX\r\n",
               (uint32_t) radio_result,
               (uint32_t) WirelessTouchRx_GetInitResult(),
               WirelessTouchRx_IsConnected() ? 1U : 0U,
               WirelessTouchRx_IsReady() ? 1U : 0U,
+              WIRELESS_VIDEO_RX_CHANNEL,
               (uint32_t) WirelessTouchTx_GetInitResult(),
               WirelessTouchTx_IsConnected() ? 1U : 0U,
               WirelessTouchTx_IsReady() ? 1U : 0U,
-              WIRELESS_TOUCH_CHANNEL,
+              WIRELESS_COMMAND_TX_CHANNEL,
               g_nrf24_spi0_transaction_count,
               g_nrf24_spi1_transaction_count,
               g_nrf24_spi_timeout_count,
@@ -1032,10 +1055,12 @@ void AppRadioTask_Entry(void)
     APP_PRINT("[NRF RX] polling\r\n");
 #endif
 #else
-    APP_PRINT("[NRF24] init=%u ready=%u channel=%u spi=hardware cb=%lu timeout=%lu event=%u fsp=0x%08lX tx=%lu rx=%lu count=%lu spcr=%08lX spsr=%08lX sppsr=%08lX ielsr_rxi=%08lX iser=%08lX primask=%lu\r\n",
+    APP_PRINT("[NRF24] init=%u tx_ready=%u tx_ch=%u rx_ready=%u rx_ch=%u spi=hardware cb=%lu timeout=%lu event=%u fsp=0x%08lX tx=%lu rx=%lu count=%lu spcr=%08lX spsr=%08lX sppsr=%08lX ielsr_rxi=%08lX iser=%08lX primask=%lu\r\n",
               (uint32_t) radio_result,
               WirelessTouchTx_IsReady() ? 1U : 0U,
-              WIRELESS_TOUCH_CHANNEL,
+              WIRELESS_COMMAND_TX_CHANNEL,
+              WirelessTouchRx_IsReady() ? 1U : 0U,
+              WIRELESS_VIDEO_RX_CHANNEL,
               g_nrf24_spi_callback_count,
               g_nrf24_spi_timeout_count,
               (uint32_t) g_nrf24_spi_last_event,
@@ -1057,30 +1082,29 @@ void AppRadioTask_Entry(void)
     LCD_Backlight_ON();
 
     FreeRtosApp_NotifyInitialized();
-    APP_PRINT("[RTOS] G4 R3 C2\r\n");
-    APP_PRINT("[VIDEO OPT] camera=%ux%u ROI=center encode=gray-%ux%u display=RGB888-%ux%u payload=%u tx_fifo=3 bursts_per_loop=%u active_delay=yield\r\n",
-              (uint32_t) CAMERA_CAPTURE_WIDTH,
-              (uint32_t) CAMERA_CAPTURE_HEIGHT,
+    APP_PRINT("[RTOS] GUI=P4 VIDEO_RX=P3 COMMAND_TX=P2 TOUCH=P1\r\n");
+    APP_PRINT("[LINK] command_tx_ch=%u video_rx_ch=%u rate=2Mbps command_ack=on local_camera=%u loopback=%u\r\n",
+              (uint32_t) WIRELESS_COMMAND_TX_CHANNEL,
+              (uint32_t) WIRELESS_VIDEO_RX_CHANNEL,
+              (uint32_t) APP_CAMERA_CAPTURE_ENABLE,
+              (uint32_t) APP_LOCAL_VIDEO_LOOPBACK_ENABLE);
+    APP_PRINT("[VIDEO RX] jpeg=gray-%ux%u display=RGB888-%ux%u payload=%u source=vehicle\r\n",
               (uint32_t) IMAGE_SOURCE_WIDTH,
               (uint32_t) IMAGE_SOURCE_HEIGHT,
               (uint32_t) IMAGE_DISPLAY_WIDTH,
               (uint32_t) IMAGE_DISPLAY_HEIGHT,
-              (uint32_t) IMAGE_PACKET_DATA_SIZE,
-              (uint32_t) NRF24_TX_BATCH_PACKETS_PER_LOOP);
+              (uint32_t) IMAGE_PACKET_DATA_SIZE);
 
     uint32_t rtt_heartbeat_count = 0U;
     uint32_t received_packet_count = 0U;
-    uint32_t transmitted_packet_count = 0U;
-    uint32_t tx_service_error_count = 0U;
     nrf24_result_t last_rx_error = NRF24_RESULT_SUCCESS;
-    nrf24_result_t last_tx_service_error = NRF24_RESULT_SUCCESS;
 #if NRF24_RX_IRQ_NOTIFICATION_ENABLE
     fsp_err_t last_irq_take_error = FSP_SUCCESS;
 #endif
     while(1)
     {
         bool service_rx_fifo = true;
-#if NRF24_IMAGE_TEST_ENABLE
+#if APP_VIDEO_RX_ENABLE
         if (g_image_rx_state.active &&
             ((uint32_t) (lv_tick_get() - g_image_rx_state.last_packet_tick_ms) >=
              IMAGE_RX_STALL_TIMEOUT_MS))
@@ -1171,6 +1195,9 @@ void AppRadioTask_Entry(void)
             }
 
             received_packet_count++;
+#if APP_VIDEO_RX_CONTROL_COMPAT_ENABLE
+            /* Historical loopback parser retained but excluded from the
+             * production build.  Video RX channel 100 must carry images only. */
             if ((WIRELESS_TOUCH_PAYLOAD_LENGTH == payload_length) &&
                 (WIRELESS_TOUCH_MAGIC == payload[0]))
             {
@@ -1180,11 +1207,9 @@ void AppRadioTask_Entry(void)
                 (void) memcpy(&packet, payload, sizeof(packet));
                 value = (uint16_t) packet.value_lsb |
                         (uint16_t) ((uint16_t) packet.value_msb << 8U);
-
                 if (WirelessTouchPacket_IsValid(&packet))
                 {
-                    APP_PRINT("[NRF24 RX SPI0] count=%lu seq=%u control=%s(%u) action=%s(%u) value=%u checksum=OK\r\n",
-                              received_packet_count,
+                    APP_PRINT("[CONTROL COMPAT RX] seq=%u control=%s(%u) action=%s(%u) value=%u\r\n",
                               (uint32_t) packet.sequence,
                               wireless_touch_control_name(packet.control),
                               (uint32_t) packet.control,
@@ -1192,104 +1217,21 @@ void AppRadioTask_Entry(void)
                               (uint32_t) packet.action,
                               (uint32_t) value);
                 }
-                else
-                {
-                    APP_PRINT("[NRF24 RX SPI0] count=%lu CONTROL INVALID raw=%02X %02X %02X %02X %02X %02X %02X %02X\r\n",
-                              received_packet_count,
-                              (uint32_t) packet.magic,
-                              (uint32_t) packet.version,
-                              (uint32_t) packet.control,
-                              (uint32_t) packet.action,
-                              (uint32_t) packet.value_lsb,
-                              (uint32_t) packet.value_msb,
-                              (uint32_t) packet.sequence,
-                              (uint32_t) packet.checksum);
-                }
             }
-#if NRF24_IMAGE_TEST_ENABLE
-            else if (image_test_rx_process(payload, payload_length))
-            {
-                /* Image packet was consumed by the frame reassembler. */
-            }
-#endif
             else
+#endif
+#if APP_VIDEO_RX_ENABLE
+            if (image_test_rx_process(payload, payload_length))
             {
-                APP_PRINT("[NRF24 RX SPI0] count=%lu UNKNOWN length=%u magic=%02X\r\n",
+                /* Video RX owns channel 100 and consumes image traffic only. */
+            }
+            else
+#endif
+            {
+                APP_PRINT("[VIDEO RX] rejected non-image packet count=%lu length=%u magic=%02X\r\n",
                           received_packet_count,
                           (uint32_t) payload_length,
                           (uint32_t) payload[0]);
-            }
-        }
-
-        /* Keep the three-entry TX FIFO busy for several consecutive bursts.
-         * The local SPI1 -> SPI0 test drains RX after every burst, so this does
-         * not overflow the receiver FIFO or its 16-slot software ring. */
-        for (uint32_t tx_batch_index = 0U;
-             tx_batch_index < NRF24_TX_BATCH_PACKETS_PER_LOOP;
-             tx_batch_index++)
-        {
-#if NRF24_IMAGE_TEST_ENABLE
-            /* Keep at least three consecutive image fragments ready so one
-             * service call can fill the complete nRF24 TX FIFO. */
-            while ((WirelessRadioTx_RingCountGet() < 3U) &&
-                   (IMAGE_TX_STAGE_IDLE != g_image_tx_state.stage))
-            {
-                uint32_t ring_count_before = WirelessRadioTx_RingCountGet();
-                image_test_tx_service();
-                if (WirelessRadioTx_RingCountGet() == ring_count_before)
-                {
-                    break;
-                }
-            }
-#endif
-            uint32_t packets_sent = 0U;
-            nrf24_result_t tx_service_result = WirelessRadioTx_Service(&packets_sent);
-
-            if (NRF24_RESULT_SUCCESS != tx_service_result)
-            {
-                tx_service_error_count++;
-                if ((tx_service_error_count <= 3U) ||
-                    (0U == (tx_service_error_count % 64U)) ||
-                    (last_tx_service_error != tx_service_result))
-                {
-                    APP_PRINT("[NRF24 TX RING] send_error=%u error_count=%lu retained=%lu\r\n",
-                              (uint32_t) tx_service_result,
-                              tx_service_error_count,
-                              WirelessRadioTx_RingCountGet());
-                }
-                last_tx_service_error = tx_service_result;
-                break;
-            }
-
-            last_tx_service_error = NRF24_RESULT_SUCCESS;
-            if (0U == packets_sent)
-            {
-                break;
-            }
-
-            transmitted_packet_count += packets_sent;
-
-            /* In the local SPI1 -> SPI0 loopback test, drain immediately
-             * after each RF burst so the receiver's three-entry FIFO cannot
-             * overflow. */
-            if (0U != packets_sent)
-            {
-                uint32_t queued_packets = 0U;
-                nrf24_result_t rx_service_result =
-                    WirelessRadioRx_Service(packets_sent, &queued_packets);
-
-                if (NRF24_RESULT_SUCCESS != rx_service_result)
-                {
-                    if (last_rx_error != rx_service_result)
-                    {
-                        APP_PRINT("[NRF24 RX RING] batch_drain_error=%u ring_count=%lu\r\n",
-                                  (uint32_t) rx_service_result,
-                                  WirelessRadioRx_RingCountGet());
-                    }
-                    last_rx_error = rx_service_result;
-                    break;
-                }
-                last_rx_error = NRF24_RESULT_SUCCESS;
             }
         }
 
@@ -1297,35 +1239,26 @@ void AppRadioTask_Entry(void)
         if (1000U <= rtt_heartbeat_count)
         {
             rtt_heartbeat_count = 0U;
-            APP_PRINT("[RTT] cam=%lu err=%lu rx0=%u tx1=%u tx=%lu rx=%lu txq=%lu/%u rxq=%lu/%u txerr=%lu imgtx=%u/%u imgrx=%u/%u\r\n",
-                       CameraCapture_FrameCountGet(),
-                       CameraCapture_ErrorCountGet(),
+            APP_PRINT("[VIDEO RX] ready=%u ch=%u packets=%lu rxq=%lu/%u frame=%u chunks=%u/%u\r\n",
                        WirelessTouchRx_IsReady() ? 1U : 0U,
-                      WirelessTouchTx_IsReady() ? 1U : 0U,
-                      transmitted_packet_count,
-                      received_packet_count,
-                      WirelessRadioTx_RingCountGet(),
-                      (uint32_t) WIRELESS_RADIO_TX_RING_CAPACITY,
-                      WirelessRadioRx_RingCountGet(),
-                      (uint32_t) WIRELESS_RADIO_RX_RING_CAPACITY,
-                      tx_service_error_count,
-#if NRF24_IMAGE_TEST_ENABLE
-                      (uint32_t) g_image_tx_state.chunk_index,
-                      (uint32_t) g_image_tx_state.chunk_count,
-                      (uint32_t) g_image_rx_state.received_chunks,
-                      (uint32_t) g_image_rx_state.chunk_count
+                       (uint32_t) WIRELESS_VIDEO_RX_CHANNEL,
+                       received_packet_count,
+                       WirelessRadioRx_RingCountGet(),
+                       (uint32_t) WIRELESS_RADIO_RX_RING_CAPACITY,
+#if APP_VIDEO_RX_ENABLE
+                       (uint32_t) g_image_rx_state.frame_id,
+                       (uint32_t) g_image_rx_state.received_chunks,
+                       (uint32_t) g_image_rx_state.chunk_count
 #else
-                      0U, 0U, 0U, 0U
+                       0U, 0U, 0U
 #endif
-                      );
+                       );
         }
-#if NRF24_IMAGE_TEST_ENABLE
-        if ((IMAGE_TX_STAGE_IDLE != g_image_tx_state.stage) ||
-            (0U != WirelessRadioTx_RingCountGet()) ||
-            g_image_rx_state.active)
+#if APP_VIDEO_RX_ENABLE
+        if (g_image_rx_state.active)
         {
-            /* GUI has a higher RTOS priority and can still preempt this task.
-             * Avoid adding a full tick between image bursts. */
+            /* Drain a frame without inserting a complete RTOS tick between
+             * consecutive radio FIFO reads. */
             taskYIELD();
         }
         else
@@ -1376,7 +1309,7 @@ void AppGuiTask_Entry(void * pv_parameters)
 
     while (1)
     {
-#if NRF24_IMAGE_TEST_ENABLE
+#if APP_VIDEO_RX_ENABLE
         /* GUI Guider deletes the active main screen during PageToAbout() and
          * creates a new main_img_1 object during PageToMain().  Reattach the
          * stable image descriptor whenever the widget instance (or its source)
@@ -1457,17 +1390,67 @@ void AppTouchTask_Entry(void * pv_parameters)
     }
 }
 
-void AppCameraTask_Entry(void * pv_parameters)
+void AppCommandTxTask_Entry(void * pv_parameters)
 {
     FSP_PARAMETER_NOT_USED(pv_parameters);
     FreeRtosApp_WaitInitialized();
+    uint32_t transmitted_packet_count = 0U;
+    uint32_t tx_service_error_count = 0U;
+    nrf24_result_t last_tx_error = NRF24_RESULT_SUCCESS;
+
+    APP_PRINT("[COMMAND TX] started ch=%u control-only\r\n",
+              (uint32_t) WIRELESS_COMMAND_TX_CHANNEL);
 
     while (1)
     {
-#if NRF24_IMAGE_TEST_ENABLE
+#if APP_LOCAL_VIDEO_LOOPBACK_ENABLE
+        /* Retained diagnostic source: when explicitly enabled this task may
+         * enqueue locally captured JPEG packets.  Production keeps it out of
+         * compilation so Command TX owns touch-control traffic only. */
         image_test_dynamic_service();
+        while ((WirelessRadioTx_RingCountGet() < 3U) &&
+               (IMAGE_TX_STAGE_IDLE != g_image_tx_state.stage))
+        {
+            uint32_t ring_count_before = WirelessRadioTx_RingCountGet();
+            image_test_tx_service();
+            if (WirelessRadioTx_RingCountGet() == ring_count_before)
+            {
+                break;
+            }
+        }
 #endif
-        vTaskDelay(pdMS_TO_TICKS(5U));
+
+        uint32_t packets_sent = 0U;
+        nrf24_result_t result = WirelessRadioTx_Service(&packets_sent);
+        if (NRF24_RESULT_SUCCESS != result)
+        {
+            tx_service_error_count++;
+            if ((last_tx_error != result) ||
+                (tx_service_error_count <= 3U) ||
+                (0U == (tx_service_error_count % 64U)))
+            {
+                APP_PRINT("[COMMAND TX] error=%u count=%lu queued=%lu\r\n",
+                          (uint32_t) result,
+                          tx_service_error_count,
+                          WirelessRadioTx_RingCountGet());
+            }
+            last_tx_error = result;
+            vTaskDelay(pdMS_TO_TICKS(2U));
+            continue;
+        }
+
+        last_tx_error = NRF24_RESULT_SUCCESS;
+        transmitted_packet_count += packets_sent;
+        if (0U == packets_sent)
+        {
+            vTaskDelay(pdMS_TO_TICKS(2U));
+        }
+        else if (0U == (transmitted_packet_count % 64U))
+        {
+            APP_PRINT("[COMMAND TX] sent=%lu queued=%lu\r\n",
+                      transmitted_packet_count,
+                      WirelessRadioTx_RingCountGet());
+        }
     }
 }
 

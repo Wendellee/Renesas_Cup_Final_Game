@@ -47,6 +47,11 @@ static uint8_t wireless_touch_checksum(uint8_t const * p_data, uint32_t length)
 
 nrf24_result_t WirelessTouchTx_Init(void)
 {
+    return WirelessRemoteLinks_Init();
+}
+
+nrf24_result_t WirelessRemoteLinks_Init(void)
+{
     nrf24_config_t tx_config;
     nrf24_config_t rx_config;
     nrf24_result_t result;
@@ -92,13 +97,12 @@ nrf24_result_t WirelessTouchTx_Init(void)
     g_touch_rx_transport.delay_ms(g_touch_rx_transport.p_context, 100U);
 
     Nrf24_GetDefaultConfig(&rx_config);
-    rx_config.channel                 = WIRELESS_TOUCH_CHANNEL;
-    rx_config.payload_width           = WIRELESS_TOUCH_PAYLOAD_LENGTH;
+    rx_config.channel                 = WIRELESS_VIDEO_RX_CHANNEL;
+    rx_config.payload_width           = WIRELESS_RADIO_MAX_PAYLOAD_LENGTH;
     rx_config.initial_role            = NRF24_ROLE_RECEIVER;
-    /* Require a hardware ACK for every control/image payload.  SETUP_RETR uses
-     * the driver's default 1.5 ms delay and 15 retries.  Image transmission
-     * advances its chunk index only after TX_DS, so MAX_RT retries the same
-     * chunk on the next service cycle instead of silently losing image data. */
+    /* Command TX uses hardware ACK and the driver's retry policy.  Video RX
+     * accepts the vehicle's dynamic 32-byte packets on its separate channel;
+     * reliability of the video framing is defined by the shared protocol. */
     rx_config.auto_ack_enabled        = true;
     rx_config.dynamic_payload_enabled = true;
     rx_config.ack_payload_enabled     = false;
@@ -109,7 +113,9 @@ nrf24_result_t WirelessTouchTx_Init(void)
 #endif
 
     tx_config = rx_config;
-    tx_config.initial_role = NRF24_ROLE_TRANSMITTER;
+    tx_config.channel       = WIRELESS_COMMAND_TX_CHANNEL;
+    tx_config.payload_width = WIRELESS_TOUCH_PAYLOAD_LENGTH;
+    tx_config.initial_role  = NRF24_ROLE_TRANSMITTER;
 
     /* Probe and initialize both radios independently so one wiring fault does not hide the other result. */
     result = Nrf24_TestConnection(&g_touch_rx_transport, &g_touch_rx_connected);

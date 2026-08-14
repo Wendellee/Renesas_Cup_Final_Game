@@ -1,15 +1,20 @@
 #include "jpeg_codec.h"
 
+#if APP_LOCAL_VIDEO_LOOPBACK_ENABLE
 #include "camera_capture.h"
+#endif
 #include "tjpgd.h"
 
 #include <string.h>
 
+#if APP_LOCAL_VIDEO_LOOPBACK_ENABLE
 #define TJE_IMPLEMENTATION
 #include "tiny_jpeg.h"
+#endif
 
 #define JPEG_DECODER_WORK_SIZE (4096U)
 
+#if APP_LOCAL_VIDEO_LOOPBACK_ENABLE
 /* Previous unblended 200x112 grayscale frame.  A light 3:1 temporal blend
  * reduces random camera noise without building a long persistence trail. */
 static uint8_t g_gray8_previous[JPEG_CODEC_GRAY8_SIZE] BSP_ALIGN_VARIABLE(32);
@@ -22,6 +27,7 @@ typedef struct st_jpeg_encode_context
     uint32_t   size;
     bool       overflow;
 } jpeg_encode_context_t;
+#endif
 
 typedef struct st_jpeg_decode_context
 {
@@ -34,6 +40,7 @@ typedef struct st_jpeg_decode_context
     uint16_t        height;
 } jpeg_decode_context_t;
 
+#if APP_LOCAL_VIDEO_LOOPBACK_ENABLE
 static void jpeg_write_callback(void * p_context, void * p_data, int size)
 {
     jpeg_encode_context_t * p_writer = (jpeg_encode_context_t *) p_context;
@@ -54,6 +61,7 @@ static void jpeg_write_callback(void * p_context, void * p_data, int size)
     (void) memcpy(&p_writer->p_buffer[p_writer->size], p_data, write_size);
     p_writer->size += write_size;
 }
+#endif
 
 static size_t jpeg_input_callback(JDEC * p_decoder, uint8_t * p_buffer, size_t byte_count)
 {
@@ -139,6 +147,7 @@ static int jpeg_output_callback(JDEC * p_decoder, void * p_bitmap, JRECT * p_rec
     return 1;
 }
 
+#if APP_LOCAL_VIDEO_LOOPBACK_ENABLE
 bool JpegCodec_CameraRgb565ToGray8(uint8_t const * p_camera_rgb565,
                                    uint8_t       * p_gray8,
                                    uint32_t        gray8_capacity)
@@ -240,6 +249,7 @@ bool JpegCodec_EncodeGray8(uint8_t const * p_gray8,
 
     return (0 != result) && !writer.overflow && (0U != writer.size);
 }
+#endif /* APP_LOCAL_VIDEO_LOOPBACK_ENABLE */
 
 bool JpegCodec_DecodeRgb888(uint8_t const * p_jpeg,
                             uint32_t        jpeg_size,

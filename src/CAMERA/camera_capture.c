@@ -1,4 +1,8 @@
+#include "app_config.h"
 #include "CAMERA/camera_capture.h"
+
+#if APP_CAMERA_CAPTURE_ENABLE
+
 #include "CAMERA/camera_sensor.h"
 #include <string.h>
 
@@ -186,3 +190,21 @@ void mipi_csi0_callback(mipi_csi_callback_args_t * p_args)
      * normal RX-active/EoTp notifications as capture errors would be wrong. */
     FSP_PARAMETER_NOT_USED(p_args);
 }
+
+#else
+
+/* configuration.xml still owns the dormant VIN/MIPI stack, so its generated
+ * configuration keeps these callback symbols.  The production build never
+ * opens the local capture peripheral; the stubs only satisfy that generated
+ * linkage without compiling the camera pipeline. */
+void vin_callback(capture_callback_args_t * p_args)
+{
+    FSP_PARAMETER_NOT_USED(p_args);
+}
+
+void mipi_csi0_callback(mipi_csi_callback_args_t * p_args)
+{
+    FSP_PARAMETER_NOT_USED(p_args);
+}
+
+#endif /* APP_CAMERA_CAPTURE_ENABLE */
