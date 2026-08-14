@@ -122,6 +122,8 @@
             <slot name="P209.CPU0" secure="true"/>
             <slot name="P210.CPU0" secure="true"/>
             <slot name="P211.CPU0" secure="true"/>
+            <slot name="P212.CPU0" secure="true"/>
+            <slot name="P213.CPU0" secure="true"/>
         </peripheral>
         <peripheral name="PORT3.CPU0" group="PORT">
             <slot name="P300.CPU0" secure="true"/>

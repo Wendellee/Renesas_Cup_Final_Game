@@ -23,7 +23,7 @@ FSP Configuration
     
   RA8P1 Family
     Enable inline BSP IRQ functions: Enabled
-    SDRAM: SDRAM Support: Disabled
+    SDRAM: SDRAM Support: Enabled
     SDRAM: Timings: tRAS (cycles): 6 cycles
     SDRAM: Timings: tRCD (cycles): 3 cycles
     SDRAM: Timings: tRP (cycles): 3 cycles

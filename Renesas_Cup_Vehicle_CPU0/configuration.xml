@@ -38,7 +38,7 @@
     </config>
     <config id="config.bsp.ra8p1.fsp">
       <property id="config.bsp.fsp.inline_irq_functions" value="config.bsp.common.inline_irq_functions.enabled"/>
-      <property id="config.bsp.fsp.sdram.enabled" value="config.bsp.fsp.sdram.enabled.disabled"/>
+      <property id="config.bsp.fsp.sdram.enabled" value="config.bsp.fsp.sdram.enabled.enabled"/>
       <property id="config.bsp.fsp.sdram.tras" value="config.bsp.fsp.sdram.tras.6"/>
       <property id="config.bsp.fsp.sdram.trcd" value="config.bsp.fsp.sdram.trcd.3"/>
       <property id="config.bsp.fsp.sdram.trp" value="config.bsp.fsp.sdram.trp.3"/>
@@ -282,8 +282,8 @@
       <property id="config.bsp.option_setting_otp.zhuk.zhuken3" value="config.bsp.option_setting_otp.zhuk.zhuken3.disabled"/>
     </config>
     <config id="config.bsp.ra">
-      <property id="config.bsp.common.main" value="0x800"/>
-      <property id="config.bsp.common.heap" value="0x800"/>
+      <property id="config.bsp.common.main" value="0x400"/>
+      <property id="config.bsp.common.heap" value="0x4000"/>
       <property id="config.bsp.common.bootloader.xip_enable" value="config.bsp.common.bootloader.xip_enable.disabled"/>
       <property id="config.bsp.common.vcc" value="3300"/>
       <property id="config.bsp.common.checking" value="config.bsp.common.checking.disabled"/>
@@ -976,7 +976,7 @@
       <property id="config.awsfreertos.thread.configheap_clear_memory_on_free" value="config.awsfreertos.thread.configheap_clear_memory_on_free.disabled"/>
       <property id="config.awsfreertos.thread.configsupport_static_allocation" value="config.awsfreertos.thread.configsupport_static_allocation.enabled"/>
       <property id="config.awsfreertos.thread.configsupport_dynamic_allocation" value="config.awsfreertos.thread.configsupport_dynamic_allocation.enabled"/>
-      <property id="config.awsfreertos.thread.configtotal_heap_size" value="1024"/>
+      <property id="config.awsfreertos.thread.configtotal_heap_size" value="0x4000"/>
       <property id="config.awsfreertos.thread.configapplication_allocated_heap" value="config.awsfreertos.thread.configapplication_allocated_heap.disabled"/>
       <property id="config.awsfreertos.thread.configgenerate_run_time_stats" value="config.awsfreertos.thread.configgenerate_run_time_stats.disabled"/>
       <property id="config.awsfreertos.thread.configuse_timers" value="config.awsfreertos.thread.configuse_timers.enabled"/>
@@ -1053,7 +1053,99 @@
       <configSetting altId="glcdc.lcd_tcon0.p806" configurationId="glcdc.lcd_tcon0"/>
       <configSetting altId="glcdc.lcd_tcon1.p805" configurationId="glcdc.lcd_tcon1"/>
       <configSetting altId="glcdc.lcd_tcon2.p807" configurationId="glcdc.lcd_tcon2"/>
-      <configSetting altId="glcdc.mode.custom.free" configurationId="glcdc.mode"/>
+      <configSetting altId="cgc.extal.p212" configurationId="cgc.extal"/>
+      <configSetting altId="cgc.mode.custom.free" configurationId="cgc.mode"/>
+      <configSetting altId="cgc.xtal.p213" configurationId="cgc.xtal"/>
+      <configSetting altId="glcdc.mode.custom.b" configurationId="glcdc.mode"/>
+      <configSetting altId="glcdc.pairing.b" configurationId="glcdc.pairing"/>
+      <configSetting altId="p112.gpio_speed.gpio_speed_h" configurationId="p112.gpio_drivecapacity"/>
+      <configSetting altId="p113.gpio_speed.gpio_speed_h" configurationId="p113.gpio_drivecapacity"/>
+      <configSetting altId="p114.gpio_speed.gpio_speed_h" configurationId="p114.gpio_drivecapacity"/>
+      <configSetting altId="p115.gpio_speed.gpio_speed_h" configurationId="p115.gpio_drivecapacity"/>
+      <configSetting altId="p207.gpio_speed.gpio_speed_hh" configurationId="p207.gpio_drivecapacity"/>
+      <configSetting altId="p212.cgc.extal" configurationId="p212"/>
+      <configSetting altId="p212.gpio_mode.gpio_mode_peripheral" configurationId="p212.gpio_mode"/>
+      <configSetting altId="p213.cgc.xtal" configurationId="p213"/>
+      <configSetting altId="p213.gpio_mode.gpio_mode_peripheral" configurationId="p213.gpio_mode"/>
+      <configSetting altId="p300.gpio_speed.gpio_speed_h" configurationId="p300.gpio_drivecapacity"/>
+      <configSetting altId="p301.gpio_speed.gpio_speed_h" configurationId="p301.gpio_drivecapacity"/>
+      <configSetting altId="p302.gpio_speed.gpio_speed_h" configurationId="p302.gpio_drivecapacity"/>
+      <configSetting altId="p503.gpio_speed.gpio_speed_h" configurationId="p503.gpio_drivecapacity"/>
+      <configSetting altId="p504.gpio_speed.gpio_speed_h" configurationId="p504.gpio_drivecapacity"/>
+      <configSetting altId="p505.gpio_speed.gpio_speed_h" configurationId="p505.gpio_drivecapacity"/>
+      <configSetting altId="p506.gpio_speed.gpio_speed_h" configurationId="p506.gpio_drivecapacity"/>
+      <configSetting altId="p507.gpio_speed.gpio_speed_h" configurationId="p507.gpio_drivecapacity"/>
+      <configSetting altId="p508.gpio_speed.gpio_speed_h" configurationId="p508.gpio_drivecapacity"/>
+      <configSetting altId="p509.gpio_speed.gpio_speed_h" configurationId="p509.gpio_drivecapacity"/>
+      <configSetting altId="p510.gpio_speed.gpio_speed_h" configurationId="p510.gpio_drivecapacity"/>
+      <configSetting altId="p515.gpio_speed.gpio_speed_hh" configurationId="p515.gpio_drivecapacity"/>
+      <configSetting altId="p607.gpio_speed.gpio_speed_h" configurationId="p607.gpio_drivecapacity"/>
+      <configSetting altId="p608.gpio_speed.gpio_speed_h" configurationId="p608.gpio_drivecapacity"/>
+      <configSetting altId="p609.gpio_speed.gpio_speed_h" configurationId="p609.gpio_drivecapacity"/>
+      <configSetting altId="p610.gpio_speed.gpio_speed_h" configurationId="p610.gpio_drivecapacity"/>
+      <configSetting altId="p611.gpio_speed.gpio_speed_h" configurationId="p611.gpio_drivecapacity"/>
+      <configSetting altId="p612.gpio_speed.gpio_speed_h" configurationId="p612.gpio_drivecapacity"/>
+      <configSetting altId="p613.gpio_speed.gpio_speed_h" configurationId="p613.gpio_drivecapacity"/>
+      <configSetting altId="p614.gpio_speed.gpio_speed_h" configurationId="p614.gpio_drivecapacity"/>
+      <configSetting altId="p615.gpio_speed.gpio_speed_h" configurationId="p615.gpio_drivecapacity"/>
+      <configSetting altId="p707.gpio_speed.gpio_speed_hh" configurationId="p707.gpio_drivecapacity"/>
+      <configSetting altId="p711.gpio_speed.gpio_speed_hh" configurationId="p711.gpio_drivecapacity"/>
+      <configSetting altId="p712.gpio_speed.gpio_speed_hh" configurationId="p712.gpio_drivecapacity"/>
+      <configSetting altId="p713.gpio_speed.gpio_speed_hh" configurationId="p713.gpio_drivecapacity"/>
+      <configSetting altId="p714.gpio_speed.gpio_speed_hh" configurationId="p714.gpio_drivecapacity"/>
+      <configSetting altId="p715.gpio_speed.gpio_speed_hh" configurationId="p715.gpio_drivecapacity"/>
+      <configSetting altId="p805.gpio_speed.gpio_speed_hh" configurationId="p805.gpio_drivecapacity"/>
+      <configSetting altId="p806.gpio_speed.gpio_speed_hh" configurationId="p806.gpio_drivecapacity"/>
+      <configSetting altId="p807.gpio_speed.gpio_speed_hh" configurationId="p807.gpio_drivecapacity"/>
+      <configSetting altId="p813.gpio_speed.gpio_speed_h" configurationId="p813.gpio_drivecapacity"/>
+      <configSetting altId="p902.gpio_speed.gpio_speed_hh" configurationId="p902.gpio_drivecapacity"/>
+      <configSetting altId="p903.gpio_speed.gpio_speed_hh" configurationId="p903.gpio_drivecapacity"/>
+      <configSetting altId="p904.gpio_speed.gpio_speed_hh" configurationId="p904.gpio_drivecapacity"/>
+      <configSetting altId="p910.gpio_speed.gpio_speed_hh" configurationId="p910.gpio_drivecapacity"/>
+      <configSetting altId="p911.gpio_speed.gpio_speed_hh" configurationId="p911.gpio_drivecapacity"/>
+      <configSetting altId="p912.gpio_speed.gpio_speed_hh" configurationId="p912.gpio_drivecapacity"/>
+      <configSetting altId="p913.gpio_speed.gpio_speed_hh" configurationId="p913.gpio_drivecapacity"/>
+      <configSetting altId="p914.gpio_speed.gpio_speed_hh" configurationId="p914.gpio_drivecapacity"/>
+      <configSetting altId="p915.gpio_speed.gpio_speed_hh" configurationId="p915.gpio_drivecapacity"/>
+      <configSetting altId="pa00.gpio_speed.gpio_speed_h" configurationId="pa00.gpio_drivecapacity"/>
+      <configSetting altId="pa01.gpio_speed.gpio_speed_h" configurationId="pa01.gpio_drivecapacity"/>
+      <configSetting altId="pa02.gpio_speed.gpio_speed_h" configurationId="pa02.gpio_drivecapacity"/>
+      <configSetting altId="pa03.gpio_speed.gpio_speed_h" configurationId="pa03.gpio_drivecapacity"/>
+      <configSetting altId="pa04.gpio_speed.gpio_speed_h" configurationId="pa04.gpio_drivecapacity"/>
+      <configSetting altId="pa05.gpio_speed.gpio_speed_h" configurationId="pa05.gpio_drivecapacity"/>
+      <configSetting altId="pa06.gpio_speed.gpio_speed_h" configurationId="pa06.gpio_drivecapacity"/>
+      <configSetting altId="pa08.gpio_speed.gpio_speed_h" configurationId="pa08.gpio_drivecapacity"/>
+      <configSetting altId="pa09.gpio_speed.gpio_speed_h" configurationId="pa09.gpio_drivecapacity"/>
+      <configSetting altId="pa10.gpio_speed.gpio_speed_h" configurationId="pa10.gpio_drivecapacity"/>
+      <configSetting altId="pa11.gpio_speed.gpio_speed_h" configurationId="pa11.gpio_drivecapacity"/>
+      <configSetting altId="pa12.gpio_speed.gpio_speed_h" configurationId="pa12.gpio_drivecapacity"/>
+      <configSetting altId="pa13.gpio_speed.gpio_speed_h" configurationId="pa13.gpio_drivecapacity"/>
+      <configSetting altId="pa14.gpio_speed.gpio_speed_h" configurationId="pa14.gpio_drivecapacity"/>
+      <configSetting altId="pa15.gpio_speed.gpio_speed_hh" configurationId="pa15.gpio_drivecapacity"/>
+      <configSetting altId="pb00.gpio_speed.gpio_speed_hh" configurationId="pb00.gpio_drivecapacity"/>
+      <configSetting altId="pb01.gpio_speed.gpio_speed_hh" configurationId="pb01.gpio_drivecapacity"/>
+      <configSetting altId="pb02.gpio_speed.gpio_speed_hh" configurationId="pb02.gpio_drivecapacity"/>
+      <configSetting altId="pb03.gpio_speed.gpio_speed_hh" configurationId="pb03.gpio_drivecapacity"/>
+      <configSetting altId="pb04.gpio_speed.gpio_speed_hh" configurationId="pb04.gpio_drivecapacity"/>
+      <configSetting altId="pb05.gpio_speed.gpio_speed_hh" configurationId="pb05.gpio_drivecapacity"/>
+      <configSetting altId="pb06.gpio_speed.gpio_speed_hh" configurationId="pb06.gpio_drivecapacity"/>
+      <configSetting altId="pb07.gpio_speed.gpio_speed_hh" configurationId="pb07.gpio_drivecapacity"/>
+      <configSetting altId="pc00.gpio_speed.gpio_speed_h" configurationId="pc00.gpio_drivecapacity"/>
+      <configSetting altId="pc01.gpio_speed.gpio_speed_h" configurationId="pc01.gpio_drivecapacity"/>
+      <configSetting altId="pc02.gpio_speed.gpio_speed_h" configurationId="pc02.gpio_drivecapacity"/>
+      <configSetting altId="pc03.gpio_speed.gpio_speed_h" configurationId="pc03.gpio_drivecapacity"/>
+      <configSetting altId="pc04.gpio_speed.gpio_speed_h" configurationId="pc04.gpio_drivecapacity"/>
+      <configSetting altId="pc05.gpio_speed.gpio_speed_h" configurationId="pc05.gpio_drivecapacity"/>
+      <configSetting altId="pc06.gpio_speed.gpio_speed_h" configurationId="pc06.gpio_drivecapacity"/>
+      <configSetting altId="pc08.gpio_speed.gpio_speed_h" configurationId="pc08.gpio_drivecapacity"/>
+      <configSetting altId="pc09.gpio_speed.gpio_speed_h" configurationId="pc09.gpio_drivecapacity"/>
+      <configSetting altId="pc10.gpio_speed.gpio_speed_h" configurationId="pc10.gpio_drivecapacity"/>
+      <configSetting altId="pc11.gpio_speed.gpio_speed_h" configurationId="pc11.gpio_drivecapacity"/>
+      <configSetting altId="pc12.gpio_speed.gpio_speed_h" configurationId="pc12.gpio_drivecapacity"/>
+      <configSetting altId="pc13.gpio_speed.gpio_speed_h" configurationId="pc13.gpio_drivecapacity"/>
+      <configSetting altId="pc14.gpio_speed.gpio_speed_h" configurationId="pc14.gpio_drivecapacity"/>
+      <configSetting altId="pc15.gpio_speed.gpio_speed_h" configurationId="pc15.gpio_drivecapacity"/>
+      <configSetting altId="pd00.gpio_speed.gpio_speed_h" configurationId="pd00.gpio_drivecapacity"/>
       <configSetting altId="iic1.mode.custom.free" configurationId="iic1.mode"/>
       <configSetting altId="iic1.scl1.p512" configurationId="iic1.scl1"/>
       <configSetting altId="iic1.sda1.p511" configurationId="iic1.sda1"/>
