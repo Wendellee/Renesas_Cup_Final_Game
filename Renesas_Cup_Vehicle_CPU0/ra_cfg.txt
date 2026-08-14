@@ -34,7 +34,7 @@ FSP Configuration
     SDRAM: Initialization: Auto-Refresh Interval (ARFI): 10 cycles
     SDRAM: Initialization: Auto-Refresh Count (ARFC): 8 times
     SDRAM: Initialization: Precharge Cycle Count (PRC): 3 cycles
-    SDRAM: Address Multiplex Shift: 9-bit shift
+    SDRAM: Address Multiplex Shift: 8-bit shift
     SDRAM: Endian Mode: Little Endian
     SDRAM: Continuous Access Mode: Enabled
     SDRAM: Bus Width: 32-bit
@@ -66,8 +66,8 @@ FSP Configuration
     Clocks: MSTP Change Delays: Enabled
     Clocks: Settling Delay (us): 30
     Main Oscillator Wait Time: 8163 cycles
-    Cache settings: Data cache: Disabled
-    Cache settings: Data cache forced write-through: Disabled
+    Cache settings: Data cache: Enabled
+    Cache settings: Data cache forced write-through: Enabled
     I/O Ports: Voltage Mode: VCC: High (VCC >= 2.7 V)
     I/O Ports: Voltage Mode: VCC2: High (VCC2 >= 2.7 V)
     
@@ -247,8 +247,8 @@ FSP Configuration
   RA8P1 Core 0 Options
   RA8P1 event data
   RA Common
-    Main stack size (bytes): 0x400
-    Heap size (bytes): 0
+    Main stack size (bytes): 0x800
+    Heap size (bytes): 0x800
     Bootloader Secondary XIP: Disabled
     MCU Vcc (mV): 3300
     Parameter checking: Disabled

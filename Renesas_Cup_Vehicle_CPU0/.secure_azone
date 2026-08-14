@@ -18,8 +18,9 @@
         <memory parent="DATA_FLASH_NS" name="DATA_FLASH_NS_CPU1_N" size="0x0" offset="0x0" security="n" Pname="CPU1"/>
         <memory parent="DATA_FLASH" name="DATA_FLASH_CPU0_S" size="0x0" offset="0x0" security="s" Pname="CPU0"/>
         <memory parent="DATA_FLASH" name="DATA_FLASH_CPU1_S" size="0x0" offset="0x0" security="s" Pname="CPU1"/>
-        <memory parent="SDRAM" name="SDRAM_CPU0_S" size="0x4000000" offset="0x0" security="s" Pname="CPU0"/>
-        <memory parent="SDRAM" name="SDRAM_CPU1_S" size="0x4000000" offset="0x4000000" security="s" Pname="CPU1"/>
+        <memory parent="SDRAM" name="SDRAM_CPU0_S" size="0x7E00000" offset="0x0" security="s" Pname="CPU0"/>
+        <memory parent="SDRAM" name="SDRAM_CPU1_S" size="0x1E0000" offset="0x7E00000" security="s" Pname="CPU1"/>
+        <memory parent="SDRAM" name="SHARE_MEM" size="0x20000" offset="0x7FE0000" security="s" Pname="CPU0" info="@user"/>
         <memory parent="SDRAM" name="SDRAM_CPU0_N" size="0x0" offset="0x8000000" security="n" Pname="CPU0"/>
         <memory parent="SDRAM" name="SDRAM_CPU1_N" size="0x0" offset="0x8000000" security="n" Pname="CPU1"/>
         <memory parent="OSPI0_CS0" name="OSPI0_CS0_CPU0_S" size="0x8000000" offset="0x0" security="s" Pname="CPU0"/>
