@@ -4,15 +4,15 @@
     <partition>
         <memory parent="RAM_NS" name="RAM_NS_CPU0_N" size="0x0" offset="0x1D4000" security="n" Pname="CPU0"/>
         <memory parent="RAM_NS" name="RAM_NS_CPU1_N" size="0x0" offset="0x1D4000" security="n" Pname="CPU1"/>
-        <memory parent="RAM" name="RAM_CPU0_S" size="0xEA000" offset="0x0" security="s" Pname="CPU0"/>
-        <memory parent="RAM" name="RAM_CPU0_C" size="0x0" offset="0xEA000" security="c" Pname="CPU0"/>
-        <memory parent="RAM" name="RAM_CPU1_S" size="0xEA000" offset="0xEA000" security="s" Pname="CPU1"/>
+        <memory parent="RAM" name="RAM_CPU0_S" size="0x180000" offset="0x0" security="s" Pname="CPU0"/>
+        <memory parent="RAM" name="RAM_CPU0_C" size="0x0" offset="0x180000" security="c" Pname="CPU0"/>
+        <memory parent="RAM" name="RAM_CPU1_S" size="0x54000" offset="0x180000" security="s" Pname="CPU1"/>
         <memory parent="RAM" name="RAM_CPU1_C" size="0x0" offset="0x1D4000" security="c" Pname="CPU1"/>
         <memory parent="FLASH_NS" name="FLASH_NS_CPU0_N" size="0x0" offset="0x100000" security="n" Pname="CPU0"/>
         <memory parent="FLASH_NS" name="FLASH_NS_CPU1_N" size="0x0" offset="0x100000" security="n" Pname="CPU1"/>
-        <memory parent="FLASH" name="FLASH_CPU0_S" size="0x80000" offset="0x0" security="s" Pname="CPU0"/>
-        <memory parent="FLASH" name="FLASH_CPU0_C" size="0x0" offset="0x80000" security="c" Pname="CPU0"/>
-        <memory parent="FLASH" name="FLASH_CPU1_S" size="0x80000" offset="0x80000" security="s" Pname="CPU1"/>
+        <memory parent="FLASH" name="FLASH_CPU0_S" size="0xD8000" offset="0x0" security="s" Pname="CPU0"/>
+        <memory parent="FLASH" name="FLASH_CPU0_C" size="0x0" offset="0xD8000" security="c" Pname="CPU0"/>
+        <memory parent="FLASH" name="FLASH_CPU1_S" size="0x28000" offset="0xD8000" security="s" Pname="CPU1"/>
         <memory parent="FLASH" name="FLASH_CPU1_C" size="0x0" offset="0x100000" security="c" Pname="CPU1"/>
         <memory parent="DATA_FLASH_NS" name="DATA_FLASH_NS_CPU0_N" size="0x0" offset="0x0" security="n" Pname="CPU0"/>
         <memory parent="DATA_FLASH_NS" name="DATA_FLASH_NS_CPU1_N" size="0x0" offset="0x0" security="n" Pname="CPU1"/>

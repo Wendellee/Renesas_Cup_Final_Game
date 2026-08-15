@@ -4,22 +4,23 @@
     <partition>
         <memory parent="RAM_NS" name="RAM_NS_CPU0_N" size="0x0" offset="0x1D4000" security="n" Pname="CPU0"/>
         <memory parent="RAM_NS" name="RAM_NS_CPU1_N" size="0x0" offset="0x1D4000" security="n" Pname="CPU1"/>
-        <memory parent="RAM" name="RAM_CPU0_S" size="0xEA000" offset="0x0" security="s" Pname="CPU0"/>
-        <memory parent="RAM" name="RAM_CPU0_C" size="0x0" offset="0xEA000" security="c" Pname="CPU0"/>
-        <memory parent="RAM" name="RAM_CPU1_S" size="0xEA000" offset="0xEA000" security="s" Pname="CPU1"/>
+        <memory parent="RAM" name="RAM_CPU0_S" size="0x180000" offset="0x0" security="s" Pname="CPU0"/>
+        <memory parent="RAM" name="RAM_CPU0_C" size="0x0" offset="0x180000" security="c" Pname="CPU0"/>
+        <memory parent="RAM" name="RAM_CPU1_S" size="0x54000" offset="0x180000" security="s" Pname="CPU1"/>
         <memory parent="RAM" name="RAM_CPU1_C" size="0x0" offset="0x1D4000" security="c" Pname="CPU1"/>
         <memory parent="FLASH_NS" name="FLASH_NS_CPU0_N" size="0x0" offset="0x100000" security="n" Pname="CPU0"/>
         <memory parent="FLASH_NS" name="FLASH_NS_CPU1_N" size="0x0" offset="0x100000" security="n" Pname="CPU1"/>
-        <memory parent="FLASH" name="FLASH_CPU0_S" size="0x80000" offset="0x0" security="s" Pname="CPU0"/>
-        <memory parent="FLASH" name="FLASH_CPU0_C" size="0x0" offset="0x80000" security="c" Pname="CPU0"/>
-        <memory parent="FLASH" name="FLASH_CPU1_S" size="0x80000" offset="0x80000" security="s" Pname="CPU1"/>
+        <memory parent="FLASH" name="FLASH_CPU0_S" size="0xD8000" offset="0x0" security="s" Pname="CPU0"/>
+        <memory parent="FLASH" name="FLASH_CPU0_C" size="0x0" offset="0xD8000" security="c" Pname="CPU0"/>
+        <memory parent="FLASH" name="FLASH_CPU1_S" size="0x28000" offset="0xD8000" security="s" Pname="CPU1"/>
         <memory parent="FLASH" name="FLASH_CPU1_C" size="0x0" offset="0x100000" security="c" Pname="CPU1"/>
         <memory parent="DATA_FLASH_NS" name="DATA_FLASH_NS_CPU0_N" size="0x0" offset="0x0" security="n" Pname="CPU0"/>
         <memory parent="DATA_FLASH_NS" name="DATA_FLASH_NS_CPU1_N" size="0x0" offset="0x0" security="n" Pname="CPU1"/>
         <memory parent="DATA_FLASH" name="DATA_FLASH_CPU0_S" size="0x0" offset="0x0" security="s" Pname="CPU0"/>
         <memory parent="DATA_FLASH" name="DATA_FLASH_CPU1_S" size="0x0" offset="0x0" security="s" Pname="CPU1"/>
-        <memory parent="SDRAM" name="SDRAM_CPU0_S" size="0x4000000" offset="0x0" security="s" Pname="CPU0"/>
-        <memory parent="SDRAM" name="SDRAM_CPU1_S" size="0x4000000" offset="0x4000000" security="s" Pname="CPU1"/>
+        <memory parent="SDRAM" name="SDRAM_CPU0_S" size="0x7E00000" offset="0x0" security="s" Pname="CPU0"/>
+        <memory parent="SDRAM" name="SDRAM_CPU1_S" size="0x1E0000" offset="0x7E00000" security="s" Pname="CPU1"/>
+        <memory parent="SDRAM" name="SHARE_MEM" size="0x20000" offset="0x7FE0000" security="s" Pname="CPU0" info="@user"/>
         <memory parent="SDRAM" name="SDRAM_CPU0_N" size="0x0" offset="0x8000000" security="n" Pname="CPU0"/>
         <memory parent="SDRAM" name="SDRAM_CPU1_N" size="0x0" offset="0x8000000" security="n" Pname="CPU1"/>
         <memory parent="OSPI0_CS0" name="OSPI0_CS0_CPU0_S" size="0x8000000" offset="0x0" security="s" Pname="CPU0"/>
@@ -106,6 +107,9 @@
         <memory parent="CTCM" name="CTCM_CPU1_S" size="0x10000" offset="0x0" security="s" Pname="CPU1"/>
         <memory parent="STCM_NS" name="STCM_NS_CPU1_N" size="0x0" offset="0x10000" security="n" Pname="CPU1"/>
         <memory parent="STCM" name="STCM_CPU1_S" size="0x10000" offset="0x0" security="s" Pname="CPU1"/>
+        <peripheral name="PORT0.CPU0" group="PORT">
+            <slot name="P012.CPU0" secure="true"/>
+        </peripheral>
         <peripheral name="PORT1.CPU0" group="PORT">
             <slot name="P112.CPU0" secure="true"/>
             <slot name="P113.CPU0" secure="true"/>
@@ -118,6 +122,8 @@
             <slot name="P209.CPU0" secure="true"/>
             <slot name="P210.CPU0" secure="true"/>
             <slot name="P211.CPU0" secure="true"/>
+            <slot name="P212.CPU0" secure="true"/>
+            <slot name="P213.CPU0" secure="true"/>
         </peripheral>
         <peripheral name="PORT3.CPU0" group="PORT">
             <slot name="P300.CPU0" secure="true"/>
@@ -308,6 +314,7 @@
             <assign memory="FLASH_CPU0_C"/>
             <assign memory="DATA_FLASH_CPU0_S"/>
             <assign memory="SDRAM_CPU0_S"/>
+            <assign memory="SHARE_MEM"/>
             <assign memory="OSPI0_CS0_CPU0_S"/>
             <assign memory="OSPI0_CS1_CPU0_S"/>
             <assign memory="OSPI1_CS0_CPU0_S"/>
@@ -340,6 +347,7 @@
             <assign memory="OPTION_SETTING_OTP_ZHUK_CPU0_S"/>
             <assign memory="ITCM_CPU0_S"/>
             <assign memory="DTCM_CPU0_S"/>
+            <assign group="PORT" peripheral="PORT0.P012"/>
             <assign group="PORT" peripheral="PORT1.P112"/>
             <assign group="PORT" peripheral="PORT1.P113"/>
             <assign group="PORT" peripheral="PORT1.P114"/>
@@ -349,6 +357,8 @@
             <assign group="PORT" peripheral="PORT2.P209"/>
             <assign group="PORT" peripheral="PORT2.P210"/>
             <assign group="PORT" peripheral="PORT2.P211"/>
+            <assign group="PORT" peripheral="PORT2.P212"/>
+            <assign group="PORT" peripheral="PORT2.P213"/>
             <assign group="PORT" peripheral="PORT3.P300"/>
             <assign group="PORT" peripheral="PORT3.P301"/>
             <assign group="PORT" peripheral="PORT3.P302"/>
