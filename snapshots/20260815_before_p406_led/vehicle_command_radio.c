@@ -4,7 +4,6 @@
 #include "Radio/platform/fsp_nrf24_port.h"
 #include "Radio/protocol/control_protocol.h"
 #include "Vehicle/adapters/rtos/vehicle_command_mailbox.h"
-#include "hal_data.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include <string.h>
@@ -114,12 +113,8 @@ static bool submit_vehicle_command(control_packet_t const * p_packet, uint16_t v
             command.suction_percent = 80U;
             break;
 
+        /* LED、Wi-Fi和页面属于手持/附件功能，不应直接写底盘。 */
         case CONTROL_ID_LED:
-            return FSP_SUCCESS == R_IOPORT_PinWrite(&g_ioport_ctrl,
-                                                    BSP_IO_PORT_04_PIN_06,
-                                                    (0U != value) ? BSP_IO_LEVEL_HIGH : BSP_IO_LEVEL_LOW);
-
-        /* Wi-Fi和页面属于手持功能，不应直接写底盘。 */
         case CONTROL_ID_WIFI:
         case CONTROL_ID_PAGE:
             return true;
