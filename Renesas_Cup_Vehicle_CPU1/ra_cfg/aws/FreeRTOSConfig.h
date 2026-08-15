@@ -48,7 +48,7 @@ FSP_HEADER
 #define configTICK_RATE_HZ (1000)
 #endif
 #ifndef configMAX_PRIORITIES
-#define configMAX_PRIORITIES (5)
+#define configMAX_PRIORITIES (16)
 #endif
 #ifndef configMINIMAL_STACK_SIZE
 #define configMINIMAL_STACK_SIZE (128)

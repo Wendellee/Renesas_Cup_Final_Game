@@ -836,7 +836,7 @@
       <property id="config.awsfreertos.thread.configuse_tick_hook" value="config.awsfreertos.thread.configuse_tick_hook.disabled"/>
       <property id="config.awsfreertos.thread.configcpu_clock_hz" value="SystemCoreClock"/>
       <property id="config.awsfreertos.thread.configtick_rate_hz" value="1000"/>
-      <property id="config.awsfreertos.thread.configmax_priorities" value="5"/>
+      <property id="config.awsfreertos.thread.configmax_priorities" value="16"/>
       <property id="config.awsfreertos.thread.configminimal_stack_size" value="128"/>
       <property id="config.awsfreertos.thread.configmax_task_name_len" value="20"/>
       <property id="config.awsfreertos.thread.configuse_trace_facility" value="config.awsfreertos.thread.configuse_trace_facility.disabled"/>
