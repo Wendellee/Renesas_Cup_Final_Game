@@ -86,7 +86,8 @@ static void gt911_reset(uint8_t i2c_addr)
     R_BSP_SoftwareDelay(10, BSP_DELAY_UNITS_MILLISECONDS);
     R_IOPORT_PinCfg(&g_ioport_ctrl,
                     TCH_INT,
-                    (uint32_t) IOPORT_CFG_PORT_DIRECTION_INPUT);
+                    (uint32_t) IOPORT_CFG_PORT_DIRECTION_INPUT |
+                    (uint32_t) IOPORT_CFG_IRQ_ENABLE);
     R_BSP_SoftwareDelay(100, BSP_DELAY_UNITS_MILLISECONDS);
 }
 
@@ -171,8 +172,13 @@ fsp_err_t gt911_enable(void)
         return err;
     }
 
-    /* IRQ19/P705 belongs to the video nRF24 receiver.  GT911 is sampled by
-     * LVGL over I2C, so touch must not open or reconfigure that IRQ channel. */
+    /* GT911 INT is routed to P111/IRQ19.  LVGL still polls the controller,
+     * while the IRQ records touch activity without sharing the video IRQ0. */
+    err = R_ICU_ExternalIrqOpen(&g_external_irq19_ctrl, &g_external_irq19_cfg);
+    if (FSP_SUCCESS == err)
+    {
+        (void) R_ICU_ExternalIrqEnable(&g_external_irq19_ctrl);
+    }
 
     g_gt911_last_error = FSP_SUCCESS;
     return FSP_SUCCESS;

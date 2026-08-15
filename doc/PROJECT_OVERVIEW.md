@@ -7,8 +7,8 @@
 当前正式数据流为：
 
 ```text
-LVGL -> Command TX Thread -> SPI1 nRF24（76 信道） -> 小车控制接收端
-LVGL main_img_1 <- Video RX Thread <- SPI0 nRF24（100 信道） <- 小车图传发送端
+LVGL -> Command TX Thread -> SPI0 nRF24（76 信道） -> 小车控制接收端
+LVGL main_img_1 <- Video RX Thread <- SPI1 nRF24（100 信道，P105/IRQ0） <- 小车图传发送端
 ```
 
 遥控器只发送控制命令，不接收小车控制命令；遥控器只接收小车图像，不通过 Video RX 链路发送数据。
@@ -31,8 +31,8 @@ LVGL main_img_1 <- Video RX Thread <- SPI0 nRF24（100 信道） <- 小车图传
 | LVGL + GUI Guider | 1024×600 触摸界面 |
 | GLCDC + Dave2D | LCD 输出和图形加速 |
 | GT911 + IIC1 | 触摸输入 |
-| SPI1 nRF24L01+ | 76 信道，向小车发送控制命令 |
-| SPI0 nRF24L01+ | 100 信道，接收小车图像 |
+| SPI0 nRF24L01+ | 76 信道，向小车发送控制命令，不使用 IRQ |
+| SPI1 nRF24L01+ | 100 信道，接收小车图像，IRQ 为 P105/IRQ0 |
 | TJpgDec | 解码小车发送的 200×112 灰度 JPEG |
 | SEGGER RTT | 运行日志和故障诊断 |
 | OV5640 + MIPI CSI + VIN | 源码保留，当前不启动本地采集 |
@@ -54,19 +54,19 @@ LVGL main_img_1 <- Video RX Thread <- SPI0 nRF24（100 信道） <- 小车图传
 
 这样配置的原因是：
 
-1. 这些外设是板级单例或跨线程共享资源。例如 LVGL 事件在 Display Thread 产生控制数据，而 SPI1 由 Command TX Thread 执行发送。
+1. 这些外设是板级单例或跨线程共享资源。例如 LVGL 事件在 Display Thread 产生控制数据，而 SPI0 由 Command TX Thread 执行发送。
 2. `_hal.0` 中的模块由 FSP 生成全局实例，例如 `g_spi0`、`g_spi1`、`g_display`，应用可以在明确同步规则下从不同任务调用。
 3. 如果把同一个外设 Stack 分别放入多个 Thread，FSP 通常会生成线程私有实例或产生实例/中断/DMA 通道冲突。
 4. 外设放在哪个 Thread 节点不等于驱动只能在哪个任务运行。运行时所有权应由任务入口、队列、互斥锁和初始化顺序定义。
 5. 只有确实由单一线程独占、且希望由该线程自动初始化的模块，才适合挂在线程上下文中。
 
-本工程继续保留全局 FSP Stack，但在应用层规定：SPI0 RX 归 Video RX Thread，SPI1 TX 归 Command TX Thread，LVGL/GT911 归 Display Thread。
+本工程继续保留全局 FSP Stack，但在应用层规定：SPI1 RX 归 Video RX Thread，SPI0 TX 归 Command TX Thread，LVGL/GT911 归 Display Thread。Video RX 使用 P105/IRQ0；GT911 INT 使用 P111/IRQ19，RST 使用 P606。
 
 ## 5. 启动流程
 
 1. FSP 生成的 `main()` 创建四个静态 FreeRTOS 任务。
 2. Video RX Thread 优先执行统一初始化：IOPORT、SDRAM、LVGL Port、I²C/GT911、两颗 nRF24 和 GUI。
-3. SPI0 nRF24 配置为 100 信道接收机；SPI1 nRF24 配置为 76 信道发射机。
+3. SPI1 nRF24 配置为 100 信道接收机；SPI0 nRF24 配置为 76 信道发射机。
 4. 初始化完成后调用 `FreeRtosApp_NotifyInitialized()`。
 5. Display、Command TX 和 Touch 任务解除等待，分别进入自己的循环。
 
@@ -78,7 +78,7 @@ LVGL main_img_1 <- Video RX Thread <- SPI0 nRF24（100 信道） <- 小车图传
 
 Command TX Thread 周期性调用 `WirelessRadioTx_Service()`：
 
-- 使用 SPI1 nRF24；
+- 使用 SPI0 nRF24；
 - 使用 76 信道和 2 Mbps；
 - 使用硬件 ACK、2 字节 CRC 和自动重发；
 - 发送失败时保留队头包，下次继续重试。
@@ -90,7 +90,7 @@ Video RX Thread 只处理 100 信道收到的图像协议包。非图像包直�
 图像处理顺序：
 
 ```text
-nRF24 IRQ -> SPI0 硬件 FIFO -> 32 项软件 RX 队列
+nRF24 P105/IRQ0 -> SPI1 硬件 FIFO -> 32 项软件 RX 队列
 -> START/DATA/END 分片重组 -> CRC32
 -> TJpgDec 解码 200×112 JPEG
 -> 近邻放大为 480×272 RGB888

@@ -23,7 +23,7 @@ static nrf24_port_context_t g_nrf24_port_contexts[NRF24_PORT_MODULE_COUNT] =
         .sck    = BSP_IO_PORT_07_PIN_02,
         .csn    = BSP_IO_PORT_07_PIN_03,
         .ce     = BSP_IO_PORT_07_PIN_04,
-        /* Video RX IRQ is routed to P705/IRQ19 by the board wiring. */
+        /* Command TX completion is polled through STATUS; its IRQ is not wired. */
         .irq    = BSP_IO_PORT_07_PIN_05,
     },
     {
@@ -33,7 +33,7 @@ static nrf24_port_context_t g_nrf24_port_contexts[NRF24_PORT_MODULE_COUNT] =
         .sck    = BSP_IO_PORT_04_PIN_15,
         .csn    = BSP_IO_PORT_04_PIN_14,
         .ce     = BSP_IO_PORT_01_PIN_04,
-        /* Command TX completion is polled through STATUS; its IRQ is not wired. */
+        /* Video RX IRQ is routed to P105/IRQ0 by the board wiring. */
         .irq    = BSP_IO_PORT_01_PIN_05,
     },
 };
@@ -293,7 +293,7 @@ fsp_err_t Nrf24Port_Init(void)
         uint32_t irq_pin_cfg = (uint32_t) IOPORT_CFG_PORT_DIRECTION_INPUT |
                                (uint32_t) IOPORT_CFG_PULLUP_ENABLE;
 #if NRF24_RX_IRQ_NOTIFICATION_ENABLE
-        if (NRF24_PORT_MODULE_SPI0 == p_port->module)
+        if (NRF24_RX_MODULE == p_port->module)
         {
             irq_pin_cfg |= (uint32_t) IOPORT_CFG_IRQ_ENABLE;
         }
@@ -330,16 +330,16 @@ fsp_err_t Nrf24Port_RxIrqOpen(void)
     g_nrf24_rx_irq_pending = false;
     g_nrf24_rx_irq_callback_count = 0U;
 
-    err = R_ICU_ExternalIrqOpen(&g_external_irq19_ctrl, &g_external_irq19_cfg);
+    err = R_ICU_ExternalIrqOpen(&g_external_irq0_ctrl, &g_external_irq0_cfg);
     if (FSP_SUCCESS != err)
     {
         return err;
     }
 
-    err = R_ICU_ExternalIrqEnable(&g_external_irq19_ctrl);
+    err = R_ICU_ExternalIrqEnable(&g_external_irq0_ctrl);
     if (FSP_SUCCESS != err)
     {
-        (void) R_ICU_ExternalIrqClose(&g_external_irq19_ctrl);
+        (void) R_ICU_ExternalIrqClose(&g_external_irq0_ctrl);
     }
     else
     {
@@ -407,7 +407,7 @@ void spi1_callback(spi_callback_args_t * p_args)
     g_spi_transfer_done[NRF24_PORT_MODULE_SPI1] = true;
 }
 
-void nrf24_spi0_irq_callback(external_irq_callback_args_t * p_args)
+void nrf24_video_rx_irq_callback(external_irq_callback_args_t * p_args)
 {
     FSP_PARAMETER_NOT_USED(p_args);
     g_nrf24_rx_irq_callback_count++;

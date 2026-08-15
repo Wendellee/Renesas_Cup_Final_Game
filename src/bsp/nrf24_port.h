@@ -7,8 +7,8 @@
 #ifndef NRF24_PORT_SOFTWARE_SPI
 #define NRF24_PORT_SOFTWARE_SPI    (0U)
 #endif
-#define NRF24_RX_MODULE            NRF24_PORT_MODULE_SPI0
-#define NRF24_TX_MODULE            NRF24_PORT_MODULE_SPI1
+#define NRF24_RX_MODULE            NRF24_PORT_MODULE_SPI1
+#define NRF24_TX_MODULE            NRF24_PORT_MODULE_SPI0
 
 /*
  * 1: P105/IRQ0 notifies the application when the SPI0 receiver has data.
@@ -33,7 +33,7 @@ fsp_err_t Nrf24Port_RxIrqPendingTake(bool * p_pending);
 uint32_t Nrf24Port_RxIrqCallbackCountGet(void);
 void spi0_callback(spi_callback_args_t * p_args);
 void spi1_callback(spi_callback_args_t * p_args);
-void nrf24_spi0_irq_callback(external_irq_callback_args_t * p_args);
+void nrf24_video_rx_irq_callback(external_irq_callback_args_t * p_args);
 
 extern volatile uint32_t    g_nrf24_spi_callback_count;
 extern volatile uint32_t    g_nrf24_spi0_transaction_count;

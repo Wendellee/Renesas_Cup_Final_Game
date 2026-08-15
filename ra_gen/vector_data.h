@@ -6,7 +6,7 @@
         #endif
 /* Number of interrupts allocated */
 #ifndef VECTOR_DATA_IRQ_COUNT
-#define VECTOR_DATA_IRQ_COUNT    (19)
+#define VECTOR_DATA_IRQ_COUNT    (20)
 #endif
 /* ISR prototypes */
 void spi_b_rxi_isr(void);
@@ -64,8 +64,10 @@ void mipi_csi_vc_isr(void);
 #define MIPICSI_DL_IRQn          ((IRQn_Type) 17) /* MIPICSI DL (Data Lane interrupt) */
 #define VECTOR_NUMBER_MIPICSI_VC ((IRQn_Type) 18) /* MIPICSI VC (Virtual Channel interrupt) */
 #define MIPICSI_VC_IRQn          ((IRQn_Type) 18) /* MIPICSI VC (Virtual Channel interrupt) */
+#define VECTOR_NUMBER_ICU_IRQ0 ((IRQn_Type) 19) /* ICU IRQ0 (External pin interrupt 0) */
+#define ICU_IRQ0_IRQn          ((IRQn_Type) 19) /* ICU IRQ0 (External pin interrupt 0) */
 /* The number of entries required for the ICU vector table. */
-#define BSP_ICU_VECTOR_NUM_ENTRIES (19)
+#define BSP_ICU_VECTOR_NUM_ENTRIES (20)
 
 #ifdef __cplusplus
         }

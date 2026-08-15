@@ -3,12 +3,12 @@
 #define COMMON_DATA_H_
 #include <stdint.h>
 #include "bsp_api.h"
+#include "r_icu.h"
+#include "r_external_irq_api.h"
 #include "r_mipi_csi.h"
 #include "r_mipi_csi_api.h"
 #include "r_vin.h"
 #include "r_capture_api.h"
-#include "r_icu.h"
-#include "r_external_irq_api.h"
 #include "dave_driver.h"
 #include "r_glcdc.h"
 #include "r_display_api.h"
@@ -18,6 +18,16 @@
 #include "r_ioport.h"
 #include "bsp_pin_cfg.h"
 FSP_HEADER
+/** External IRQ on ICU Instance. */
+extern const external_irq_instance_t g_external_irq0;
+
+/** Access the ICU instance using these structures when calling API functions directly (::p_api is not used). */
+extern icu_instance_ctrl_t g_external_irq0_ctrl;
+extern const external_irq_cfg_t g_external_irq0_cfg;
+
+#ifndef nrf24_video_rx_irq_callback
+void nrf24_video_rx_irq_callback(external_irq_callback_args_t *p_args);
+#endif
 /* MIPI PHY on MIPI PHY Instance. */
 
 extern const mipi_phy_instance_t g_mipi_phy0;
@@ -67,8 +77,8 @@ extern const external_irq_instance_t g_external_irq19;
 extern icu_instance_ctrl_t g_external_irq19_ctrl;
 extern const external_irq_cfg_t g_external_irq19_cfg;
 
-#ifndef nrf24_spi0_irq_callback
-void nrf24_spi0_irq_callback(external_irq_callback_args_t *p_args);
+#ifndef touch_irq_callback
+void touch_irq_callback(external_irq_callback_args_t *p_args);
 #endif
 #if DRW_CFG_CUSTOM_MALLOC
             void * d1_malloc(size_t size);
