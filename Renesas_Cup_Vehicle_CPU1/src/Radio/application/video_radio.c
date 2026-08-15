@@ -8,8 +8,19 @@
 
 #define VIDEO_RADIO_CHANNEL              (100U)
 #define VIDEO_RADIO_TIMEOUT_MS           (50U)
+#ifndef VIDEO_AUTO_ACK_ENABLE
+#define VIDEO_AUTO_ACK_ENABLE             (0U)
+#endif
+#ifndef VIDEO_FAST_BATCH_NO_ACK_ENABLE
+#define VIDEO_FAST_BATCH_NO_ACK_ENABLE    (0U)
+#endif
+#define VIDEO_NO_ACK_DATA_REPEAT          (2U)
+#define VIDEO_NO_ACK_BOUNDARY_REPEAT      (3U)
+#define VIDEO_NO_ACK_PACING_CHUNKS        (4U)
+#if VIDEO_FAST_BATCH_NO_ACK_ENABLE
 #define VIDEO_BATCH_SIZE                 (3U)
 #define VIDEO_BATCHES_BEFORE_DELAY        (8U)
+#endif
 #define VIDEO_EXPECTED_WIDTH              (200U)
 #define VIDEO_EXPECTED_HEIGHT             (112U)
 
@@ -20,15 +31,29 @@ static uint8_t const g_video_radio_address[NRF24_ADDRESS_WIDTH_MAX] =
 
 static nrf24_transport_t g_transport;
 
-static nrf24_result_t packet_send_ack(uint8_t const packet[VIDEO_PACKET_SIZE])
+static nrf24_result_t packet_send(uint8_t const packet[VIDEO_PACKET_SIZE], bool no_ack)
 {
     nrf24_tx_result_t tx_result;
     return Nrf24_Send(&g_transport,
                       packet,
                       VIDEO_PACKET_SIZE,
-                      false,
+                      no_ack,
                       VIDEO_RADIO_TIMEOUT_MS,
                       &tx_result);
+}
+
+static nrf24_result_t packet_send_repeated(uint8_t const packet[VIDEO_PACKET_SIZE],
+                                           uint32_t repeat_count)
+{
+    for (uint32_t repeat = 0U; repeat < repeat_count; repeat++)
+    {
+        nrf24_result_t const result = packet_send(packet, true);
+        if (NRF24_RESULT_SUCCESS != result)
+        {
+            return result;
+        }
+    }
+    return NRF24_RESULT_SUCCESS;
 }
 
 nrf24_result_t VideoRadio_Init(void)
@@ -59,7 +84,7 @@ nrf24_result_t VideoRadio_Init(void)
     config.payload_width = VIDEO_PACKET_SIZE;
     config.initial_role = NRF24_ROLE_TRANSMITTER;
     config.data_rate = NRF24_DATA_RATE_2MBPS;
-    config.auto_ack_enabled = true;
+    config.auto_ack_enabled = (0U != VIDEO_AUTO_ACK_ENABLE);
     config.dynamic_payload_enabled = true;
     config.dynamic_ack_enabled = true;
     (void) memcpy(config.tx_address, g_video_radio_address, sizeof(g_video_radio_address));
@@ -90,12 +115,20 @@ nrf24_result_t VideoRadio_SendFrame(video_frame_t const * p_frame)
 
     uint8_t packet[VIDEO_PACKET_SIZE];
     VideoProtocol_StartPacketBuild(&frame, packet);
-    nrf24_result_t result = packet_send_ack(packet);
+#if VIDEO_AUTO_ACK_ENABLE
+    nrf24_result_t result = packet_send(packet, false);
+#else
+    nrf24_result_t result = packet_send_repeated(packet, VIDEO_NO_ACK_BOUNDARY_REPEAT);
+#endif
     if (NRF24_RESULT_SUCCESS != result)
     {
+        g_printf("[VIDEO NRF] frame=%u START failed=%u\r\n",
+                 (uint32_t) frame.frame_id,
+                 (uint32_t) result);
         return result;
     }
 
+#if VIDEO_FAST_BATCH_NO_ACK_ENABLE
     uint32_t batch_number = 0U;
     for (uint16_t chunk = 0U; chunk < chunk_count;)
     {
@@ -132,7 +165,53 @@ nrf24_result_t VideoRadio_SendFrame(video_frame_t const * p_frame)
             vTaskDelay(1U);
         }
     }
+#elif VIDEO_AUTO_ACK_ENABLE
+    /* A complete JPEG is useful only when every fragment arrives.  Hardware
+     * ACK/retry therefore provides receiver back-pressure and retransmits an
+     * occasional lost DATA packet.  The former three-packet NO_ACK burst is
+     * retained above for later throughput experiments. */
+    for (uint16_t chunk = 0U; chunk < chunk_count; chunk++)
+    {
+        VideoProtocol_DataPacketBuild(&frame, chunk, packet);
+        result = packet_send(packet, false);
+        if (NRF24_RESULT_SUCCESS != result)
+        {
+            g_printf("[VIDEO NRF] frame=%u chunk=%u/%u failed=%u\r\n",
+                     (uint32_t) frame.frame_id,
+                     (uint32_t) chunk,
+                     (uint32_t) chunk_count,
+                     (uint32_t) result);
+            return result;
+        }
+    }
+#else
+    /* ACK return path is not required in the production video direction.
+     * Send every fragment twice before advancing, so the receiver can accept
+     * the duplicate when the first copy was lost and ignore it otherwise. */
+    for (uint16_t chunk = 0U; chunk < chunk_count; chunk++)
+    {
+        VideoProtocol_DataPacketBuild(&frame, chunk, packet);
+        result = packet_send_repeated(packet, VIDEO_NO_ACK_DATA_REPEAT);
+        if (NRF24_RESULT_SUCCESS != result)
+        {
+            g_printf("[VIDEO NRF] frame=%u chunk=%u/%u noack failed=%u\r\n",
+                     (uint32_t) frame.frame_id,
+                     (uint32_t) chunk,
+                     (uint32_t) chunk_count,
+                     (uint32_t) result);
+            return result;
+        }
+        if (0U == (((uint32_t) chunk + 1U) % VIDEO_NO_ACK_PACING_CHUNKS))
+        {
+            vTaskDelay(1U);
+        }
+    }
+#endif
 
     VideoProtocol_EndPacketBuild(&frame, packet);
-    return packet_send_ack(packet);
+#if VIDEO_AUTO_ACK_ENABLE
+    return packet_send(packet, false);
+#else
+    return packet_send_repeated(packet, VIDEO_NO_ACK_BOUNDARY_REPEAT);
+#endif
 }

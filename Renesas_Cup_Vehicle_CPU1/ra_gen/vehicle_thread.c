@@ -120,8 +120,8 @@ const gpt_extended_cfg_t g_right_wheel_extend =
 						GPT_GTIOC_POLARITY_NORMAL, };
 
 const timer_cfg_t g_right_wheel_cfg = { .mode = TIMER_MODE_PWM,
-/* Actual period: 0.00004 seconds. Actual duty: 70%. */.period_counts =
-		(uint32_t) 0x2710, .duty_cycle_counts = 0x1b58, .source_div =
+/* Actual period: 0.00004 seconds. Actual duty: 80%. */.period_counts =
+		(uint32_t) 0x2710, .duty_cycle_counts = 0x1f40, .source_div =
 		(timer_source_div_t) 0, .channel = 8, .p_callback = NULL,
 /** If NULL then do not add & */
 #if defined(NULL)
@@ -245,8 +245,8 @@ const gpt_extended_cfg_t g_fan_extend =
 						GPT_GTIOC_POLARITY_NORMAL, };
 
 const timer_cfg_t g_fan_cfg = { .mode = TIMER_MODE_PWM,
-/* Actual period: 0.0001 seconds. Actual duty: 50%. */.period_counts =
-		(uint32_t) 0x61a8, .duty_cycle_counts = 0x30d4, .source_div =
+/* Actual period: 0.0001 seconds. Actual duty: 80%. */.period_counts =
+		(uint32_t) 0x61a8, .duty_cycle_counts = 0x4e20, .source_div =
 		(timer_source_div_t) 0, .channel = 7, .p_callback = NULL,
 /** If NULL then do not add & */
 #if defined(NULL)
@@ -370,8 +370,8 @@ const gpt_extended_cfg_t g_left_wheel_extend =
 						GPT_GTIOC_POLARITY_NORMAL, };
 
 const timer_cfg_t g_left_wheel_cfg = { .mode = TIMER_MODE_PWM,
-/* Actual period: 0.00004 seconds. Actual duty: 30%. */.period_counts =
-		(uint32_t) 0x2710, .duty_cycle_counts = 0xbb8, .source_div =
+/* Actual period: 0.00004 seconds. Actual duty: 80%. */.period_counts =
+		(uint32_t) 0x2710, .duty_cycle_counts = 0x1f40, .source_div =
 		(timer_source_div_t) 0, .channel = 6, .p_callback = NULL,
 /** If NULL then do not add & */
 #if defined(NULL)

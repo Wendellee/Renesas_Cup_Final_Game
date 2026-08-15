@@ -918,9 +918,21 @@
       <configSetting altId="irq.irq19.p705" configurationId="irq.irq19"/>
       <configSetting altId="irq.mode.custom.free" configurationId="irq.mode"/>
       <configSetting altId="jtag_fslash_swd.mode.jtag.free" configurationId="jtag_fslash_swd.mode"/>
+      <configSetting altId="jtag_fslash_swd.tck.p211" configurationId="jtag_fslash_swd.tck"/>
+      <configSetting altId="jtag_fslash_swd.tdi.p208" configurationId="jtag_fslash_swd.tdi"/>
+      <configSetting altId="jtag_fslash_swd.tdo.p209" configurationId="jtag_fslash_swd.tdo"/>
+      <configSetting altId="jtag_fslash_swd.tms.p210" configurationId="jtag_fslash_swd.tms"/>
       <configSetting altId="p104.output.low" configurationId="p104"/>
       <configSetting altId="p104.gpio_speed.gpio_speed_h" configurationId="p104.gpio_drivecapacity"/>
       <configSetting altId="p104.gpio_mode.gpio_mode_out.low" configurationId="p104.gpio_mode"/>
+      <configSetting altId="p208.jtag_fslash_swd.tdi" configurationId="p208"/>
+      <configSetting altId="p208.gpio_mode.gpio_mode_peripheral" configurationId="p208.gpio_mode"/>
+      <configSetting altId="p209.jtag_fslash_swd.tdo" configurationId="p209"/>
+      <configSetting altId="p209.gpio_mode.gpio_mode_peripheral" configurationId="p209.gpio_mode"/>
+      <configSetting altId="p210.jtag_fslash_swd.tms" configurationId="p210"/>
+      <configSetting altId="p210.gpio_mode.gpio_mode_peripheral" configurationId="p210.gpio_mode"/>
+      <configSetting altId="p211.jtag_fslash_swd.tck" configurationId="p211"/>
+      <configSetting altId="p211.gpio_mode.gpio_mode_peripheral" configurationId="p211.gpio_mode"/>
       <configSetting altId="p303.gpt7.gtioc7b" configurationId="p303"/>
       <configSetting altId="p303.gpio_mode.gpio_mode_peripheral" configurationId="p303.gpio_mode"/>
       <configSetting altId="p304.gpt7.gtioc7a" configurationId="p304"/>
@@ -996,6 +1008,10 @@
       <lockSetting id="iic0.scl0" lock="true"/>
       <lockSetting id="iic0.sda0" lock="true"/>
       <lockSetting id="irq.irq19" lock="true"/>
+      <lockSetting id="jtag_fslash_swd.tck" lock="true"/>
+      <lockSetting id="jtag_fslash_swd.tdi" lock="true"/>
+      <lockSetting id="jtag_fslash_swd.tdo" lock="true"/>
+      <lockSetting id="jtag_fslash_swd.tms" lock="true"/>
       <lockSetting id="sci0.rxd0" lock="true"/>
       <lockSetting id="sci0.txd0" lock="true"/>
       <lockSetting id="spi0.miso0" lock="true"/>
