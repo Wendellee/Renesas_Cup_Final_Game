@@ -12,7 +12,7 @@
 #include "vector_data.h"
 #define RA_NOT_DEFINED 0
 #ifndef BSP_CFG_RTOS
-#if (RA_NOT_DEFINED) != (5)
+#if (RA_NOT_DEFINED) != (6)
 #define BSP_CFG_RTOS (2)
 #elif (RA_NOT_DEFINED) != (RA_NOT_DEFINED)
               #define BSP_CFG_RTOS (1)

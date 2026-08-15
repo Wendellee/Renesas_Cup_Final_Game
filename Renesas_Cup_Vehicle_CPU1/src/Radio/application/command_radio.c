@@ -62,7 +62,7 @@ static bool submit_vehicle_command(control_packet_t const * p_packet, uint16_t v
     {
         case CONTROL_ID_DIRECTION:
             command.kind = VEHICLE_COMMAND_MANUAL;
-            if ((CONTROL_ACTION_RELEASED == p_packet->action) || !g_run_enabled)
+            if (CONTROL_ACTION_RELEASED == p_packet->action)
             {
                 command.manual_action = VEHICLE_MANUAL_STOP;
             }
@@ -105,6 +105,9 @@ static bool submit_vehicle_command(control_packet_t const * p_packet, uint16_t v
             break;
 
         case CONTROL_ID_FAN:
+            g_printf("[CMD NRF] fan=%s seq=%u.\r\n",
+                     (0U != value) ? "ON" : "OFF",
+                     (unsigned int) p_packet->sequence);
             command.kind = VEHICLE_COMMAND_SET_SUCTION;
             command.suction_enable = (0U != value);
             command.suction_percent = 80U;

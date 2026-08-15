@@ -8,8 +8,8 @@
 
 #define VEHICLE_SUCTION_STARTUP_TIME_MS       (2000U)
 #define VEHICLE_AUTO_STRAIGHT_TIME_MS         (5000U)
-#define VEHICLE_AUTO_STRAIGHT_PERCENT         (40U)
-#define VEHICLE_AUTO_TURN_PERCENT             (36U)
+#define VEHICLE_AUTO_STRAIGHT_PERCENT         (90U)
+#define VEHICLE_AUTO_TURN_PERCENT             (90U)
 #define VEHICLE_AUTO_RIGHT_TURN_TIME_MS        (750U)
 #define VEHICLE_MPU6050_ADDRESS               (0x68U)
 #define VEHICLE_GYRO_CALIBRATION_SAMPLES      (500U)
@@ -69,8 +69,13 @@ static vehicle_result_t straight_start(bool reverse, uint8_t pwm_percent)
     if (pwm_percent > 100U) return set_error(VEHICLE_RESULT_INVALID_ARGUMENT);
     duty = percent_to_duty(pwm_percent);
     if (reverse) duty = -duty;
+#if VEHICLE_MPU6050_ENABLE
     heading_controller_start(&g_vehicle.heading, duty);
     g_vehicle.status.heading_enabled = true;
+#else
+    heading_controller_stop(&g_vehicle.heading);
+    g_vehicle.status.heading_enabled = false;
+#endif
     return write_wheels(duty, duty);
 }
 
@@ -116,6 +121,7 @@ vehicle_result_t vehicle_service_init(vehicle_dependencies_t const * dependencie
     {
         return set_error(VEHICLE_RESULT_IO_ERROR);
     }
+#if VEHICLE_MPU6050_ENABLE
     if (!mpu6050_init(&g_vehicle.imu,
                       g_vehicle.dependencies.imu_i2c,
                       VEHICLE_MPU6050_ADDRESS))
@@ -130,6 +136,7 @@ vehicle_result_t vehicle_service_init(vehicle_dependencies_t const * dependencie
     {
         return set_error(VEHICLE_RESULT_SENSOR_ERROR);
     }
+#endif
     if (!heading_controller_init(&g_vehicle.heading, &heading_cfg))
     {
         return set_error(VEHICLE_RESULT_INVALID_ARGUMENT);
@@ -262,6 +269,42 @@ vehicle_result_t vehicle_service_manual_command(vehicle_manual_command_t command
 
     wheels_stop();
     g_vehicle.status.mode = VEHICLE_MODE_MANUAL;
+    g_vehicle.status.auto_state = VEHICLE_AUTO_IDLE;
+    duty = percent_to_duty(pwm_percent);
+
+    switch (command)
+    {
+        case VEHICLE_MANUAL_FORWARD:    return set_error(straight_start(false, pwm_percent));
+        case VEHICLE_MANUAL_REVERSE:    return set_error(straight_start(true, pwm_percent));
+        case VEHICLE_MANUAL_TURN_LEFT:  return set_error(write_wheels(-duty, duty));
+        case VEHICLE_MANUAL_TURN_RIGHT: return set_error(write_wheels(duty, -duty));
+        case VEHICLE_MANUAL_STOP:       return set_error(VEHICLE_RESULT_OK);
+        default:                        return set_error(VEHICLE_RESULT_INVALID_ARGUMENT);
+    }
+}
+
+vehicle_result_t vehicle_service_navigation_command(vehicle_manual_command_t command,
+                                                     uint8_t pwm_percent)
+{
+    float duty;
+    vehicle_result_t ready;
+
+    if (VEHICLE_MODE_AUTOMATIC != g_vehicle.status.mode)
+    {
+        return set_error(VEHICLE_RESULT_NOT_READY);
+    }
+    if (VEHICLE_MANUAL_STOP == command)
+    {
+        wheels_stop();
+        g_vehicle.status.auto_state = VEHICLE_AUTO_IDLE;
+        return set_error(VEHICLE_RESULT_OK);
+    }
+
+    ready = require_motion_ready();
+    if (VEHICLE_RESULT_OK != ready) return ready;
+    if (pwm_percent > 100U) return set_error(VEHICLE_RESULT_INVALID_ARGUMENT);
+
+    wheels_stop();
     g_vehicle.status.auto_state = VEHICLE_AUTO_IDLE;
     duty = percent_to_duty(pwm_percent);
 

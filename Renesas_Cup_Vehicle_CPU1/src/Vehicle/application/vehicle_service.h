@@ -4,6 +4,9 @@
 #include "Vehicle/contracts/vehicle_ports.h"
 #include "Vehicle/contracts/vehicle_types.h"
 
+/* 0：隔离 MPU6050，直行使用左右轮等占空比开环控制；1：启用航向闭环。 */
+#define VEHICLE_MPU6050_ENABLE    (0U)
+
 /**
  * @file vehicle_service.h
  * @brief 车辆用例编排入口；必须只由 Vehicle Thread 调用。
@@ -17,6 +20,8 @@ vehicle_result_t vehicle_service_step(float elapsed_seconds);
 
 vehicle_result_t vehicle_service_manual_command(vehicle_manual_command_t command,
                                                 uint8_t pwm_percent);
+vehicle_result_t vehicle_service_navigation_command(vehicle_manual_command_t command,
+                                                    uint8_t pwm_percent);
 vehicle_result_t vehicle_service_automatic_start(void);
 vehicle_result_t vehicle_service_automatic_speed_set(uint8_t pwm_percent);
 vehicle_result_t vehicle_service_automatic_turn_time_set(uint32_t turn_time_ms);

@@ -3,6 +3,7 @@
 #include "Camera/camera_sensor.h"
 #include "ImageUpload/Image_JPEG_Encoder.h"
 #include "IPC/shared_jpeg_cpu0.h"
+#include "Navigation/navigation_runtime.h"
 #include "SEGGER_RTT/bsp_print.h"
 
 #define VIDEO_SOURCE_WIDTH          (1024U)
@@ -91,6 +92,7 @@ void encode_thread_entry(void *pvParameters) {
 			                            (int32_t) VIN_BYTES_PER_FRAME);
 #endif
 			video_rgb565_to_gray8((const uint16_t *) p_frame);
+			navigation_frame_submit(g_video_gray, sequence);
 			size_t jpeg_size = 0U;
 			fsp_err_t const encode_result = ImageJpeg_EncodeGray8(
 				g_video_gray, VIDEO_ENCODE_WIDTH, VIDEO_ENCODE_HEIGHT,
