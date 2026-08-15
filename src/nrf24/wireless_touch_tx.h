@@ -10,6 +10,7 @@
 #define WIRELESS_TOUCH_VERSION         (1U)
 #define WIRELESS_COMMAND_TX_CHANNEL    (76U)
 #define WIRELESS_VIDEO_RX_CHANNEL      (100U)
+#define WIRELESS_RADIO_ADDRESS_WIDTH   (5U)
 /* Compatibility name used by older diagnostics. */
 #define WIRELESS_TOUCH_CHANNEL         WIRELESS_COMMAND_TX_CHANNEL
 #define WIRELESS_TOUCH_PAYLOAD_LENGTH  (8U)
@@ -18,6 +19,11 @@
 /* One radio-task pass may send eight bursts of three payloads.  Keep extra
  * room for START/END and a high-priority control packet without overflowing. */
 #define WIRELESS_RADIO_RX_RING_CAPACITY (32U)
+
+/* These addresses are part of the over-the-air protocol.  Keep them in sync
+ * with command_radio.c and video_radio.c on the vehicle. */
+#define WIRELESS_COMMAND_ADDRESS_BYTES {0x43U, 0x4DU, 0x44U, 0x52U, 0x58U} /* "CMDRX" */
+#define WIRELESS_VIDEO_ADDRESS_BYTES   {0x56U, 0x49U, 0x44U, 0x45U, 0x4FU} /* "VIDEO" */
 
 /*
  * 1: Two radios are mounted close together for the SPI1 -> SPI0 loopback test.

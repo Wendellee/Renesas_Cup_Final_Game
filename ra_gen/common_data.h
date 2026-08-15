@@ -61,24 +61,14 @@ extern uint8_t vin_image_buffer_2[VIN_BYTES_PER_FRAME];
 extern uint8_t vin_image_buffer_3[VIN_BYTES_PER_FRAME];
 
 /** External IRQ on ICU Instance. */
-extern const external_irq_instance_t g_external_irq0;
-
-/** Access the ICU instance using these structures when calling API functions directly (::p_api is not used). */
-extern icu_instance_ctrl_t g_external_irq0_ctrl;
-extern const external_irq_cfg_t g_external_irq0_cfg;
-
-#ifndef nrf24_spi0_irq_callback
-void nrf24_spi0_irq_callback(external_irq_callback_args_t *p_args);
-#endif
-/** External IRQ on ICU Instance. */
 extern const external_irq_instance_t g_external_irq19;
 
 /** Access the ICU instance using these structures when calling API functions directly (::p_api is not used). */
 extern icu_instance_ctrl_t g_external_irq19_ctrl;
 extern const external_irq_cfg_t g_external_irq19_cfg;
 
-#ifndef touch_irq_callback
-void touch_irq_callback(external_irq_callback_args_t *p_args);
+#ifndef nrf24_spi0_irq_callback
+void nrf24_spi0_irq_callback(external_irq_callback_args_t *p_args);
 #endif
 #if DRW_CFG_CUSTOM_MALLOC
             void * d1_malloc(size_t size);

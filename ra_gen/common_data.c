@@ -303,33 +303,6 @@ const capture_cfg_t g_vin_cfg =
 /* Instance structure to use this module. */
 const capture_instance_t g_vin =
 { .p_ctrl = &g_vin_ctrl, .p_cfg = &g_vin_cfg, .p_api = &g_capture_on_vin };
-icu_instance_ctrl_t g_external_irq0_ctrl;
-
-/** External IRQ extended configuration for ICU HAL driver */
-const icu_extended_cfg_t g_external_irq0_ext_cfg =
-{ .filter_src = EXTERNAL_IRQ_DIGITAL_FILTER_PCLK_DIV, };
-
-const external_irq_cfg_t g_external_irq0_cfg =
-{ .channel = 0, .trigger = EXTERNAL_IRQ_TRIG_FALLING, .filter_enable = true, .clock_source_div =
-          EXTERNAL_IRQ_CLOCK_SOURCE_DIV_64,
-  .p_callback = nrf24_spi0_irq_callback,
-  /** If NULL then do not add & */
-#if defined(NULL)
-    .p_context           = NULL,
-#else
-  .p_context = (void*) &NULL,
-#endif
-  .p_extend = (void*) &g_external_irq0_ext_cfg,
-  .ipl = (12),
-#if defined(VECTOR_NUMBER_ICU_IRQ0)
-    .irq                 = VECTOR_NUMBER_ICU_IRQ0,
-#else
-  .irq = FSP_INVALID_VECTOR,
-#endif
-        };
-/* Instance structure to use this module. */
-const external_irq_instance_t g_external_irq0 =
-{ .p_ctrl = &g_external_irq0_ctrl, .p_cfg = &g_external_irq0_cfg, .p_api = &g_external_irq_on_icu };
 icu_instance_ctrl_t g_external_irq19_ctrl;
 
 /** External IRQ extended configuration for ICU HAL driver */
@@ -339,7 +312,7 @@ const icu_extended_cfg_t g_external_irq19_ext_cfg =
 const external_irq_cfg_t g_external_irq19_cfg =
 { .channel = 19, .trigger = EXTERNAL_IRQ_TRIG_FALLING, .filter_enable = true, .clock_source_div =
           EXTERNAL_IRQ_CLOCK_SOURCE_DIV_64,
-  .p_callback = touch_irq_callback,
+  .p_callback = nrf24_spi0_irq_callback,
   /** If NULL then do not add & */
 #if defined(NULL)
     .p_context           = NULL,

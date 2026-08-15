@@ -171,15 +171,8 @@ fsp_err_t gt911_enable(void)
         return err;
     }
 
-    /*
-     * Touch reading is polling-based from LVGL. The external IRQ is useful, but it
-     * must not block bring-up if the IRQ channel/pin is not ready yet.
-     */
-    err = R_ICU_ExternalIrqOpen(&g_external_irq19_ctrl, &g_external_irq19_cfg);
-    if (FSP_SUCCESS == err)
-    {
-        (void) R_ICU_ExternalIrqEnable(&g_external_irq19_ctrl);
-    }
+    /* IRQ19/P705 belongs to the video nRF24 receiver.  GT911 is sampled by
+     * LVGL over I2C, so touch must not open or reconfigure that IRQ channel. */
 
     g_gt911_last_error = FSP_SUCCESS;
     return FSP_SUCCESS;

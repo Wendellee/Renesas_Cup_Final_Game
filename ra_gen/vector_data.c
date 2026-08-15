@@ -19,11 +19,10 @@
             [12] = glcdc_line_detect_isr, /* GLCDC LINE DETECT (Specified line) */
             [13] = drw_int_isr, /* DRW INT (DRW interrupt) */
             [14] = r_icu_isr, /* ICU IRQ19 (External pin interrupt 19) */
-            [15] = r_icu_isr, /* ICU IRQ0 (External pin interrupt 0) */
-            [16] = vin_status_isr, /* VIN IRQ (Interrupt Request) */
-            [17] = mipi_csi_rx_isr, /* MIPICSI RX (Receive interrupt) */
-            [18] = mipi_csi_dl_isr, /* MIPICSI DL (Data Lane interrupt) */
-            [19] = mipi_csi_vc_isr, /* MIPICSI VC (Virtual Channel interrupt) */
+            [15] = vin_status_isr, /* VIN IRQ (Interrupt Request) */
+            [16] = mipi_csi_rx_isr, /* MIPICSI RX (Receive interrupt) */
+            [17] = mipi_csi_dl_isr, /* MIPICSI DL (Data Lane interrupt) */
+            [18] = mipi_csi_vc_isr, /* MIPICSI VC (Virtual Channel interrupt) */
         };
         #if BSP_FEATURE_ICU_HAS_IELSR
         const bsp_interrupt_event_t g_interrupt_event_link_select[BSP_ICU_VECTOR_NUM_ENTRIES] =
@@ -43,11 +42,10 @@
             [12] = BSP_PRV_VECT_ENUM(EVENT_GLCDC_LINE_DETECT,GROUP4), /* GLCDC LINE DETECT (Specified line) */
             [13] = BSP_PRV_VECT_ENUM(EVENT_DRW_INT,GROUP5), /* DRW INT (DRW interrupt) */
             [14] = BSP_PRV_VECT_ENUM(EVENT_ICU_IRQ19,GROUP6), /* ICU IRQ19 (External pin interrupt 19) */
-            [15] = BSP_PRV_VECT_ENUM(EVENT_ICU_IRQ0,GROUP7), /* ICU IRQ0 (External pin interrupt 0) */
-            [16] = BSP_PRV_VECT_ENUM(EVENT_VIN_IRQ,GROUP0), /* VIN IRQ (Interrupt Request) */
-            [17] = BSP_PRV_VECT_ENUM(EVENT_MIPICSI_RX,GROUP1), /* MIPICSI RX (Receive interrupt) */
-            [18] = BSP_PRV_VECT_ENUM(EVENT_MIPICSI_DL,GROUP2), /* MIPICSI DL (Data Lane interrupt) */
-            [19] = BSP_PRV_VECT_ENUM(EVENT_MIPICSI_VC,GROUP3), /* MIPICSI VC (Virtual Channel interrupt) */
+            [15] = BSP_PRV_VECT_ENUM(EVENT_VIN_IRQ,GROUP7), /* VIN IRQ (Interrupt Request) */
+            [16] = BSP_PRV_VECT_ENUM(EVENT_MIPICSI_RX,GROUP0), /* MIPICSI RX (Receive interrupt) */
+            [17] = BSP_PRV_VECT_ENUM(EVENT_MIPICSI_DL,GROUP1), /* MIPICSI DL (Data Lane interrupt) */
+            [18] = BSP_PRV_VECT_ENUM(EVENT_MIPICSI_VC,GROUP2), /* MIPICSI VC (Virtual Channel interrupt) */
         };
         #endif
         #endif

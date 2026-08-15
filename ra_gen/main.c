@@ -11,6 +11,8 @@ extern void video_rx_thread_create(void);
 extern TaskHandle_t video_rx_thread;
 extern void command_tx_thread_create(void);
 extern TaskHandle_t command_tx_thread;
+extern void new_thread0_create(void);
+extern TaskHandle_t new_thread0;
 uint32_t g_fsp_common_thread_count;
 bool g_fsp_common_initialized;
 SemaphoreHandle_t g_fsp_common_initialized_semaphore;
@@ -112,6 +114,7 @@ int main(void)
     touch_thread_create ();
     video_rx_thread_create ();
     command_tx_thread_create ();
+    new_thread0_create ();
 
     /* Start the scheduler. */
     vTaskStartScheduler ();

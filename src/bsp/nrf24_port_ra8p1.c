@@ -23,8 +23,8 @@ static nrf24_port_context_t g_nrf24_port_contexts[NRF24_PORT_MODULE_COUNT] =
         .sck    = BSP_IO_PORT_07_PIN_02,
         .csn    = BSP_IO_PORT_07_PIN_03,
         .ce     = BSP_IO_PORT_07_PIN_04,
-        /* P705 is IRQ19 and conflicts with GT911/P111. Route RX IRQ to P105/IRQ0. */
-        .irq    = BSP_IO_PORT_01_PIN_05,
+        /* Video RX IRQ is routed to P705/IRQ19 by the board wiring. */
+        .irq    = BSP_IO_PORT_07_PIN_05,
     },
     {
         .module = NRF24_PORT_MODULE_SPI1,
@@ -33,8 +33,8 @@ static nrf24_port_context_t g_nrf24_port_contexts[NRF24_PORT_MODULE_COUNT] =
         .sck    = BSP_IO_PORT_04_PIN_15,
         .csn    = BSP_IO_PORT_04_PIN_14,
         .ce     = BSP_IO_PORT_01_PIN_04,
-        /* The transmitter does not require IRQ; P705 is kept as an unused input. */
-        .irq    = BSP_IO_PORT_07_PIN_05,
+        /* Command TX completion is polled through STATUS; its IRQ is not wired. */
+        .irq    = BSP_IO_PORT_01_PIN_05,
     },
 };
 
@@ -330,16 +330,16 @@ fsp_err_t Nrf24Port_RxIrqOpen(void)
     g_nrf24_rx_irq_pending = false;
     g_nrf24_rx_irq_callback_count = 0U;
 
-    err = R_ICU_ExternalIrqOpen(&g_external_irq0_ctrl, &g_external_irq0_cfg);
+    err = R_ICU_ExternalIrqOpen(&g_external_irq19_ctrl, &g_external_irq19_cfg);
     if (FSP_SUCCESS != err)
     {
         return err;
     }
 
-    err = R_ICU_ExternalIrqEnable(&g_external_irq0_ctrl);
+    err = R_ICU_ExternalIrqEnable(&g_external_irq19_ctrl);
     if (FSP_SUCCESS != err)
     {
-        (void) R_ICU_ExternalIrqClose(&g_external_irq0_ctrl);
+        (void) R_ICU_ExternalIrqClose(&g_external_irq19_ctrl);
     }
     else
     {

@@ -6,7 +6,7 @@
         #endif
 /* Number of interrupts allocated */
 #ifndef VECTOR_DATA_IRQ_COUNT
-#define VECTOR_DATA_IRQ_COUNT    (20)
+#define VECTOR_DATA_IRQ_COUNT    (19)
 #endif
 /* ISR prototypes */
 void spi_b_rxi_isr(void);
@@ -56,18 +56,16 @@ void mipi_csi_vc_isr(void);
 #define DRW_INT_IRQn          ((IRQn_Type) 13) /* DRW INT (DRW interrupt) */
 #define VECTOR_NUMBER_ICU_IRQ19 ((IRQn_Type) 14) /* ICU IRQ19 (External pin interrupt 19) */
 #define ICU_IRQ19_IRQn          ((IRQn_Type) 14) /* ICU IRQ19 (External pin interrupt 19) */
-#define VECTOR_NUMBER_ICU_IRQ0 ((IRQn_Type) 15) /* ICU IRQ0 (External pin interrupt 0) */
-#define ICU_IRQ0_IRQn          ((IRQn_Type) 15) /* ICU IRQ0 (External pin interrupt 0) */
-#define VECTOR_NUMBER_VIN_IRQ ((IRQn_Type) 16) /* VIN IRQ (Interrupt Request) */
-#define VIN_IRQ_IRQn          ((IRQn_Type) 16) /* VIN IRQ (Interrupt Request) */
-#define VECTOR_NUMBER_MIPICSI_RX ((IRQn_Type) 17) /* MIPICSI RX (Receive interrupt) */
-#define MIPICSI_RX_IRQn          ((IRQn_Type) 17) /* MIPICSI RX (Receive interrupt) */
-#define VECTOR_NUMBER_MIPICSI_DL ((IRQn_Type) 18) /* MIPICSI DL (Data Lane interrupt) */
-#define MIPICSI_DL_IRQn          ((IRQn_Type) 18) /* MIPICSI DL (Data Lane interrupt) */
-#define VECTOR_NUMBER_MIPICSI_VC ((IRQn_Type) 19) /* MIPICSI VC (Virtual Channel interrupt) */
-#define MIPICSI_VC_IRQn          ((IRQn_Type) 19) /* MIPICSI VC (Virtual Channel interrupt) */
+#define VECTOR_NUMBER_VIN_IRQ ((IRQn_Type) 15) /* VIN IRQ (Interrupt Request) */
+#define VIN_IRQ_IRQn          ((IRQn_Type) 15) /* VIN IRQ (Interrupt Request) */
+#define VECTOR_NUMBER_MIPICSI_RX ((IRQn_Type) 16) /* MIPICSI RX (Receive interrupt) */
+#define MIPICSI_RX_IRQn          ((IRQn_Type) 16) /* MIPICSI RX (Receive interrupt) */
+#define VECTOR_NUMBER_MIPICSI_DL ((IRQn_Type) 17) /* MIPICSI DL (Data Lane interrupt) */
+#define MIPICSI_DL_IRQn          ((IRQn_Type) 17) /* MIPICSI DL (Data Lane interrupt) */
+#define VECTOR_NUMBER_MIPICSI_VC ((IRQn_Type) 18) /* MIPICSI VC (Virtual Channel interrupt) */
+#define MIPICSI_VC_IRQn          ((IRQn_Type) 18) /* MIPICSI VC (Virtual Channel interrupt) */
 /* The number of entries required for the ICU vector table. */
-#define BSP_ICU_VECTOR_NUM_ENTRIES (20)
+#define BSP_ICU_VECTOR_NUM_ENTRIES (19)
 
 #ifdef __cplusplus
         }

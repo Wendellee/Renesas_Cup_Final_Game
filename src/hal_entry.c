@@ -1136,7 +1136,7 @@ void AppRadioTask_Entry(void)
             uint32_t irq_count = Nrf24Port_RxIrqCallbackCountGet();
             if ((irq_count <= 3U) || (0U == (irq_count % IMAGE_PROGRESS_INTERVAL)))
             {
-                APP_PRINT("[NRF IRQ0] cb=%lu RX FIFO\r\n",
+                APP_PRINT("[NRF IRQ19] cb=%lu RX FIFO\r\n",
                           irq_count);
             }
         }

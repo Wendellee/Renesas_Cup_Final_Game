@@ -7,7 +7,7 @@
 FSP_HEADER
 
 #define CAMERA_RESET (BSP_IO_PORT_00_PIN_12)
-#define NRF24_SPI0_RX_IRQ (BSP_IO_PORT_01_PIN_05)
+#define COMMAND_TX_CE (BSP_IO_PORT_01_PIN_04)
 #define user_led (BSP_IO_PORT_01_PIN_10)
 #define TCH_INT (BSP_IO_PORT_01_PIN_11)
 #define LCD_BL (BSP_IO_PORT_05_PIN_13)
@@ -16,8 +16,8 @@ FSP_HEADER
 #define SPI0_MOSI (BSP_IO_PORT_07_PIN_01)
 #define SPI0_CLK (BSP_IO_PORT_07_PIN_02)
 #define SPI0_CSN (BSP_IO_PORT_07_PIN_03)
-#define SPI0_CE (BSP_IO_PORT_07_PIN_04)
-#define SPI0_IRQ (BSP_IO_PORT_07_PIN_05)
+#define VIDEO_RX_CE (BSP_IO_PORT_07_PIN_04)
+#define VIDEO_RX_IRQ (BSP_IO_PORT_07_PIN_05)
 
 extern const ioport_cfg_t g_bsp_pin_cfg; /* R7KA8P1KFLCAC.pincfg */
 

@@ -32,6 +32,10 @@ static uint32_t g_radio_tx_ring_count;
 static uint32_t g_radio_rx_ring_head;
 static uint32_t g_radio_rx_ring_tail;
 static uint32_t g_radio_rx_ring_count;
+static uint8_t const g_command_radio_address[WIRELESS_RADIO_ADDRESS_WIDTH] =
+    WIRELESS_COMMAND_ADDRESS_BYTES;
+static uint8_t const g_video_radio_address[WIRELESS_RADIO_ADDRESS_WIDTH] =
+    WIRELESS_VIDEO_ADDRESS_BYTES;
 
 static uint8_t wireless_touch_checksum(uint8_t const * p_data, uint32_t length)
 {
@@ -108,6 +112,12 @@ nrf24_result_t WirelessRemoteLinks_Init(void)
     rx_config.ack_payload_enabled     = false;
     rx_config.dynamic_ack_enabled     = true;
     rx_config.data_rate               = NRF24_DATA_RATE_2MBPS;
+    (void) memcpy(rx_config.tx_address,
+                  g_video_radio_address,
+                  sizeof(g_video_radio_address));
+    (void) memcpy(rx_config.rx_pipe0_address,
+                  g_video_radio_address,
+                  sizeof(g_video_radio_address));
 #if WIRELESS_RADIO_NEAR_FIELD_LOOPBACK_TEST
     rx_config.power                    = NRF24_POWER_NEGATIVE_18_DBM;
 #endif
@@ -116,6 +126,12 @@ nrf24_result_t WirelessRemoteLinks_Init(void)
     tx_config.channel       = WIRELESS_COMMAND_TX_CHANNEL;
     tx_config.payload_width = WIRELESS_TOUCH_PAYLOAD_LENGTH;
     tx_config.initial_role  = NRF24_ROLE_TRANSMITTER;
+    (void) memcpy(tx_config.tx_address,
+                  g_command_radio_address,
+                  sizeof(g_command_radio_address));
+    (void) memcpy(tx_config.rx_pipe0_address,
+                  g_command_radio_address,
+                  sizeof(g_command_radio_address));
 
     /* Probe and initialize both radios independently so one wiring fault does not hide the other result. */
     result = Nrf24_TestConnection(&g_touch_rx_transport, &g_touch_rx_connected);
