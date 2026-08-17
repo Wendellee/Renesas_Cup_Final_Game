@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050b18">
+  <meta name="description" content="基于 RA8P1 的光伏板智能巡检系统答辩展示">
+  <title>光伏板智能巡检系统 / 项目答辩</title>
+  <link rel="icon" href="assets/images/pcb-base.png">
+  <link rel="preload" href="assets/images/vehicle-new.jpg" as="image">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+  <script src="assets/vendor/webpack-2a10525494b0e182.js" defer></script>
+  <script src="assets/vendor/b19bb45c-0e3f8a9ecd46ed02.js" defer></script>
+  <script src="assets/vendor/375a538c-58d556db3442820d.js" defer></script>
+  <script src="assets/vendor/631-9d52023961c1c754.js" defer></script>
+  <script src="assets/vendor/glb-loader.js?v=20260817-hardware2" defer></script>
+  <script src="assets/model/indexed-model-data.js?v=20260817-hardware7" defer></script>
+  <script src="assets/model/renesas-cup-data.js?v=20260817-hardware2" defer></script>
+  <script src="model-viewer.js?v=20260817-hardware7" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#slides">跳到答辩内容</a>
+  <div class="deck" data-deck>
+    <header class="deck-header">
+      <div class="brand"><span class="brand-mark">RA</span><span><b>光伏板智能巡检系统</b><small>RENESAS RA8P1</small></span></div>
+      <nav class="chapter-nav" aria-label="答辩章节" data-timeline>
+        <button type="button" data-go="0" aria-label="封面" title="封面"><span>00</span></button>
+        <button type="button" data-go="1" aria-label="项目概述" title="项目概述"><span>01</span></button>
+        <button type="button" data-go="2" aria-label="系统框图" title="系统框图"><span>02</span></button>
+        <button type="button" data-go="3" aria-label="硬件框图" title="硬件框图"><span>03</span></button>
+        <button type="button" data-go="4" aria-label="三维模型" title="三维模型"><span>04</span></button>
+        <button type="button" data-go="5" aria-label="软件流程" title="软件流程"><span>05</span></button>
+        <button type="button" data-go="6" aria-label="AI 与导航" title="AI 与导航"><span>06</span></button>
+        <button type="button" data-go="7" aria-label="通信与控制" title="通信与控制"><span>07</span></button>
+        <button type="button" data-go="8" aria-label="关键设计" title="关键设计"><span>08</span></button>
+        <button type="button" data-go="9" aria-label="验证结果" title="验证结果"><span>09</span></button>
+        <button type="button" data-go="10" aria-label="总结展望" title="总结展望"><span>10</span></button>
+      </nav>
+      <div class="header-tools">
+        <output class="timer" data-timer-output aria-live="polite">00:00</output>
+        <button type="button" class="icon-button" data-timer-toggle aria-label="开始计时" title="开始或暂停计时">▶</button>
+        <button type="button" class="icon-button" data-timer-reset aria-label="计时归零" title="计时归零">↺</button>
+        <button type="button" class="icon-button" data-overview-toggle aria-label="打开总览" title="章节总览">▦</button>
+        <button type="button" class="icon-button" data-fullscreen aria-label="进入全屏" title="全屏">⛶</button>
+      </div>
+    </header>
+    <main class="slides" id="slides" data-slides>
+      <section class="slide cover active" data-slide="0" data-title="封面" aria-hidden="false">
+        <img class="cover-photo" src="assets/images/vehicle-new.jpg" alt="光伏板上的智能巡检车">
+        <div class="cover-overlay"></div>
+        <div class="cover-copy enter">
+          <p class="eyebrow light">RENESAS CUP · PROJECT DEFENSE</p>
+          <h1>基于 RA8P1 的<br>光伏板智能巡检系统</h1>
+          <p class="cover-subtitle">面向光伏板表面作业的吸附移动、边缘识别、无线图传与远程控制一体化平台</p>
+          <div class="cover-line"></div>
+          <div class="cover-facts">
+            <span><b>双核协同</b>M85 视觉处理 / M33 实时控制</span>
+            <span><b>端侧智能</b>Ethos-U55 加速 YOLO 推理</span>
+            <span><b>双端系统</b>巡检车 / 触控遥控终端</span>
+          </div>
+        </div>
+      </section>
+      <section class="slide light-slide" data-slide="1" data-title="项目概述" aria-hidden="true">
+        <div class="slide-shell">
+          <header class="slide-title enter"><div><p class="eyebrow">01 · PROJECT OVERVIEW</p><h2>面向光伏板表面的智能巡检终端</h2></div><p>以 RA8P1 为核心，把现场感知、缺陷识别、运动执行和远程交互组织成一个完整系统。</p></header>
+          <div class="problem-layout enter">
+            <div class="problem-hero"><span class="question-mark">01</span><p>让一台吸附式巡检车完成感知、判断、执行与回传。</p><strong>当前成果：双核车端与触控遥控终端已形成端到端功能链路。</strong></div>
+            <div class="requirement-list">
+              <article><span>场景</span><div><b>光伏板表面巡检</b><p>设备需要兼顾倾斜表面附着、移动和图像采集。</p></div></article>
+              <article><span>组成</span><div><b>巡检车 + 遥控终端</b><p>车端负责感知与执行，遥控端负责交互与图像显示。</p></div></article>
+              <article><span>能力</span><div><b>AI 识别 + 自动导航</b><p>YOLO 完成缺陷检测，ROI 状态机提供基础运动意图。</p></div></article>
+              <article><span>原则</span><div><b>实时控制优先</b><p>图像与控制分流，执行机构由 M33 统一管理。</p></div></article>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="slide dark-slide" data-slide="2" data-title="系统框图" aria-hidden="true">
+        <div class="slide-shell">
+          <header class="slide-title enter"><div><p class="eyebrow light">02 · SYSTEM BLOCK DIAGRAM</p><h2>系统总体框图</h2></div><p>控制指令、实时图像与缺陷结果的数据关系</p></header>
+          <div class="system-block-diagram enter" aria-label="系统总体框图">
+            <div class="system-topology">
+              <article class="diagram-block terminal-block">
+                <small>终端一</small><h3>触控遥控器</h3><p>人机交互 / 指令发送 / 图像显示</p>
+              </article>
+              <div class="diagram-link bidirectional-link" aria-label="遥控器与巡检车双向通信">
+                <div class="control-link"><b>控制指令</b><span>8 B · nRF24 · CH 76</span><i>→</i></div>
+                <div class="image-link"><i>←</i><b>实时图像</b><span>32 B · nRF24 · CH 100</span></div>
+              </div>
+              <article class="diagram-block vehicle-main-block">
+                <small>终端二</small><h3>智能巡检车</h3><p>RA8P1 双核控制平台</p>
+              </article>
+              <div class="diagram-link result-link"><b>缺陷结果</b><span>Wi-Fi / TCP</span><i>→</i></div>
+              <article class="diagram-block host-block">
+                <small>结果接收端</small><h3>上位机</h3><p>缺陷图像接收 / 存储</p>
+              </article>
+            </div>
+            <div class="vehicle-process-group">
+              <div class="group-label"><b>巡检车内部处理流程</b><span>按数据处理顺序从左向右</span></div>
+              <div class="vehicle-process-flow">
+                <article><small>输入</small><h4>图像采集</h4><p>OV5640 摄像头</p></article><i>→</i>
+                <article><small>处理</small><h4>缺陷识别</h4><p>M85 + Ethos-U55</p></article><i>→</i>
+                <article><small>决策</small><h4>导航与控制</h4><p>M85 判断 / M33 执行</p></article><i>→</i>
+                <article><small>输出</small><h4>运动执行</h4><p>履带电机 + 负压风机</p></article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="slide light-slide" data-slide="3" data-title="硬件框图" aria-hidden="true">
+        <div class="slide-shell">
+          <header class="slide-title enter"><div><p class="eyebrow">03 · HARDWARE BLOCK DIAGRAM</p><h2>硬件总体框图：感知、计算、通信与执行</h2></div><p>RA8P1 核心板与自研扩展底板位于中心，向两侧连接输入、通信和执行模块。</p></header>
+          <div class="hardware-block-layout enter">
+            <div class="hardware-column hardware-input-column">
+              <p>输入与感知</p>
+              <article><span>CAMERA</span><b>OV5640</b><small>MIPI-CSI / VIN</small></article>
+              <article><span>CONTROL RX</span><b>nRF24L01+</b><small>SPI0 · 信道 76</small></article>
+              <article><span>POWER</span><b>电源与驱动供电</b><small>核心板 / 电机 / 风机</small></article>
+            </div>
+            <div class="hardware-arrow" aria-hidden="true">→</div>
+            <div class="hardware-core-stack">
+              <div class="hardware-core-board"><small>RA8P1 CORE BOARD</small><h3>Renesas RA8P1</h3><div><span><b>M85</b>视觉处理</span><span><b>U55</b>AI 推理</span><span><b>M33</b>实时控制</span></div></div>
+              <div class="hardware-bus"><span>MIPI-CSI</span><span>SPI × 2</span><span>UART</span><span>GPT PWM</span><span>IPC / SDRAM</span></div>
+              <div class="hardware-base-board"><small>CUSTOM BASE BOARD</small><b>自研扩展底板</b><span>连接显示、无线、传感器与执行机构</span></div>
+            </div>
+            <div class="hardware-arrow" aria-hidden="true">→</div>
+            <div class="hardware-column hardware-output-column">
+              <p>输出与执行</p>
+              <article><span>DISPLAY</span><b>LCD / GLCDC</b><small>本地图像与检测框</small></article>
+              <article><span>VIDEO / UPLOAD</span><b>nRF24 + DA16200</b><small>无线图传 / TCP 上传</small></article>
+              <article><span>ACTUATOR</span><b>履带 + 负压风机</b><small>GPT PWM / 电机驱动</small></article>
+            </div>
+          </div>
+          <div class="hardware-evidence-strip enter"><figure><img src="assets/images/assembly.jpg" alt="巡检车整机"><figcaption>整机装配</figcaption></figure><figure><img src="assets/images/camera.jpg" alt="相机模块"><figcaption>相机模块</figcaption></figure><figure><img src="assets/images/pcb-base.png" alt="扩展底板"><figcaption>扩展底板</figcaption></figure><div><b>框图到实物</b><span>下一页继续展示各硬件模块的三维结构与装配关系。</span></div></div>
+        </div>
+      </section>
+
+      <section class="slide model-slide" data-slide="4" data-title="三维模型" aria-hidden="true">
+        <div class="slide-shell">
+          <header class="slide-title enter"><div><p class="eyebrow light">04 · HARDWARE MODELS</p><h2>从总体模型到各硬件模块</h2></div><p>检测小车与遥控器是两个独立终端，分别展示总体结构和内部模块。</p></header>
+          <div class="model-group-tabs enter" role="tablist" aria-label="选择三维模型系统">
+            <button type="button" class="active" role="tab" aria-selected="true" data-model-group-button="vehicle"><span>01</span><b>检测小车</b><small>VEHICLE</small></button>
+            <button type="button" role="tab" aria-selected="false" data-model-group-button="remote"><span>02</span><b>遥控器</b><small>REMOTE CTRL</small></button>
+          </div>
+          <div class="model-gallery-layout enter">
+            <div class="model-stage" data-model-stage>
+              <div id="hardware-model-viewer" class="model-viewer" data-model-viewer data-model-src="glb:renesas-cup">
+                <div class="model-canvas" data-model-canvas role="img" aria-label="硬件模块三维模型"></div>
+                <div class="model-loading" data-model-loading role="status"><span>加载三维模型</span><b data-model-progress>0%</b></div>
+                <div class="model-error" data-model-error role="alert" hidden>三维模型加载失败</div>
+                <div class="model-empty" data-model-empty hidden><span>MODEL PLACEHOLDER</span><b data-model-empty-title>模型待导入</b><small data-model-empty-meta>接入 STL 后即可在此旋转查看</small></div>
+              </div>
+              <div class="model-stage-caption"><div><small data-model-system>检测小车</small><b data-model-name>小车总体模型</b></div><span data-model-meta>Renesas Cup · GLB 原始装配模型</span></div>
+            </div>
+            <div class="model-catalogs">
+              <div class="model-catalog" data-model-group="vehicle" aria-label="检测小车模型目录">
+                <button type="button" class="model-card active" data-model-select data-model-target="hardware-model-viewer" data-model-system="检测小车" data-model-src="glb:renesas-cup" data-model-name="小车总体模型" data-model-meta="Renesas Cup · GLB 原始装配模型"><span>00</span><div><b>小车总体模型</b><small>VEHICLE ASSEMBLY</small></div><i>GLB 模型</i></button>
+                <button type="button" class="model-card" data-model-select data-model-target="hardware-model-viewer" data-model-system="检测小车 · 板卡模型" data-model-src="indexed:ra8p1-baseboard" data-model-name="H_RA8P1 底板" data-model-meta="嘉立创 OBJ 原始模型 · 15 种材质"><span>01</span><div><b>H_RA8P1 底板</b><small>RA8P1 BASEBOARD</small></div><i>已更新</i></button>
+                <button type="button" class="model-card" data-model-select data-model-target="hardware-model-viewer" data-model-system="检测小车 · 板卡模型" data-model-src="indexed:motor-driver" data-model-name="电机驱动底板" data-model-meta="嘉立创 OBJ 原始模型 · 24 种材质"><span>02</span><div><b>电机驱动底板</b><small>MOTOR DRIVER BOARD</small></div><i>已更新</i></button>
+                <button type="button" class="model-card" data-model-select data-model-target="hardware-model-viewer" data-model-system="检测小车 · 板卡模型" data-model-src="indexed:sandwich-v3" data-model-name="H_夹芯板" data-model-meta="嘉立创 OBJ 原始模型 · 37 种材质"><span>03</span><div><b>H_夹芯板</b><small>SANDWICH BOARD</small></div><i>已更新</i></button>
+                <button type="button" class="model-card" data-model-select data-model-target="hardware-model-viewer" data-model-system="检测小车 · 板卡模型" data-model-src="indexed:lcd-v3-1" data-model-name="H_LCD 背光驱动板" data-model-meta="嘉立创 OBJ 原始模型 · 23 种材质"><span>04</span><div><b>H_LCD 背光驱动板</b><small>LCD BACKLIGHT DRIVER</small></div><i>已更新</i></button>
+                <button type="button" class="model-card" data-model-select data-model-target="hardware-model-viewer" data-model-system="检测小车 · 板卡模型" data-model-src="indexed:ov5640" data-model-name="OV5640 相机板" data-model-meta="嘉立创 OBJ 原始模型 · 16 种材质"><span>05</span><div><b>OV5640 相机板</b><small>CAMERA BOARD</small></div><i>已更新</i></button>
+                <button type="button" class="model-card" data-model-select data-model-target="hardware-model-viewer" data-model-system="检测小车 · 板卡模型" data-model-src="indexed:switch-board" data-model-name="开关板" data-model-meta="嘉立创 OBJ 原始模型 · 13 种材质"><span>06</span><div><b>开关板</b><small>SWITCH BOARD</small></div><i>已更新</i></button>
+              </div>
+              <div class="model-catalog" data-model-group="remote" aria-label="遥控器模型目录" hidden>
+                <button type="button" class="model-card active" data-model-select data-model-target="hardware-model-viewer" data-model-system="遥控器 · 共用板卡" data-model-src="indexed:ra8p1-baseboard" data-model-name="H_RA8P1 底板" data-model-meta="遥控器主控底板 · 15 种材质"><span>01</span><div><b>H_RA8P1 底板</b><small>RA8P1 BASEBOARD</small></div><i>共用模型</i></button>
+                <button type="button" class="model-card" data-model-select data-model-target="hardware-model-viewer" data-model-system="遥控器 · 共用板卡" data-model-src="indexed:sandwich-v3" data-model-name="H_夹芯板" data-model-meta="遥控器板间连接 · 37 种材质"><span>02</span><div><b>H_夹芯板</b><small>SANDWICH BOARD</small></div><i>共用模型</i></button>
+              </div>
+            </div>
+          </div>
+          <div class="model-gallery-note enter"><b>查看方式</b><span>检测小车先看总体装配，再查看各板卡。</span><span>遥控器复用 H_RA8P1 底板与 H_夹芯板两个模型。</span></div>
+        </div>
+      </section>
+
+      <section class="slide architecture-slide" data-slide="5" data-title="软件流程" aria-hidden="true">
+        <div class="slide-shell">
+          <header class="slide-title enter"><div><p class="eyebrow light">05 · SOFTWARE FLOW</p><h2>软件总体流程：任务、数据与控制路径</h2></div><p>每个方框对应现行线程或明确的数据交接点，完整展示从相机输入到车辆执行的调用链。</p></header>
+          <div class="software-flow-board enter">
+            <div class="software-lane m85-software-lane">
+              <header><span>CPU0 · CORTEX-M85 · 1 GHz</span><b>视觉采集、AI 与导航</b><small>6 个 FreeRTOS 任务</small></header>
+              <div class="flow-sequence">
+                <article data-flow-detail tabindex="0" role="button" aria-label="查看 Camera Thread 详情" data-detail-core="CPU0 · Cortex-M85" data-detail-title="Camera Thread · 图像采集" data-detail-body="初始化 OV5640、MIPI-CSI 与 VIN，持续获取车端原始画面，并维护可供后续任务读取的最新 RGB565 帧。" data-detail-input="OV5640 传感器输出；MIPI-CSI / VIN 帧完成事件" data-detail-output="1024×600 RGB565 帧缓冲；最新帧指针" data-detail-code="CPU0/src/camera_thread_entry.c；CPU0/src/Camera/"><small>CAMERA THREAD</small><b>OV5640 采集</b><span>1024×600 RGB565<br>VIN 帧缓冲</span></article><i>→</i>
+                <article data-flow-detail tabindex="0" role="button" aria-label="查看最新帧交接详情" data-detail-core="CPU0 · 数据交接" data-detail-title="Frame Handoff · 最新帧发布" data-detail-body="不建立长队列复制整帧，而是更新最新帧指针并通过直接任务通知唤醒消费者，使 AI 与编码任务始终处理最新画面。" data-detail-input="Camera Thread 完成的一帧 RGB565" data-detail-output="AI Thread 与 Encode Thread 的任务通知；最新帧地址" data-detail-code="CPU0/src/camera_thread_entry.c；CPU0/src/app_runtime.h"><small>FRAME HANDOFF</small><b>发布最新帧</b><span>只保留最新指针<br>直接任务通知</span></article><i>→</i>
+                <article class="flow-branch" data-flow-detail tabindex="0" role="button" aria-label="查看 AI 与编码详情" data-detail-core="CPU0 · 并行处理" data-detail-title="AI Thread / Encode Thread" data-detail-body="同一最新图像进入两条并行路径：AI Thread 执行 Helium 预处理、Ethos-U55 推理和 YOLO 后处理；Encode Thread 生成 Gray8 导航图和 JPEG。" data-detail-input="最新 1024×600 RGB565 帧" data-detail-output="检测结果快照；200×112 Gray8；JPEG 图像" data-detail-code="CPU0/src/ai_thread_entry.c；CPU0/src/encode_thread_entry.c"><small>PARALLEL TASKS</small><b>AI / Encode</b><span>U55 YOLO 推理<br>Gray8 + JPEG</span></article><i>→</i>
+                <article data-flow-detail tabindex="0" role="button" aria-label="查看显示与导航详情" data-detail-core="CPU0 · 结果消费" data-detail-title="Display Thread / Navigation Thread" data-detail-body="Display Thread 读取检测结果快照并叠加检测框；Navigation Thread 统计底部中央 ROI，通过连续帧状态机产生停止、前进或左转意图。" data-detail-input="YOLO 检测结果；200×112 Gray8 图像" data-detail-output="本地叠加画面；STOP / FORWARD / TURN_LEFT" data-detail-code="CPU0/src/display_thread_entry.c；CPU0/src/navigation_thread_entry.c"><small>DISPLAY / NAV</small><b>显示与决策</b><span>检测框叠加<br>ROI 状态机</span></article><i>→</i>
+                <article data-flow-detail tabindex="0" role="button" aria-label="查看跨核发布详情" data-detail-core="CPU0 → CPU1" data-detail-title="IPC / Shared Memory · 跨核发布" data-detail-body="导航意图打包为带动作、序号和校验的 32 位短消息；JPEG 写入共享 SDRAM 双槽，并通过描述符通知 CPU1，避免大图占用 IPC FIFO。" data-detail-input="导航动作意图；编码后的 JPEG" data-detail-output="32 位导航 IPC；共享 JPEG 描述符" data-detail-code="CPU0/src/IPC/；CPU0/src/ipc_thread_entry.c"><small>IPC / SHARED MEM</small><b>跨核发布</b><span>32 位导航消息<br>JPEG 双槽描述符</span></article>
+              </div>
+            </div>
+            <div class="software-lane m33-software-lane">
+              <header><span>CPU1 · CORTEX-M33 · 250 MHz</span><b>通信分发与车辆执行</b><small>5 个 FreeRTOS 任务</small></header>
+              <div class="flow-sequence">
+                <article data-flow-detail tabindex="0" role="button" aria-label="查看 CPU1 IPC Thread 详情" data-detail-core="CPU1 · Cortex-M33" data-detail-title="IPC Thread · 跨核接收" data-detail-body="接收并校验 M85 发来的导航短消息，同时校验共享 JPEG 的地址、长度、帧号和 CRC，完成后再向发送端释放对应槽位。" data-detail-input="32 位导航 IPC；共享 JPEG 描述符" data-detail-output="导航命令；已验证 JPEG 作业；共享槽完成通知" data-detail-code="CPU1/src/ipc_thread_entry.c；CPU1/src/IPC/"><small>IPC THREAD</small><b>接收跨核数据</b><span>校验导航消息<br>消费共享 JPEG</span></article><i>→</i>
+                <article class="flow-branch" data-flow-detail tabindex="0" role="button" aria-label="查看视频与上传分发详情" data-detail-core="CPU1 · 后台通信" data-detail-title="Video TX / Wi-Fi Upload" data-detail-body="IPC Thread 只投递元数据和缓冲区地址。Video TX Thread 将 JPEG 拆分为 nRF24 无线包；Wi-Fi Upload Thread 独占 DA16200 UART/TCP 状态机并上传检测图。" data-detail-input="已验证 JPEG 地址、长度、帧号和 CRC" data-detail-output="CH 100 无线图像分片；TCP 检测图上传" data-detail-code="CPU1/src/video_tx_thread_entry.c；CPU1/src/wifi_upload_thread_entry.c"><small>WORK DISTRIBUTION</small><b>视频 / 上传邮箱</b><span>Video TX Thread<br>Wi-Fi Upload Thread</span></article><i>→</i>
+                <article data-flow-detail tabindex="0" role="button" aria-label="查看命令邮箱详情" data-detail-core="CPU1 · 命令汇聚" data-detail-title="Latest Command Mailbox" data-detail-body="导航命令和遥控命令都覆盖写入单槽邮箱，只保留最新值，避免旧动作排队执行。IPC 和无线任务均不能直接操作电机或风机。" data-detail-input="Navigation IPC；Command RX Thread 控制包" data-detail-output="单槽最新车辆命令" data-detail-code="CPU1/src/Vehicle/adapters/rtos/vehicle_command_mailbox.c"><small>COMMAND MAILBOX</small><b>最新命令收口</b><span>导航覆盖写入<br>← Command RX</span></article><i>→</i>
+                <article data-flow-detail tabindex="0" role="button" aria-label="查看 Vehicle Thread 详情" data-detail-core="CPU1 · 实时控制" data-detail-title="Vehicle Thread · 车辆状态机" data-detail-body="等待双核与通信启动门控，建立吸附后消费最新命令；运行时检查导航更新时间，超过 500 ms 未更新即停止车轮。" data-detail-input="最新车辆命令；启动门控；系统节拍" data-detail-output="经过安全检查的运动与吸附请求" data-detail-code="CPU1/src/vehicle_thread_entry.c"><small>VEHICLE THREAD</small><b>车辆状态机</b><span>吸附启动门控<br>500 ms 超时检查</span></article><i>→</i>
+                <article data-flow-detail tabindex="0" role="button" aria-label="查看车辆服务与 GPT 详情" data-detail-core="CPU1 · 硬件输出" data-detail-title="Vehicle Service / GPT Adapter" data-detail-body="车辆服务把前进、转向、停车和风机请求转换为左右轮方向与占空比，最终由 FSP GPT 适配层写入硬件。" data-detail-input="运动模式、速度百分比、风机状态" data-detail-output="左右履带方向与 PWM；负压风机 PWM" data-detail-code="CPU1/src/Vehicle/application/vehicle_service.c；CPU1/src/Vehicle/platform/fsp_vehicle_actuators.c"><small>SERVICE / GPT</small><b>执行机构输出</b><span>左右履带 PWM<br>负压风机 PWM</span></article>
+              </div>
+            </div>
+            <div class="software-lane remote-software-lane">
+              <header><span>REMOTE CTRL</span><b>遥控与图像闭环</b><small>4 个 FreeRTOS 任务</small></header>
+              <div class="remote-flow detailed-remote-flow">
+                <div data-flow-detail tabindex="0" role="button" aria-label="查看遥控器控制路径详情" data-detail-core="RemoteCtrl · 控制方向" data-detail-title="Command TX Path" data-detail-body="GUI 将方向按下、释放、速度、风机和模式事件编码为固定 8 字节控制包。Command TX Thread 通过信道 76 发送，并利用 ACK 与序号维持控制可靠性。" data-detail-input="触摸与 GUI 控制事件" data-detail-output="8 字节控制包；车端 Command RX 命令" data-detail-code="RemoteCtrl 分支 · GUI 事件与 Command TX Thread"><small>CONTROL PATH</small><span>触摸 / GUI 事件</span><i>→</i><b>Command TX Thread</b><i>→</i><em>8 B 控制包 · CH 76</em></div>
+                <div data-flow-detail tabindex="0" role="button" aria-label="查看遥控器视频路径详情" data-detail-core="RemoteCtrl · 视频方向" data-detail-title="Video RX Path" data-detail-body="Video RX Thread 接收信道 100 的 32 字节图像包，按帧号和分片序号重组 JPEG，执行帧级 CRC32 后交给 TJpgDec 解码并显示。" data-detail-input="START / DATA / END 无线图像包" data-detail-output="通过 CRC32 的 JPEG；遥控端显示画面" data-detail-code="RemoteCtrl 分支 · Video RX Thread / TJpgDec"><small>VIDEO PATH</small><em>32 B 图像包 · CH 100</em><i>→</i><b>Video RX Thread</b><i>→</i><span>重组 / CRC32 / TJpgDec / 显示</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="software-flow-legend detailed-flow-legend enter"><span><i class="legend-image"></i>RGB565：最新帧指针</span><span><i class="legend-image"></i>JPEG：共享 SDRAM 双槽</span><span><i class="legend-command"></i>导航：动作 + 序号 + 校验</span><span><i class="legend-command"></i>控制：单槽最新命令邮箱</span><strong>M33 独占 GPT</strong></div>
+          <div class="software-detail-panel" data-software-detail-panel hidden role="dialog" aria-modal="true" aria-labelledby="software-detail-title">
+            <button type="button" class="software-detail-close" data-software-detail-close aria-label="关闭详情">×</button>
+            <div class="software-detail-content">
+              <p data-software-detail-core>CPU0</p>
+              <h3 id="software-detail-title" data-software-detail-title>任务详情</h3>
+              <div class="software-detail-rule"></div>
+              <p class="software-detail-body" data-software-detail-body></p>
+              <dl>
+                <div><dt>输入</dt><dd data-software-detail-input></dd></div>
+                <div><dt>输出</dt><dd data-software-detail-output></dd></div>
+                <div><dt>对应代码</dt><dd data-software-detail-code></dd></div>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="slide ai-slide" data-slide="6" data-title="AI 与导航" aria-hidden="true">
+        <div class="slide-shell">
+          <header class="slide-title enter"><div><p class="eyebrow light">06 · ALGORITHM FLOW</p><h2>算法流程：缺陷识别与边缘判断并行</h2></div><p>在软件总流程基础上，进一步展开 M85 侧的两条视觉处理路径。</p></header>
+          <div class="ai-layout enter">
+            <div class="ai-image"><img src="assets/images/interface.jpg" alt="车端图像处理与检测界面"><div><b>视觉输入</b><span>1024 × 600 RGB565</span></div></div>
+            <div class="ai-pipelines"><div class="pipeline yolo-pipeline"><header><span>PATH A</span><b>缺陷识别</b></header><ol><li>Helium 图像预处理</li><li>Ethos-U55 执行 YOLO 推理</li><li>后处理生成检测框与置信度</li><li>叠加显示并形成检测图快照</li></ol></div><div class="pipeline nav-pipeline"><header><span>PATH B</span><b>自动导航</b></header><ol><li>生成 200 × 112 Gray8 图像</li><li>统计底部 24 行中央 ROI</li><li>连续帧状态机抑制单帧噪声</li><li>输出 STOP / FORWARD / TURN_LEFT</li></ol></div></div>
+          </div>
+          <div class="state-strip enter"><span>UNARMED</span><i>→</i><span>SAFE</span><i>→</i><span>CAUTION</span><i>→</i><span>TURN LEFT</span><i>→</i><span>RECOVERY</span></div>
+        </div>
+      </section>
+      <section class="slide light-slide" data-slide="7" data-title="通信与控制" aria-hidden="true">
+        <div class="slide-shell">
+          <header class="slide-title enter"><div><p class="eyebrow">07 · COMMUNICATION & CONTROL</p><h2>通信与控制：数据分流，命令统一收口</h2></div><p>分别处理控制、图像、跨核消息和检测结果，再由唯一执行路径驱动车辆。</p></header>
+          <div class="communication-layout compact-communication enter">
+            <div class="communication-photo"><img src="assets/images/remote-main.jpg" alt="遥控终端实时图传与控制界面"><span>遥控端实时图像与控制界面</span></div>
+            <div class="data-lanes">
+              <article class="control-lane"><div><span>01</span><b>遥控指令</b></div><strong>8 B · 2 Mbps · CH 76</strong><p>硬件 ACK，方向释放立即转换为停车命令。</p></article>
+              <article class="video-lane"><div><span>02</span><b>无线图传</b></div><strong>32 B 分片 · CH 100</strong><p>NO_ACK 冗余，接收端重组并执行 CRC32 校验。</p></article>
+              <article class="ipc-lane"><div><span>03</span><b>双核通信</b></div><strong>SDRAM + 32 位 IPC</strong><p>JPEG 走共享内存，导航意图走短消息。</p></article>
+              <article class="upload-lane-card"><div><span>04</span><b>检测图上传</b></div><strong>DA16200 · TCP</strong><p>M33 独占 Wi-Fi 状态机并上传检测 JPEG。</p></article>
+            </div>
+          </div>
+          <div class="control-safety-strip enter"><b>遥控 / 导航</b><i>→</i><span>最新命令邮箱</span><i>→</i><span>Vehicle Thread</span><i>→</i><strong>GPT / 履带 / 风机</strong><em>500 ms 无导航更新即停车</em></div>
+        </div>
+      </section>
+      <section class="slide light-slide" data-slide="8" data-title="关键设计" aria-hidden="true">
+        <div class="slide-shell">
+          <header class="slide-title enter"><div><p class="eyebrow">08 · KEY DESIGN SUMMARY</p><h2>关键设计总结：实时性、可靠性与可维护性</h2></div><p>在硬件、软件和算法展开之后，归纳支撑系统稳定协作的四项设计。</p></header>
+          <div class="design-grid enter">
+            <article><span>01</span><div><small>DUAL-CORE PARTITION</small><h3>视觉与控制分区</h3><p>M85 处理高吞吐视觉任务，M33 独占运动控制，降低视觉阻塞对执行路径的影响。</p></div></article>
+            <article><span>02</span><div><small>DATA OWNERSHIP</small><h3>图像所有权可追踪</h3><p>共享 JPEG 使用双槽与完成通知，在消费完成前不允许覆盖对应缓冲区。</p></div></article>
+            <article><span>03</span><div><small>LATEST COMMAND</small><h3>命令统一收口</h3><p>手动和自动控制都写入单槽“最新命令”邮箱，再由 Vehicle Thread 统一执行。</p></div></article>
+            <article><span>04</span><div><small>FAIL-SAFE</small><h3>控制链路超时保护</h3><p>导航意图超过 500 ms 不更新时停止车轮，避免旧命令持续驱动车辆。</p></div></article>
+          </div>
+          <div class="ownership-line enter"><b>所有控制源</b><i>→</i><span>最新命令邮箱</span><i>→</i><span>Vehicle Thread</span><i>→</i><strong>GPT / 履带 / 风机</strong></div>
+        </div>
+      </section>
+      <section class="slide results-slide" data-slide="9" data-title="验证结果" aria-hidden="true">
+        <div class="slide-shell">
+          <header class="slide-title enter"><div><p class="eyebrow light">09 · RESULTS & BOUNDARIES</p><h2>主要功能链路已经完成目标板验证</h2></div><div class="status-key"><span class="verified">已验证</span><span class="integrated">已集成</span><span class="pending">待量化</span></div></header>
+          <div class="results-layout enter">
+            <div class="result-table">
+              <div><span class="verified">已验证</span><b>双核启动与任务协作</b><strong>M85 6 个任务 / M33 5 个任务</strong></div>
+              <div><span class="verified">已验证</span><b>图像采集与共享链路</b><strong>1024×600 RGB565 / 200×112 JPEG</strong></div>
+              <div><span class="verified">已验证</span><b>遥控与无线图传</b><strong>2 Mbps / 双信道 / CRC32</strong></div>
+              <div><span class="verified">已验证</span><b>自动导航最小闭环</b><strong>STOP / FORWARD / TURN_LEFT</strong></div>
+              <div><span class="verified">已验证</span><b>导航失联保护</b><strong>500 ms 无更新停车</strong></div>
+              <div><span class="integrated">已集成</span><b>Ethos-U55 YOLO 推理</b><strong>预处理 / 推理 / 后处理 / 快照</strong></div>
+            </div>
+            <aside class="boundary-panel"><p>当前工程边界</p><ul><li>真实负载下的吸附力、温升和运动参数仍需整定</li><li>FPS、连续帧号和长期丢帧率尚未量化</li><li>模型精度仍需结合赛题数据集验收</li><li>风机动力链干扰 MPU6050，当前航向闭环关闭</li></ul><strong>结论以现有代码和目标板日志为依据，不将待测参数写成完成指标。</strong></aside>
+          </div>
+        </div>
+      </section>
+      <section class="slide summary-slide" data-slide="10" data-title="总结展望" aria-hidden="true">
+        <img class="summary-photo" src="assets/images/vehicle-new.jpg" alt="光伏板智能巡检车整机"><div class="summary-overlay"></div>
+        <div class="summary-copy enter"><p class="eyebrow light">10 · CONCLUSION</p><h2>完成从现场感知到运动执行的<br>系统级贯通</h2><div class="summary-points"><article><span>01</span><b>形成完整系统架构</b><p>车端采集、识别、导航、执行与遥控端交互进入同一数据链路。</p></article><article><span>02</span><b>发挥 RA8P1 异构能力</b><p>M85、M33 和 U55 分工明确，兼顾视觉吞吐与实时控制。</p></article><article><span>03</span><b>保留明确工程边界</b><p>已验证能力与待整定项目分开陈述，为后续实车验收提供依据。</p></article></div><div class="next-work"><b>后续工作</b><span>完成吸附与运动参数整定</span><span>解决 MPU6050 硬件干扰</span><span>量化模型精度、FPS 与丢帧率</span></div><p class="thanks">感谢各位评委老师，请批评指正</p></div>
+      </section>
+    </main>
+    <footer class="deck-footer"><div class="progress-track"><span></span></div><button type="button" data-prev aria-label="上一页" title="上一页">←</button><output data-slide-count>01 / 11</output><span data-current-title>封面</span><button type="button" data-next aria-label="下一页" title="下一页">→</button></footer>
+  </div>
+</body>
+</html>
