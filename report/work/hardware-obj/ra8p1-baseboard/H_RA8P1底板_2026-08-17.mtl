@@ -1,0 +1,91 @@
+# Designed by EasyEDA Pro
+newmtl mtl1
+Ka 0.33 0.33 0.33
+Kd 0.33 0.33 0.33
+Ks 0.29 0.29 0.29
+d 1.00
+endmtl
+newmtl mtl2
+Ka 1.00 0.87 0.12
+Kd 1.00 0.87 0.12
+Ks 0.88 0.77 0.11
+d 1.00
+endmtl
+newmtl mtl3
+Ka 0.83 0.67 0.13
+Kd 0.83 0.67 0.13
+Ks 0.67 0.54 0.10
+d 1.00
+endmtl
+newmtl mtl4
+Ka 0.83 0.83 0.82
+Kd 0.83 0.83 0.82
+Ks 0.67 0.67 0.65
+d 1.00
+endmtl
+newmtl mtl5
+Ka 0.30 0.30 0.30
+Kd 0.21 0.21 0.21
+Ks 0.02 0.02 0.02
+d 1.00
+endmtl
+newmtl mtl6
+Ka 0.84 0.82 0.75
+Kd 0.84 0.82 0.75
+Ks 0.25 0.24 0.23
+d 1.00
+endmtl
+newmtl mtl7
+Ka 0.50 0.25 0.00
+Kd 0.50 0.25 0.00
+Ks 0.44 0.22 0.00
+d 1.00
+endmtl
+newmtl mtl8
+Ka 1.00 1.00 1.00
+Kd 1.00 1.00 1.00
+Ks 0.50 0.50 0.50
+d 1.00
+endmtl
+newmtl mtl9
+Ka 0.25 0.25 0.25
+Kd 0.25 0.25 0.25
+Ks 0.13 0.13 0.13
+d 1.00
+endmtl
+newmtl mtl10
+Ka 0.75 0.75 0.75
+Kd 0.75 0.75 0.75
+Ks 0.38 0.38 0.38
+d 1.00
+endmtl
+newmtl mtl11
+Ka 0.00 0.00 0.00
+Kd 0.00 0.00 0.00
+Ks 0.00 0.00 0.00
+d 1.00
+endmtl
+newmtl mtl12
+Ka 1.00 1.00 1.00
+Kd 1.00 1.00 1.00
+Ks 1.00 1.00 1.00
+d 1.00
+endmtl
+newmtl mtl13
+Ka 0.14 0.41 0.20
+Kd 0.14 0.41 0.20
+Ks 0.14 0.41 0.20
+d 1.00
+endmtl
+newmtl mtl14
+Ka 0.62 0.62 0.36
+Kd 0.62 0.62 0.36
+Ks 0.62 0.62 0.36
+d 1.00
+endmtl
+newmtl mtl15
+Ka 0.08 0.36 0.17
+Kd 0.08 0.36 0.17
+Ks 0.08 0.36 0.17
+d 1.00
+endmtl

@@ -1,0 +1,25 @@
+{
+    "name": "@types/spdx-correct",
+    "version": "3.1.3",
+    "description": "TypeScript definitions for spdx-correct",
+    "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/spdx-correct",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "Jinwoo Lee",
+            "githubUsername": "jinwoo",
+            "url": "https://github.com/jinwoo"
+        }
+    ],
+    "main": "",
+    "types": "index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+        "directory": "types/spdx-correct"
+    },
+    "scripts": {},
+    "dependencies": {},
+    "typesPublisherContentHash": "3446dea1544c867a733b9d83b904ee0479dc60ffac1ffea736eb6d5623354645",
+    "typeScriptVersion": "4.5"
+}

@@ -1,0 +1,19 @@
+#include "sub_0024_tensors.h"
+
+const TensorInfo sub_0024_tensors[] = {
+  { "_split_1_command_stream", 0, 564, "COMMAND_STREAM", 0xffffffff },
+  { "_split_1_flash", 1, 14208, "MODEL", 0xffffffff },
+  { "_split_1_scratch", 2, 10240, "ARENA", 0x0 },
+  { "_split_1_scratch_fast", 3, 10240, "FAST_SCRATCH", 0x0 },
+  { "functional_1_pan3_csp_bn_1_concatenate_138_1_concat_70314", 4, 6144, "INPUT_TENSOR", 0x1000 },
+  { "functional_1_pan3_csp_bn_1_pan3_csp_bn_conv_out_1_activation_228_1_Relu6_functional_1_pan3_csp_bn_1_pan3_csp_bn_conv_out_1_batch_normalization_236_1_batchnorm_add_1_functional_1_pan3_csp_bn_1_pan3_csp_bn_conv_out_1_conv2d_213_1_convolution_functional_1_pan3_csp_bn_1_pan3_csp_bn_conv_out_1_batch_normalization_236_1_batchnorm_sub_70315", 5, 4096, "OUTPUT_TENSOR", 0x0 },
+  { "functional_1_pan4_scd_1_pan4_scd_conv_out_1_batch_normalization_238_1_batchnorm_add_1_functional_1_pan4_scd_1_pan4_scd_conv_out_1_batch_normalization_238_1_batchnorm_mul_1_functional_1_pan4_scd_1_pan4_scd_conv_out_1_depthwise_conv2d_47_1_depthwise_functional_1_pan4_scd_1_pan4_scd_conv_out_1_batch_normalization_238_1_batchnorm_mul_functional_1_pan4_scd_1_pan4_scd_conv_out_1_batch_normalization_238_1_batchnorm_sub_70329", 6, 1024, "OUTPUT_TENSOR", 0x2000 },
+};
+
+const size_t sub_0024_tensors_count = sizeof(sub_0024_tensors) / sizeof(sub_0024_tensors[0]);
+
+// Addresses for each input and output buffer inside of the arena
+const uint32_t sub_0024_address_functional_1_pan3_csp_bn_1_concatenate_138_1_concat_70314 = 0x1000;
+const uint32_t sub_0024_address_functional_1_pan3_csp_bn_1_pan3_csp_bn_conv_out_1_activation_228_1_Relu6_functional_1_pan3_csp_bn_1_pan3_csp_bn_conv_out_1_batch_normalization_236_1_batchnorm_add_1_functional_1_pan3_csp_bn_1_pan3_csp_bn_conv_out_1_conv2d_213_1_convolution_functional_1_pan3_csp_bn_1_pan3_csp_bn_conv_out_1_batch_normalization_236_1_batchnorm_sub_70315 = 0x0;
+const uint32_t sub_0024_address_functional_1_pan4_scd_1_pan4_scd_conv_out_1_batch_normalization_238_1_batchnorm_add_1_functional_1_pan4_scd_1_pan4_scd_conv_out_1_batch_normalization_238_1_batchnorm_mul_1_functional_1_pan4_scd_1_pan4_scd_conv_out_1_depthwise_conv2d_47_1_depthwise_functional_1_pan4_scd_1_pan4_scd_conv_out_1_batch_normalization_238_1_batchnorm_mul_functional_1_pan4_scd_1_pan4_scd_conv_out_1_batch_normalization_238_1_batchnorm_sub_70329 = 0x2000;
+

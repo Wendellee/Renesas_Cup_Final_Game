@@ -1,0 +1,18 @@
+# e2 studio build output
+Debug/
+Release/
+
+# Build artifacts
+*.elf
+*.map
+*.srec
+*.hex
+*.bin
+*.lst
+*.rpd
+*.sbd
+*.cref
+*.a
+*.lib
+*.o
+*.d

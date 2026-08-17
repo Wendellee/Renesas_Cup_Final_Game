@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "dependencies": {
+    "@gltf-transform/cli": "4.2.1",
+    "esbuild": "0.25.10",
+    "three": "0.185.0"
+  }
+}
